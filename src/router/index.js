@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+const Home = () => import("@/views/home/Home");
+const Sort = () => import("@/views/sort/Sort");
+const Profile = () => import("@/views/profile/Profile");
+
 const routes = [
   // {
   //   name: "notFound",
@@ -9,9 +13,24 @@ const routes = [
   //   },
   // },
   {
-    name: "home",
+    name: "/",
     path: "",
-    redirect: "/home",
+    redirect: "/sort",
+  },
+  {
+    name: "home",
+    path: "/home",
+    component: Home,
+  },
+  {
+    name: "sort",
+    path: "/sort",
+    component: Sort,
+  },
+  {
+    name: "profile",
+    path: "/profile",
+    component: Profile,
   },
 ];
 

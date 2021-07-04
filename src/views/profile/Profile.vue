@@ -1,19 +1,18 @@
 <template>
   <div>
     <main-nav-bar :navbarcfg="navbarcfg" />
-
-    <h2>home</h2>
+    <h2>Profile</h2>
   </div>
 </template>
 
 <script>
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 export default {
-  name: "Home",
+  name: "Profile",
   data() {
     return {
       navbarcfg: {
-        title: "myproject-首页",
+        title: "myproject-用户",
         isShow: [false, true, false],
       },
     };

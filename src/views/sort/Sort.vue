@@ -2,24 +2,27 @@
   <div>
     <main-nav-bar :navbarcfg="navbarcfg" />
 
-    <h2>home</h2>
+    <main-grid></main-grid>
   </div>
 </template>
 
 <script>
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import MainGrid from "@/components/content/maingrid/MainGrid";
+
 export default {
-  name: "Home",
+  name: "Sort",
   data() {
     return {
       navbarcfg: {
-        title: "myproject-首页",
+        title: "myproject-分类",
         isShow: [false, true, false],
       },
     };
   },
   components: {
     MainNavBar,
+    MainGrid,
   },
 };
 </script>
