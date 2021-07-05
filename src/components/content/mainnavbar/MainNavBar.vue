@@ -10,7 +10,7 @@
       </div>
     </template>
     <template #right>
-      <van-icon v-show="navbarcfg.isShow[2]" name="plus" size="18" />
+      <van-icon v-show="navbarcfg.isShow[2]" name="apps-o" size="20" />
     </template>
   </van-nav-bar>
 </template>
@@ -35,9 +35,6 @@ export default {
       onClickLeft,
       onClickRight,
     };
-  },
-  created() {
-    console.log(this.route);
   },
 };
 </script>

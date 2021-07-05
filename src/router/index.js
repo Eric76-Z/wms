@@ -4,6 +4,7 @@ const Home = () => import("@/views/home/Home");
 const Sort = () => import("@/views/sort/Sort");
 const Profile = () => import("@/views/profile/Profile");
 
+const List = () => import("@/views/sort/list/List");
 const routes = [
   // {
   //   name: "notFound",
@@ -15,7 +16,7 @@ const routes = [
   {
     name: "/",
     path: "",
-    redirect: "/sort",
+    redirect: "/sort/list",
   },
   {
     name: "home",
@@ -31,6 +32,11 @@ const routes = [
     name: "profile",
     path: "/profile",
     component: Profile,
+  },
+  {
+    name: "list",
+    path: "/sort/list",
+    component: List,
   },
 ];
 

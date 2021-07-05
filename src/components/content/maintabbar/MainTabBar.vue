@@ -36,7 +36,8 @@ export default {
   //监听路由变化
   watch: {
     $route(to) {
-      this.activeTab(to.path);
+      let path = "/" + to.path.split("/")[1];
+      this.activeTab(path);
     },
   },
   methods: {
