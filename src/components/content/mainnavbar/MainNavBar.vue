@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar>
+  <van-nav-bar @click-left="onClickLeft">
     <template #left>
       <van-icon v-show="navbarcfg.isShow[0]" name="arrow-left" size="18" />
       <label v-show="navbarcfg.isShow[0]">返回</label>
@@ -16,7 +16,9 @@
 </template>
 
 <script>
+import { useRouter, useRoute } from "vue-router";
 import { Toast } from "vant";
+
 export default {
   name: "MainNavBar",
   data() {
@@ -29,7 +31,13 @@ export default {
     },
   },
   setup() {
-    const onClickLeft = () => Toast("返回");
+    const router = useRouter();
+    const route = useRoute();
+    console.log(route);
+    console.log(router);
+    const onClickLeft = () => {
+      router.back();
+    };
     const onClickRight = () => Toast("按钮");
     return {
       onClickLeft,

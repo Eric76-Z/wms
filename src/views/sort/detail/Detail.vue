@@ -13,7 +13,7 @@ import MainSideBar from "@/components/content/mainsidebar/MainSideBar";
 import SideBarCard from "@/components/content/mainsidebar/SideBarCard";
 
 export default {
-  name: "List",
+  name: "Detail",
   data() {
     return {
       navbarcfg: {
@@ -25,20 +25,20 @@ export default {
       },
       listcfg: {
         bladeapply: {
-          title: "刀片申请",
-          desc: "填写表单申请领用刀片请点击这里......",
+          title: "刀片登记详情",
+          desc: "刀片申请了不知道什么状态，请点击这里......",
         },
         weldingguncls: {
-          title: "枪衣损坏申报",
-          desc: "现场枪衣损坏，需要申报请点击这里......",
+          title: "枪衣状态详情",
+          desc: "枪衣申报了不知道什么情况，请点击这里",
         },
         tcpmanage: {
-          title: "tcp照片上传",
-          desc: "现场上传tcp照片请点击这里......",
+          title: "tcp照片查看",
+          desc: "支持查看现场tcp照片......",
         },
         maintenanceexp: {
-          title: "维修记录",
-          desc: "现场维修故障记录，维修经验记录请点击这里......",
+          title: "维修记录查看",
+          desc: "现场维修故障记录，维修经验记录这些都是在这里查看的......",
         },
       },
     };

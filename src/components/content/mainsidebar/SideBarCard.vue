@@ -5,16 +5,21 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <van-cell v-for="item in state.list" :key="item" :title="item" />
-    <!-- <van-card
+    <van-card
       v-for="(item, index) in listcfg"
       :key="index"
-      num="2"
-      price="2.00"
-      desc="描述信息"
-      title="商品标题"
-      thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-    /> -->
+      :desc="item.desc"
+      :title="item.title"
+    >
+      <!-- <template #tags>
+        <van-tag plain type="danger">标签</van-tag>
+        <van-tag plain type="danger">标签</van-tag>
+      </template>
+      <template #footer>
+        <van-button size="mini">按钮</van-button>
+        <van-button size="mini">按钮</van-button>
+      </template> -->
+    </van-card>
   </van-list>
 </template>
 
@@ -23,9 +28,7 @@ import { reactive } from "vue";
 export default {
   name: "SideBarCard",
   data() {
-    return {
-      mylist: [],
-    };
+    return {};
   },
   props: {
     listcfg: {
@@ -34,9 +37,13 @@ export default {
   },
   setup() {
     const state = reactive({
-      list: [],
-      loading: false,
-      finished: false,
+      loading: false, // 是否处在加载状态
+      finished: false, // 是否已加载完成
+      error: false, // 是否加载失败
+      list: [], // 列表
+      page: 1, // 分页
+      page_size: 10, // 每页条数
+      total: 0, // 数据总条数
     });
 
     const onLoad = () => {

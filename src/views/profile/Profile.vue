@@ -1,12 +1,20 @@
 <template>
-  <div>
-    <main-nav-bar :navbarcfg="navbarcfg" />
-    <h2>Profile</h2>
+  <main-nav-bar :navbarcfg="navbarcfg" />
+  <div class="idicon">
+    <van-image
+      round
+      width="5rem"
+      height="5rem"
+      src="https://img.yzcdn.cn/vant/cat.jpeg"
+    />
+    <h1>hasaiii</h1>
   </div>
+  <van-cell title="用户信息" />
 </template>
 
 <script>
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+
 export default {
   name: "Profile",
   data() {
@@ -24,7 +32,11 @@ export default {
 </script>
 
 <style lang="scss">
-// .van-nav-bar {
-//   background-color: $navbar-color;
-// }
+.idicon {
+  // margin: 0 auto;
+  padding: 15px 0;
+  text-align: center;
+  border-bottom: 1px solid $border-solid;
+  background-color: #fff;
+}
 </style>

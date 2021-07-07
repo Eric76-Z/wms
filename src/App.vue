@@ -1,8 +1,6 @@
 <template>
-  <div>
-    <router-view />
-    <main-tab-bar :tabbars="tabbars" />
-  </div>
+  <router-view />
+  <main-tab-bar :tabbars="tabbars" />
 </template>
 
 <script>
@@ -37,6 +35,17 @@ export default {
     };
   },
   methods: {},
+};
+
+window.onload = function () {
+  document.addEventListener("touchstart", function (event) {
+    if (event.touches.length > 1) {
+      event.preventDefault();
+    }
+  });
+  document.addEventListener("gesturestart", function (event) {
+    event.preventDefault();
+  });
 };
 </script>
 

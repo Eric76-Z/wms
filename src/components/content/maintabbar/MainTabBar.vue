@@ -6,6 +6,8 @@
       :to="item.path"
       :icon="item.icon"
       route="true"
+      fixed="true"
+      placeholder="true"
     >
       <span>{{ item.title }}</span>
     </van-tabbar-item>
