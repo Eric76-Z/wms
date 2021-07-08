@@ -14,7 +14,7 @@
           >
             <template #footer>
               <van-button
-                :to="{ name: 'bladeapply2' }"
+                :to="{ name: 'bladeapply2', params: { bladeId: index } }"
                 type="success"
                 size="mini"
                 round

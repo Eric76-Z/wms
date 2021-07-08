@@ -1,7 +1,7 @@
 <template>
   <div id="bladeapply">
     <main-nav-bar :navbarcfg="navbarcfg" />
-    <!-- <router-link to="/sort/list/bladeapply/bladeapply1"></router-link> -->
+
     <router-view></router-view>
     <!-- <div class="list-card">
       <main-list :listcfg="listcfg">

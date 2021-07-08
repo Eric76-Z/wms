@@ -11,13 +11,13 @@ const BladeApply1 = () => import("@/views/sort/list/listform/BladeApply1");
 const BladeApply2 = () => import("@/views/sort/list/listform/BladeApply2");
 
 const routes = [
-  {
-    name: "notFound",
-    path: "/:path(.*)+",
-    redirect: {
-      name: "home",
-    },
-  },
+  // {
+  //   name: "notFound",
+  //   path: "/:path(.*)+",
+  //   redirect: {
+  //     name: "home",
+  //   },
+  // },
   {
     name: "/",
     path: "",
@@ -57,18 +57,15 @@ const routes = [
     component: BladeApply,
     children: [
       {
-        name: "baldeapply1",
+        name: "bladeapply1",
         path: "bladeapply1",
         component: BladeApply1,
+        alias: "",
       },
       {
-        name: "baldeapply2",
+        name: "bladeapply2",
         path: "bladeapply2/:bladeId",
         component: BladeApply2,
-      },
-      {
-        path: "",
-        component: BladeApply1,
       },
     ],
   },
