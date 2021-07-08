@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="sort">
     <router-view />
     <main-nav-bar :navbarcfg="navbarcfg" />
     <main-grid :gridcfg="gridcfg" />

@@ -6,6 +6,10 @@ const Profile = () => import("@/views/profile/Profile");
 
 const List = () => import("@/views/sort/list/List");
 const Detail = () => import("@/views/sort/detail/Detail");
+const BladeApply = () => import("@/views/sort/list/listform/BladeApply");
+const BladeApply1 = () => import("@/views/sort/list/listform/BladeApply1");
+const BladeApply2 = () => import("@/views/sort/list/listform/BladeApply2");
+
 const routes = [
   {
     name: "notFound",
@@ -46,6 +50,27 @@ const routes = [
     // meta: {
     //   title: "分类-列表明细",
     // },
+  },
+  {
+    name: "bladeapply",
+    path: "/sort/list/bladeapply",
+    component: BladeApply,
+    children: [
+      {
+        name: "baldeapply1",
+        path: "bladeapply1",
+        component: BladeApply1,
+      },
+      {
+        name: "baldeapply2",
+        path: "bladeapply2/:bladeId",
+        component: BladeApply2,
+      },
+      {
+        path: "",
+        component: BladeApply1,
+      },
+    ],
   },
 ];
 

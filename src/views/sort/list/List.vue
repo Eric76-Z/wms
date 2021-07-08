@@ -1,16 +1,30 @@
 <template>
-  <main-nav-bar :navbarcfg="navbarcfg" />
+  <div id="list">
+    <main-nav-bar :navbarcfg="navbarcfg" />
+    <main-side-bar :sidebarcfg="sidebarcfg" v-show="false" />
 
-  <main-side-bar :sidebarcfg="sidebarcfg" v-show="false" />
-  <div class="list-card">
-    <side-bar-card :listcfg="listcfg" />
+    <div class="list-card">
+      <main-list :listcfg="listcfg">
+        <slot>
+          <van-cell-group v-for="(item, index) in listcfg.content" :key="index">
+            <van-cell
+              :title="item.title"
+              value="开始"
+              :label="item.label"
+              is-link
+              :to="item.to"
+            />
+          </van-cell-group>
+        </slot>
+      </main-list>
+    </div>
   </div>
 </template>
 
 <script>
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainSideBar from "@/components/content/mainsidebar/MainSideBar";
-import SideBarCard from "@/components/content/mainsidebar/SideBarCard";
+import MainList from "@/components/content/mainlist/MainList";
 
 export default {
   name: "List",
@@ -24,21 +38,25 @@ export default {
         titles: ["备件申领", "设备问题", "现场问题"],
       },
       listcfg: {
-        bladeapply: {
-          title: "刀片申请",
-          desc: "填写表单申请领用刀片请点击这里......",
-        },
-        weldingguncls: {
-          title: "枪衣损坏申报",
-          desc: "现场枪衣损坏，需要申报请点击这里......",
-        },
-        tcpmanage: {
-          title: "tcp照片上传",
-          desc: "现场上传tcp照片请点击这里......",
-        },
-        maintenanceexp: {
-          title: "维修记录",
-          desc: "现场维修故障记录，维修经验记录请点击这里......",
+        content: {
+          bladeapply: {
+            title: "刀片申请",
+            label: "填写表单申请领用刀片请点击这里......",
+            to: "/sort/list/bladeapply",
+            // url: "www.xiuxiu.work/mywork/bladeapply",
+          },
+          weldingguncls: {
+            title: "枪衣损坏申报",
+            label: "现场枪衣损坏，需要申报请点击这里......",
+          },
+          tcpmanage: {
+            title: "tcp照片上传",
+            label: "现场上传tcp照片请点击这里......",
+          },
+          maintenanceexp: {
+            title: "维修记录",
+            label: "现场维修故障记录，维修经验记录请点击这里......",
+          },
         },
       },
     };
@@ -46,7 +64,7 @@ export default {
   components: {
     MainNavBar,
     MainSideBar,
-    SideBarCard,
+    MainList,
   },
 };
 </script>
@@ -67,16 +85,6 @@ $sidebar-width: 80px;
     // width: calc(100% - #{$sidebar-width});
     height: calc(100vh - #{$navbar-height + $tabbar-height});
     overflow: auto;
-    .van-card {
-      .van-card__content {
-        min-height: 10px;
-        .van-card__title {
-          font-size: 18px;
-          line-height: 18px;
-          font-weight: 1000px;
-        }
-      }
-    }
   }
 }
 </style>

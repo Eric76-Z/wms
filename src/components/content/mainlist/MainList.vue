@@ -5,28 +5,23 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <van-card
-      v-for="(item, index) in listcfg"
-      :key="index"
-      :desc="item.desc"
-      :title="item.title"
-    >
-      <!-- <template #tags>
-        <van-tag plain type="danger">标签</van-tag>
-        <van-tag plain type="danger">标签</van-tag>
-      </template>
-      <template #footer>
-        <van-button size="mini">按钮</van-button>
-        <van-button size="mini">按钮</van-button>
-      </template> -->
-    </van-card>
+    <slot></slot>
+    <!-- <van-cell-group v-for="(item, index) in listcfg" :key="index">
+      <van-cell
+        :title="item.title"
+        value="内容"
+        :label="item.label"
+        is-link
+        :to="item.to"
+      />
+    </van-cell-group> -->
   </van-list>
 </template>
 
 <script>
 import { reactive } from "vue";
 export default {
-  name: "SideBarCard",
+  name: "MainList",
   data() {
     return {};
   },
@@ -63,7 +58,6 @@ export default {
         }
       }, 1000);
     };
-
     return {
       state,
       onLoad,

@@ -31,10 +31,10 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        prependData: `@import "~@/assets/scss/color.scss";`,
+        prependData: `@import "~@/assets/scss/variables.scss";`,
       },
       scss: {
-        prependData: `@import "~@/assets/scss/color.scss";`,
+        prependData: `@import "~@/assets/scss/variables.scss";`,
       },
     },
   },
