@@ -1,49 +1,60 @@
 <template>
-  <template>
-    <v-autocomplete
-      :items="items"
-      v-model="item"
-      :get-label="getLabel"
-      :component-item="template"
-      @update-items="updateItems"
-    >
-    </v-autocomplete>
-  </template>
-  <router-link to="/about">Go to About</router-link>
-  <h2>{{ $route.params.bladeId }}</h2>
+  <div id="bladeapply2">
+    <h-autocomplete></h-autocomplete>
+  </div>
 </template>
 
 <script>
-import Autocomplete from "v-autocomplete";
-import ItemTemplate from "./ItemTemplate.vue";
+import HAutocomplete from "@/components/common/HaAutocomplete";
 
 export default {
-  name: "BladeApply1",
+  name: "BladeApply2",
   data() {
     return {
-      item: {
-        id: 9,
-        name: "Lion",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+      listcfg: {
+        content: {
+          DPLZ02G: {
+            title: "02G刀片",
+            desc: "车间最常用的刀片，原装进口......",
+            price: "1230",
+            tag: "常用",
+          },
+          DJLZ02G: {
+            title: "02G刀片",
+            desc: "车间最常用的刀片，原装进口......",
+            price: "1230",
+          },
+          DPCC02G: {
+            title: "02G刀片",
+            desc: "车间最常用的刀片，原装进口......",
+            price: "1230",
+          },
+          DPFX02G: {
+            title: "02G刀片",
+            desc: "车间最常用的刀片，原装进口......",
+            price: "1230",
+          },
+          DPYG02G: {
+            title: "02G刀片",
+            desc: "车间最常用的刀片，原装进口......",
+            price: "1230",
+          },
+        },
       },
-      items: [],
-      template: ItemTemplate,
     };
   },
-  components: { "v-autocomplete": Autocomplete },
-  methods: {
-    getLabel(item) {
-      return item.name;
-    },
-    // updateItems() {
-    //   this.items = "33";
-    //   // yourGetItemsMethod(text).then((response) => {
-    //   //   this.items = response;
-    //   // });
-    // },
-  },
+  components: { HAutocomplete },
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.ha-autocomplete {
+  display: flex;
+  .ha-autocomplete-label {
+    width: 6.2em;
+  }
+  .inline-input {
+    flex: 1;
+  }
+}
+</style>
