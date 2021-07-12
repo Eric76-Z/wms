@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { Toast } from "vant";
 
 export default {
@@ -32,9 +32,9 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const route = useRoute();
-    console.log(route);
-    console.log(router);
+    // const route = useRoute();
+    // console.log(route);
+    // console.log(router);
     const onClickLeft = () => {
       router.back();
     };

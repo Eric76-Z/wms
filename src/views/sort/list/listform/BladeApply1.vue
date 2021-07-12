@@ -14,7 +14,10 @@
           >
             <template #footer>
               <van-button
-                :to="{ name: 'bladeapply2', params: { bladeId: index } }"
+                :to="{
+                  name: 'bladeapply2',
+                  params: { bladeId: index, bladeData: item },
+                }"
                 type="success"
                 size="mini"
                 round
@@ -30,45 +33,25 @@
 
 <script>
 import MainList from "@/components/content/mainlist/MainList";
-
+import { getBladeData } from "@/network/sort.js";
 export default {
   name: "BladeApply1",
   data() {
-    return {
-      listcfg: {
-        content: {
-          DPLZ02G: {
-            title: "02G刀片",
-            desc: "车间最常用的刀片，原装进口......",
-            price: "1230",
-            tag: "常用",
-          },
-          DJLZ02G: {
-            title: "02G刀片",
-            desc: "车间最常用的刀片，原装进口......",
-            price: "1230",
-          },
-          DPCC02G: {
-            title: "02G刀片",
-            desc: "车间最常用的刀片，原装进口......",
-            price: "1230",
-          },
-          DPFX02G: {
-            title: "02G刀片",
-            desc: "车间最常用的刀片，原装进口......",
-            price: "1230",
-          },
-          DPYG02G: {
-            title: "02G刀片",
-            desc: "车间最常用的刀片，原装进口......",
-            price: "1230",
-          },
-        },
-      },
-    };
+    return {};
   },
   components: {
     MainList,
+  },
+  setup() {
+    const listcfg = {};
+    getBladeData()
+      .then((res) => {
+        listcfg.content = res.callback;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return { listcfg };
   },
 };
 </script>

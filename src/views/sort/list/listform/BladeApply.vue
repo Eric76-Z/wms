@@ -12,15 +12,20 @@ import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 export default {
   name: "BladeApply",
   data() {
-    return {
-      navbarcfg: {
-        title: "表单-刀片申请",
-        isShow: [true, true, true],
-      },
-    };
+    return {};
   },
   components: {
     MainNavBar,
+  },
+  setup() {
+    const navbarcfg = {
+      title: "表单-刀片申请",
+      isShow: [true, true, true],
+    };
+
+    return {
+      navbarcfg,
+    };
   },
 };
 </script>

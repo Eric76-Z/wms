@@ -55,11 +55,13 @@ const routes = [
     name: "bladeapply",
     path: "/sort/list/bladeapply",
     component: BladeApply,
+
     children: [
       {
         name: "bladeapply1",
         path: "bladeapply1",
         component: BladeApply1,
+        props: true,
         alias: "",
       },
       {

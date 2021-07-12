@@ -74,6 +74,7 @@ export default {
 
 <style lang="scss">
 #hautocomplete {
+  position: relative;
   display: flex;
   padding: 10px 16px;
   background-color: #fff;
@@ -98,5 +99,16 @@ export default {
       }
     }
   }
+}
+#hautocomplete::after {
+  position: absolute;
+  box-sizing: border-box;
+  content: " ";
+  pointer-events: none;
+  right: var(--van-padding-md);
+  bottom: 0;
+  left: var(--van-padding-md);
+  border-bottom: 1px solid var(--van-cell-border-color);
+  transform: scaleY(0.5);
 }
 </style>

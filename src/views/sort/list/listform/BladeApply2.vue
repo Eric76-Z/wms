@@ -4,40 +4,76 @@
     <van-form @submit="onSubmit">
       <van-field
         readonly
+        required
         v-model="MyLocation"
-        name="区域"
+        name="MyLocation"
         label="区域"
-        placeholder="区域"
-        :rules="[{ required: true, message: '请填写区域' }]"
       />
       <van-field
         v-model="state.value"
         readonly
         clickable
+        required
         name="BladeType"
         label="刀片类型"
         placeholder="点击选择要申请的刀片类型......"
         @click="state.showPicker = true"
       />
-      <van-popup v-model:show="state.showPicker" position="bottom">
-        <van-picker
-          :columns="columns"
-          @confirm="onConfirm"
-          @cancel="state.showPicker = false"
-        />
-      </van-popup>
+      <van-field
+        v-model="RepairOrderNum"
+        required
+        type="digit"
+        name="RepairOrderNum"
+        label="维修单编号"
+        placeholder="请输入维修单编号......"
+        :rules="[{ required: true, message: '请填写区域' }]"
+      />
+      <van-field
+        v-model="CycleNum"
+        type="digit"
+        name="CycleNum"
+        label="修磨圈数"
+        placeholder="请输入修磨圈数......"
+        :rules="[{ required: true, message: '请输入修磨圈数' }]"
+      />
+      <van-field
+        v-model="Pressure"
+        type="number"
+        name="Pressure"
+        label="修磨压力"
+        placeholder="请输入修磨压力......"
+        :rules="[{ required: true, message: '请输入修磨压力' }]"
+      />
+      <van-field
+        v-model="message"
+        rows="2"
+        autosize
+        label="备注"
+        type="textarea"
+        maxlength="50"
+        placeholder="请输入备注......"
+        show-word-limit
+      />
       <div style="margin: 16px">
         <van-button round block type="info" native-type="submit"
           >提交</van-button
         >
       </div>
     </van-form>
+    <van-popup v-model:show="state.showPicker" position="bottom">
+      <van-picker
+        :columns="columns"
+        @confirm="onConfirm"
+        @cancel="state.showPicker = false"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { reactive } from "vue";
-import { Form, Field, Picker } from "vant";
+import { reactive, toRef } from "vue";
+import { useRoute } from "vue-router";
+import { Form, Field, Picker, Popup } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
 
 export default {
@@ -174,8 +210,13 @@ export default {
     [Form.name]: Form,
     [Field.name]: Field,
     [Picker.name]: Picker,
+    [Popup.name]: Popup,
   },
-  setup() {
+  setup(props) {
+    const params = toRef(props, "params");
+    const route = useRoute();
+    console.log(params);
+    console.log(route.params);
     const state = reactive({
       value: "",
       showPicker: false,
