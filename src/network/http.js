@@ -4,14 +4,14 @@ import { Dialog, Toast } from "vant";
 
 let config = {
   baseURL: "http://192.168.198.128:8000",
-  timeout: 60 * 1000, // Timeout
+  timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 
 // 创建Axios对象
 const Axios = axios.create(config);
 
-// 请求拦截器
+// 请求拦截
 Axios.interceptors.request.use(
   (config) => {
     // Do something before request is sent

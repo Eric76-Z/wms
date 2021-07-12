@@ -6,18 +6,25 @@ const Profile = () => import("@/views/profile/Profile");
 
 const List = () => import("@/views/sort/list/List");
 const Detail = () => import("@/views/sort/detail/Detail");
-const BladeApply = () => import("@/views/sort/list/listform/BladeApply");
-const BladeApply1 = () => import("@/views/sort/list/listform/BladeApply1");
-const BladeApply2 = () => import("@/views/sort/list/listform/BladeApply2");
+const BladeApply = () => import("@/views/sort/list/bladeapply/BladeApply");
+const BladeApply1 = () => import("@/views/sort/list/bladeapply/BladeApply1");
+const BladeApply2 = () => import("@/views/sort/list/bladeapply/BladeApply2");
+const MtIsland = () => import("@/views/sort/mtisland/MtIsland");
+const FaultRecord = () =>
+  import("@/views/sort/mtisland/faultrecord/FaultRecord");
+const FaultRecord1 = () =>
+  import("@/views/sort/mtisland/faultrecord/FaultRecord1");
+const FaultRecord2 = () =>
+  import("@/views/sort/mtisland/faultrecord/FaultRecord2");
 
 const routes = [
-  // {
-  //   name: "notFound",
-  //   path: "/:path(.*)+",
-  //   redirect: {
-  //     name: "home",
-  //   },
-  // },
+  {
+    name: "notFound",
+    path: "/:path(.*)+",
+    redirect: {
+      name: "home",
+    },
+  },
   {
     name: "/",
     path: "",
@@ -29,15 +36,17 @@ const routes = [
     component: Home,
   },
   {
-    name: "sort",
-    path: "/sort",
-    component: Sort,
-  },
-  {
     name: "profile",
     path: "/profile",
     component: Profile,
   },
+  // sort下相关模块
+  {
+    name: "sort",
+    path: "/sort",
+    component: Sort,
+  },
+
   {
     name: "list",
     path: "/sort/list",
@@ -68,6 +77,31 @@ const routes = [
         name: "bladeapply2",
         path: "bladeapply2/:bladeId",
         component: BladeApply2,
+      },
+    ],
+  },
+  {
+    name: "mtisland",
+    path: "/sort/mtisland",
+    component: MtIsland,
+  },
+  {
+    name: "faultrecord",
+    path: "/sort/mtisland/faultrecord",
+    component: FaultRecord,
+    children: [
+      {
+        name: "faultrecord1",
+        path: "faultrecord1",
+        component: FaultRecord1,
+        props: true,
+        alias: "",
+      },
+      {
+        name: "faultrecord2",
+        path: "faultrecord2",
+        component: FaultRecord2,
+        props: true,
       },
     ],
   },

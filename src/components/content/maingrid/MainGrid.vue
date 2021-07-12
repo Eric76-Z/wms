@@ -1,5 +1,5 @@
 <template>
-  <van-grid :column-num="3">
+  <van-grid :column-num="gridcfg.columnNum">
     <van-grid-item
       v-for="(value, key, index) in gridcfg.iconText"
       :key="index"

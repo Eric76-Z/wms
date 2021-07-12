@@ -1,6 +1,5 @@
 <template>
-  <div id="sort">
-    <router-view />
+  <div id="mtisland">
     <main-nav-bar :navbarcfg="navbarcfg" />
     <main-grid :gridcfg="gridcfg" />
   </div>
@@ -12,7 +11,7 @@ import MainGrid from "@/components/content/maingrid/MainGrid";
 import { reactive } from "vue";
 
 export default {
-  name: "Sort",
+  name: "MtIsland",
   data() {
     return {};
   },
@@ -22,22 +21,22 @@ export default {
   },
   setup() {
     const navbarcfg = reactive({
-      title: "myproject-分类",
-      isShow: [false, true, false],
+      title: "分类-维修岛",
+      isShow: [true, true, true],
     });
     const gridcfg = reactive({
       iconText: {
-        机器人: ["jiqiren", "/"],
-        焊枪: ["hanzhuang", "/"],
-        其他设备: ["shebei", "/"],
-        申报列表: ["shenqing", "/sort/list"],
-        列表明细: ["liebiao", "/sort/detail"],
+        故障申报: ["jiqiren", "/sort/mtisland/faultrecord"],
+        故障记录: ["hanzhuang", "/"],
+        故障代码: ["shebei", "/"],
+        维修经验: ["shenqing", "/sort/list"],
+        项目问题: ["liebiao", "/sort/detail"],
         备件查询: ["kucunguanli", "/"],
         资料查询: ["ziliao", "/"],
-        故障代码: ["faultcode", "/"],
+        故障代码1: ["faultcode", "/"],
         维修专家: ["weixiuqiye", "/sort/mtisland"],
       },
-      columnNum: 3,
+      columnNum: 4,
     });
     return {
       navbarcfg,
@@ -48,7 +47,7 @@ export default {
 </script>
 
 <style lang="scss">
-// .van-nav-bar {
-//   background-color: $navbar-color;
-// }
+#app {
+  height: 100vh;
+}
 </style>
