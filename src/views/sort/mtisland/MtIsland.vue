@@ -27,7 +27,7 @@ export default {
     const gridcfg = reactive({
       iconText: {
         故障申报: ["jiqiren", "/sort/mtisland/faultrecord"],
-        故障记录: ["hanzhuang", "/"],
+        故障记录: ["hanzhuang", "/sort/mtisland/faultlist"],
         故障代码: ["shebei", "/"],
         维修经验: ["shenqing", "/sort/list"],
         项目问题: ["liebiao", "/sort/detail"],

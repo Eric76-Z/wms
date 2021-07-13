@@ -1,3 +1,4 @@
+import * as math from "mathjs";
 //防抖函数，防止重复调用
 export function debounce(func, delay = 500) {
   let timer = null;
@@ -41,23 +42,34 @@ export function debounce(func, delay = 500) {
 //   return fmt;
 // }
 
-export function formatDate(dateData) {
-  let date = new Date(dateData);
+export const formatDate = {
+  format1: (dateData) => {
+    let date = new Date(dateData);
 
-  let y = date.getFullYear();
+    let y = date.getFullYear();
 
-  let m = date.getMonth() + 1;
+    let m = date.getMonth() + 1;
 
-  m = m < 10 ? "0" + m : m;
+    m = m < 10 ? "0" + m : m;
 
-  let d = date.getDate();
-  d = d < 10 ? "0" + d : d;
-  let h = date.getHours();
-  h = h < 10 ? "0" + h : h;
-  let min = date.getMinutes();
-  min = min < 10 ? "0" + min : min;
-  const time = y + "-" + m + "-" + d + " " + h + ":" + min;
-  console.log(time);
+    let d = date.getDate();
+    d = d < 10 ? "0" + d : d;
+    let h = date.getHours();
+    h = h < 10 ? "0" + h : h;
+    let min = date.getMinutes();
+    min = min < 10 ? "0" + min : min;
+    const time = y + "-" + m + "-" + d + " " + h + ":" + min;
+    // console.log(time);
 
-  return time;
-}
+    return time;
+  },
+  getMin: (dateData1, dateData2) => {
+    let time1 = new Date(dateData1).getTime();
+    let time2 = new Date(dateData2).getTime();
+    let duration = (time2 - time1) / (60 * 1000);
+    duration = duration < 10 && duration > 0 ? "0" + duration : duration;
+    duration =
+      duration < 0 && duration > -10 ? "-0" + math.abs(duration) : duration;
+    return duration;
+  },
+};

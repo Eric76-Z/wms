@@ -29,7 +29,6 @@ export default {
     getBladeData()
       .then((res) => {
         listcfg.content = res.callback;
-        console.log("wwwwww");
       })
       .catch((err) => {
         console.log(err);

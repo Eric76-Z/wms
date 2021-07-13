@@ -12,6 +12,7 @@ import { Cell, CellGroup } from "vant";
 import { Image as MyImage } from "vant";
 import { Button } from "vant";
 import { DatetimePicker } from "vant";
+import { Search } from "vant";
 
 const app = createApp(App);
 app.use(store);
@@ -33,6 +34,7 @@ app.use(Cell);
 app.use(CellGroup);
 app.use(Button);
 app.use(DatetimePicker);
+app.use(Search);
 
 app.config.devtools = true;
 

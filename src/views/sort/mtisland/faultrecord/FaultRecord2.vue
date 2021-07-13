@@ -10,6 +10,16 @@
         label="区域"
       />
       <van-field
+        v-model="state.value"
+        readonly
+        clickable
+        required
+        name="CarModel"
+        label="车型"
+        placeholder="选择发生故障时车型......"
+        @click="state.showPicker = true"
+      />
+      <van-field
         v-model="state1.value"
         readonly
         clickable
@@ -39,41 +49,42 @@
         placeholder="点击选择故障结束时间......"
         @click="state3.showPicker = true"
       />
-
       <van-field
-        v-model="CycleNum"
-        type="digit"
-        name="CycleNum"
-        label="修磨圈数"
-        placeholder="请输入修磨圈数......"
-        :rules="[{ required: true, message: '请输入修磨圈数' }]"
-      />
-      <van-field
-        v-model="Pressure"
-        type="number"
-        name="Pressure"
-        label="修磨压力"
-        placeholder="请输入修磨压力......"
-        :rules="[{ required: true, message: '请输入修磨压力' }]"
+        v-model="getDuration"
+        readonly
+        required
+        name="Duraion"
+        label="持续时间"
+        placeholder="持续时间"
       />
       <van-field
         v-model="message"
+        required
         rows="2"
         autosize
-        label="备注"
+        label="维修记录"
         type="textarea"
         maxlength="50"
-        placeholder="请输入备注......"
+        placeholder="请输入维修记录......"
         show-word-limit
       />
       <div style="margin: 16px">
-        <van-button round block type="info" native-type="submit"
+        <van-button round block type="success" native-type="submit"
           >提交</van-button
         >
       </div>
     </van-form>
+    <van-popup v-model:show="state.showPicker" position="bottom">
+      <van-picker
+        title="选择车型"
+        :columns="columns"
+        @confirm="onConfirm"
+        @cancel="state.showPicker = false"
+      />
+    </van-popup>
     <van-popup v-model:show="state1.showPicker" position="bottom">
       <van-picker
+        title="选择设备类型"
         :columns="columns"
         @confirm="onConfirm1"
         @cancel="state1.showPicker = false"
@@ -83,18 +94,29 @@
       <van-datetime-picker
         v-model="currentDate"
         type="datetime"
-        title="选择完整时间"
+        title="选择开始时间"
         :min-date="minDate"
         :max-date="maxDate"
         @confirm="onConfirm2"
         @cancel="state2.showPicker = false"
       />
     </van-popup>
+    <van-popup v-model:show="state3.showPicker" position="bottom">
+      <van-datetime-picker
+        v-model="currentDate"
+        type="datetime"
+        title="选择结束时间"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="onConfirm3"
+        @cancel="state3.showPicker = false"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { reactive, toRef, ref } from "vue";
+import { reactive, toRef, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { Form, Field, Picker, Popup } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
@@ -241,16 +263,21 @@ export default {
     const route = useRoute();
     console.log(params);
     console.log(route.params);
+    const state = reactive({
+      value: "",
+      showPicker: false,
+    });
+    const onConfirm = (value) => {
+      state.value = value;
+      state.showPicker = false;
+    };
 
     const state1 = reactive({
       value: "",
       showPicker: false,
     });
-    const columns = ["杭州", "宁波", "温州", "嘉兴", "湖州"];
-
     const onConfirm1 = (value) => {
       state1.value = value;
-
       state1.showPicker = false;
     };
 
@@ -259,20 +286,39 @@ export default {
       showPicker: false,
     });
     const onConfirm2 = (value) => {
-      state2.value = formatDate(value);
+      state2.value = formatDate.format1(value);
       state2.showPicker = false;
     };
-    const currentDate = ref(new Date());
 
+    const state3 = reactive({
+      value: "",
+      showPicker: false,
+    });
+    const onConfirm3 = (value) => {
+      state3.value = formatDate.format1(value);
+      state3.showPicker = false;
+    };
+    // getDuraion.value = formatDate.getMin(state3.value, state2.value);
+    let currentDate = ref(new Date());
+    const columns = ["杭州", "宁波", "温州", "嘉兴", "湖州"];
+
+    const getDuration = computed(() => {
+      return formatDate.getMin(state2.value, state3.value) + " min";
+    });
     return {
+      state,
+      onConfirm,
       state1,
-      columns,
       onConfirm1,
       state2,
       onConfirm2,
+      state3,
+      onConfirm3,
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
+      getDuration,
       currentDate,
+      columns,
     };
   },
 };

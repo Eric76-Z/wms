@@ -17,6 +17,8 @@ const FaultRecord1 = () =>
 const FaultRecord2 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord2");
 
+const FaultList = () => import("@/views/sort/mtisland/faultlist/FaultList");
+
 const routes = [
   {
     name: "notFound",
@@ -104,6 +106,11 @@ const routes = [
         props: true,
       },
     ],
+  },
+  {
+    name: "faultlist",
+    path: "/sort/mtisland/faultlist",
+    component: FaultList,
   },
 ];
 
