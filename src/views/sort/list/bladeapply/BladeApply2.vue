@@ -212,27 +212,50 @@ export default {
     [Picker.name]: Picker,
     [Popup.name]: Popup,
   },
+  props: {
+    listcfg: {
+      type: Object,
+    },
+  },
+
   setup(props) {
-    const params = toRef(props, "params");
+    const listcfg = toRef(props, "listcfg");
+    const bladeDatas = listcfg.value.content;
     const route = useRoute();
-    console.log(params);
-    console.log(route.params);
-    const state = reactive({
+    let param = route.params;
+    let state = reactive({
       value: "",
       showPicker: false,
     });
-    const columns = ["杭州", "宁波", "温州", "嘉兴", "湖州"];
 
+    const columns = [];
     const onConfirm = (value) => {
       state.value = value;
       state.showPicker = false;
     };
 
+    // if (state.value === "") {
+    //   state.value = bladeDatas[param["bladeId"]]["title"];
+    // }
     return {
       state,
       columns,
       onConfirm,
+      bladeDatas,
+      param,
     };
+  },
+  watch: {
+    listcfg: {
+      handler(newVal, oldVal) {
+        console.log("oldVal:", oldVal);
+        console.log("newVal:", newVal);
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    console.log(this.state.value);
   },
 };
 </script>

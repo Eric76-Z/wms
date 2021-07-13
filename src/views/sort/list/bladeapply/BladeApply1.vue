@@ -16,7 +16,7 @@
               <van-button
                 :to="{
                   name: 'bladeapply2',
-                  params: { bladeId: index, bladeData: item },
+                  params: { bladeId: index },
                 }"
                 type="success"
                 size="mini"
@@ -32,8 +32,9 @@
 </template>
 
 <script>
+// import { toRef } from "vue";
 import MainList from "@/components/content/mainlist/MainList";
-import { getBladeData } from "@/network/sort.js";
+
 export default {
   name: "BladeApply1",
   data() {
@@ -42,17 +43,13 @@ export default {
   components: {
     MainList,
   },
-  setup() {
-    const listcfg = {};
-    getBladeData()
-      .then((res) => {
-        listcfg.content = res.callback;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    return { listcfg };
+  props: {
+    listcfg: {
+      type: Object,
+    },
   },
+
+  setup() {},
 };
 </script>
 
