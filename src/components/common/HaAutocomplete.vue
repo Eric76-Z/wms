@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, onMounted, toRef } from "vue";
+import { ref, onMounted, toRef, toRaw } from "vue";
 import { ElAutocomplete } from "element-plus";
 import { Field, CellGroup } from "vant";
 
@@ -37,8 +37,10 @@ export default {
   setup(props) {
     const autocompletecfg = toRef(props, "autocompletecfg");
     const loadAll = autocompletecfg.value.loadAll;
+    console.log(loadAll);
     const toShow = ref([]); //需要显示的内容
     const querySearch = (queryString, cb) => {
+      console.log(toShow);
       var results = queryString
         ? toShow.value.filter(createFilter(queryString))
         : toShow.value;
@@ -47,6 +49,7 @@ export default {
     };
     const createFilter = (queryString) => {
       return (target) => {
+        console.log(target);
         return (
           target.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
@@ -56,8 +59,11 @@ export default {
     const handleSelect = (item) => {
       console.log(item);
     };
+
     onMounted(() => {
-      toShow.value = autocompletecfg.value.loadAll;
+      console.log(autocompletecfg.value.loadAll);
+      toShow.value = toRaw(autocompletecfg.value.loadAll);
+      console.log(toShow.value);
     });
     return {
       toShow,

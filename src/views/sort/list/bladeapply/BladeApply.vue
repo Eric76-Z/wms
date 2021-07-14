@@ -8,9 +8,10 @@
 </template>
 
 <script>
-// import { reactive } from "vue";
+import { reactive, toRef } from "vue";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
-import { getBladeData } from "@/network/sort.js";
+// import { getBladeData } from "@/network/sort.js";
+import { useStore } from "vuex";
 
 export default {
   name: "BladeApply",
@@ -21,23 +22,40 @@ export default {
     MainNavBar,
   },
   setup() {
+    const store = useStore();
     const navbarcfg = {
       title: "表单-刀片申请",
       isShow: [true, true, true],
     };
-    const listcfg = {};
-    getBladeData()
-      .then((res) => {
-        listcfg.content = res.callback;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    const bladedata = toRef(store.state, "bladedata");
+
+    // console.log(bladedata);
+    const {
+      getBladedata: [getBladedata],
+    } = store._actions;
+
+    const listcfg = reactive({});
 
     return {
       navbarcfg,
       listcfg,
+      bladedata,
+      getBladedata,
     };
+  },
+  beforeCreate() {
+    //判断store中有没有数据
+    if (this.bladedata !== undefined) {
+      //有数据
+      this.listcfg.content = this.bladedata;
+    } else {
+      //没有请求数据
+      console.log("重新加载数据");
+      this.getBladedata();
+      this.listcfg.content = this.bladedata;
+    }
+    // console.log(this.listcfg.content);
   },
 };
 </script>

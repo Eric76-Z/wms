@@ -56,6 +56,7 @@ export default function axiosApi(type, params, method) {
   var value = {
     sign: sign,
   };
+
   var data =
     method == "post"
       ? qs.stringify(Object.assign(value, params))
@@ -64,7 +65,7 @@ export default function axiosApi(type, params, method) {
     Axios({
       method: method,
       url: type,
-      data: data,
+      params: data,
     })
       .then((res) => {
         if (res.data.errcode == 0) {
