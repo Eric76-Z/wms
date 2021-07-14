@@ -1,23 +1,24 @@
 <template>
-  <div id="faultlist">
-    <main-nav-bar :navbarcfg="navbarcfg" />
-
-    <router-view />
+  <div id="faultlist1">
+    <van-search
+      v-model="value"
+      ref="search"
+      :show-action="isShow"
+      background="#4fc08d"
+      placeholder="请输入搜索关键词"
+    />
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
   name: "faultlist",
   data() {
     return {};
   },
-  components: {
-    MainNavBar,
-  },
+  components: {},
   setup() {
     const navbarcfg = {
       title: "历史故障",
@@ -25,15 +26,19 @@ export default {
     };
     const value = ref("");
     // const isShow = reactive("false");
-    const foucs = () => { };
+    // const foucs = () => {
+    //   console.log("wwwww");
+    // };
 
     return {
       navbarcfg,
       value,
-      foucs,
+      // foucs
     };
+  },
+  mounted() {
+    console.log(this.$refs.search.focus());
   },
 };
 </script>
-
 <style lang="scss"></style>

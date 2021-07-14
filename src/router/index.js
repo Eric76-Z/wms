@@ -18,6 +18,9 @@ const FaultRecord2 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord2");
 
 const FaultList = () => import("@/views/sort/mtisland/faultlist/FaultList");
+const FaultList1 = () => import("@/views/sort/mtisland/faultlist/FaultList1");
+const FaultListSearch = () =>
+  import("@/views/sort/mtisland/faultlist/FaultListSearch");
 
 const routes = [
   {
@@ -111,6 +114,21 @@ const routes = [
     name: "faultlist",
     path: "/sort/mtisland/faultlist",
     component: FaultList,
+    children: [
+      {
+        name: "faultlist1",
+        path: "faultlist1",
+        component: FaultList1,
+        props: true,
+        alias: "",
+      },
+      {
+        name: "faultlistsearch",
+        path: "faultlistsearch",
+        component: FaultListSearch,
+        props: true,
+      },
+    ],
   },
 ];
 
