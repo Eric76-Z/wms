@@ -4,6 +4,7 @@ const Home = () => import("@/views/home/Home");
 const Sort = () => import("@/views/sort/Sort");
 const Profile = () => import("@/views/profile/Profile");
 const Login = () => import("@/views/profile/Login");
+const Register = () => import("@/views/profile/Register");
 
 const List = () => import("@/views/sort/list/List");
 const Detail = () => import("@/views/sort/detail/Detail");
@@ -50,6 +51,11 @@ const routes = [
     name: "login",
     path: "/login",
     component: Login,
+  },
+  {
+    name: "register",
+    path: "/register",
+    component: Register,
   },
 
   // sort下相关模块

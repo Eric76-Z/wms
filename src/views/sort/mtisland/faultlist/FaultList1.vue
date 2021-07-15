@@ -25,10 +25,6 @@ export default {
       isShow: [true, true, true],
     };
     const value = ref("");
-    // const isShow = reactive("false");
-    // const foucs = () => {
-    //   console.log("wwwww");
-    // };
 
     return {
       navbarcfg,

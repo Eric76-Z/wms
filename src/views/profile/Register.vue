@@ -1,44 +1,53 @@
 <template>
-  <div id="login">
+  <div id="register">
     <main-nav-bar :navbarcfg="navbarcfg" />
-    <van-image
-      round
-      width="8rem"
-      height="8rem"
-      lazy-load
-      src="https://img01.yzcdn.cn/vant/cat.jpeg"
-    >
-      <template v-slot:loading>
-        <van-loading type="spinner" size="20" />
-      </template>
-    </van-image>
     <van-form @submit="onSubmit">
       <van-cell-group inset>
         <van-field
           v-model="state.username"
-          name="用户名"
+          name="username"
           label="用户名"
-          placeholder="用户名"
+          placeholder="请填写用户名"
           :rules="[{ required: true, message: '请填写用户名' }]"
         />
         <van-field
           v-model="state.password"
           type="password"
-          name="密码"
+          name="password"
           label="密码"
           placeholder="密码"
           :rules="[{ required: true, message: '请填写密码' }]"
         />
+        <van-field
+          v-model="state.password1"
+          type="password"
+          name="password1"
+          label="确认密码"
+          placeholder="请再次输入密码确认"
+          :rules="[{ required: true, message: '请再次输入密码确认' }]"
+        />
+        <van-field
+          v-model="state.email"
+          type="email"
+          name="email"
+          label="邮箱"
+          placeholder="请输入电子邮箱地址"
+          :rules="[{ required: true, message: '请输入电子邮箱地址' }]"
+        />
+        <van-field
+          v-model="state.phonenum"
+          type="tel"
+          name="phonenum"
+          label="手机号"
+          placeholder="请输入手机号"
+          :rules="[{ required: true, message: '请输入手机号' }]"
+        />
       </van-cell-group>
       <div style="margin: 16px">
+        <router-link to="/login" class="to-login">直接登陆</router-link>
         <van-button round block type="success" native-type="submit">
-          登陆
+          注册
         </van-button>
-        <div class="halfbtn">
-          <van-button type="success" to="/register">注册</van-button>
-
-          <van-button type="warning">忘记密码</van-button>
-        </div>
       </div>
     </van-form>
   </div>
@@ -53,7 +62,7 @@ export default {
   data() {
     return {
       navbarcfg: {
-        title: "用户登录",
+        title: "用户注册",
         isShow: [true, true, true],
       },
     };
@@ -79,27 +88,10 @@ export default {
 </script>
 
 <style lang="scss">
-#login {
-  text-align: center;
-  .van-image {
-    margin: 10px 0 15px 0;
-  }
-  .halfbtn {
-    display: flex;
-    margin-top: 5px;
-    button {
-      flex: 1;
-      &:first-child {
-        border-top-left-radius: 999px;
-        border-bottom-left-radius: 999px;
-        margin-right: 1px;
-      }
-      &:last-child {
-        border-top-right-radius: 999px;
-        border-bottom-right-radius: 999px;
-        margin-left: 1px;
-      }
-    }
-  }
+.to-login {
+  position: relative;
+  // display: block;
+  margin-bottom: 2px;
+  left: 10%;
 }
 </style>
