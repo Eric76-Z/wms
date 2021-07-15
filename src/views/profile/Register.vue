@@ -90,7 +90,7 @@ export default {
 <style lang="scss">
 .to-login {
   position: relative;
-  // display: block;
+  display: block;
   margin-bottom: 2px;
   left: 10%;
 }
