@@ -25,7 +25,7 @@ export default {
     };
     const value = ref("");
     // const isShow = reactive("false");
-    const foucs = () => { };
+    const foucs = () => {};
 
     return {
       navbarcfg,

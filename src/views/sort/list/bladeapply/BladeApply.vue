@@ -11,7 +11,7 @@
 import { reactive, toRef } from "vue";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 // import { getBladeData } from "@/network/sort.js";
-import { useStore } from "vuex";
+import { useStore } from "vue";
 
 export default {
   name: "BladeApply",
@@ -36,7 +36,6 @@ export default {
     } = store._actions;
 
     const listcfg = reactive({});
-
     return {
       navbarcfg,
       listcfg,
@@ -51,7 +50,7 @@ export default {
       this.listcfg.content = this.bladedata;
     } else {
       //没有请求数据
-      console.log("重新加载数据");
+      console.log("重新加载bladedata");
       this.getBladedata();
       this.listcfg.content = this.bladedata;
     }

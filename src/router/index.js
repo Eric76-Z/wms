@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const Home = () => import("@/views/home/Home");
 const Sort = () => import("@/views/sort/Sort");
 const Profile = () => import("@/views/profile/Profile");
+const Login = () => import("@/views/profile/Login");
 
 const List = () => import("@/views/sort/list/List");
 const Detail = () => import("@/views/sort/detail/Detail");
@@ -33,7 +34,7 @@ const routes = [
   {
     name: "/",
     path: "",
-    redirect: "/home",
+    redirect: "/login",
   },
   {
     name: "home",
@@ -45,6 +46,12 @@ const routes = [
     path: "/profile",
     component: Profile,
   },
+  {
+    name: "login",
+    path: "/login",
+    component: Login,
+  },
+
   // sort下相关模块
   {
     name: "sort",

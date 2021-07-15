@@ -12,15 +12,23 @@ export default {
       });
   },
   getLocation(context, payload) {
-    console.log(payload);
+    // console.log(payload);
     reqLocation(payload)
       .then((res) => {
         const location = [];
         res.rows.forEach((element) => {
-          location.push({ value: element["weldinggun_num"] });
+          const area =
+            element["location_level_1"] +
+            "-" +
+            element["location_level_2"] +
+            "-" +
+            element["location_level_3"];
+          location.push({
+            value: element["weldinggun_num"],
+            area: area,
+          });
         });
-        console.log(location);
-
+        // console.log(location);
         context.commit(ADD_TO_LOCATION, location);
       })
       .catch((err) => {

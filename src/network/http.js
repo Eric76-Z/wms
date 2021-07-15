@@ -3,7 +3,7 @@ import qs from "qs";
 import { Dialog, Toast } from "vant";
 
 let config = {
-  baseURL: "http://192.168.198.128:8000",
+  baseURL: "http://192.168.198.128:8000/",
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -19,6 +19,9 @@ Axios.interceptors.request.use(
       duration: 0,
       message: "加载中...",
       forbidClick: true,
+    });
+    config.headers = Object.assign(config.headers, {
+      "Content-Type": "application/x-www-form-urlencoded",
     });
     return config;
   },
@@ -47,36 +50,52 @@ Axios.interceptors.response.use(
 );
 
 export default function axiosApi(type, params, method) {
-  let sign = process.env.VUE_APP_SIGN;
-  if (process.env.NODE_ENV === "production") {
-    sign = localStorage.getItem("wx_sign");
-  } else {
-    sign = "crm:user:sign:f0c8cbe468f6a34463d198268290903f";
-  }
-  var value = {
-    sign: sign,
-  };
-
-  var data =
-    method == "post"
-      ? qs.stringify(Object.assign(value, params))
-      : Object.assign(value, params);
+  // let sign = process.env.VUE_APP_SIGN;
+  // if (process.env.NODE_ENV === "production") {
+  //   sign = localStorage.getItem("wx_sign");
+  // } else {
+  //   sign = "crm:user:sign:f0c8cbe468f6a34463d198268290903f";
+  // }
+  // var value = {
+  //   sign: sign,
+  // };
+  console.log(params);
+  // var data = method == "post" ? qs.stringify(params) : params;
   return new Promise((resolve, reject) => {
-    Axios({
-      method: method,
-      url: type,
-      params: data,
-    })
-      .then((res) => {
-        if (res.data.errcode == 0) {
-          resolve(res.data);
-        } else {
-          // 接口错误提示
-          Toast.fail(res.data.msg);
-        }
+    if (method == "post") {
+      Axios({
+        method: method,
+        url: type,
+        data: qs.stringify(params),
       })
-      .catch((err) => {
-        reject(err);
-      });
+        .then((res) => {
+          if (res.data.errcode == 0) {
+            resolve(res.data);
+          } else {
+            // 接口错误提示
+            Toast.fail(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else if (method == "get") {
+      Axios({
+        method: method,
+        url: type,
+        params: params,
+      })
+        .then((res) => {
+          if (res.data.errcode == 0) {
+            resolve(res.data);
+          } else {
+            // 接口错误提示
+            Toast.fail(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }
   });
 }
