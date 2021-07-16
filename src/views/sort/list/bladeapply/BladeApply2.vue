@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { reactive, toRef } from "vue";
+import { onActivated, reactive, toRef } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { Form, Field, Picker, Popup } from "vant";
@@ -94,11 +94,15 @@ export default {
     },
   },
   setup(props) {
+    //vuex数据
     const store = useStore();
+    const bladedata = toRef(store.state, "bladedata");
+    console.log(bladedata);
     const location = toRef(store.state, "location");
     const {
       getLocation: [getLocation],
     } = store._actions;
+    //表单相关数据
     const formData = reactive({
       WeldingGun: "",
       MyLocation: "",
@@ -107,14 +111,12 @@ export default {
       Pressure: "",
       Comments: "",
     });
-    const autocompletecfg = reactive({ target: "location", loadAll: [] });
-    console.log(location.value[0]);
-    autocompletecfg.loadAll.push(location.value[0]);
-
+    //autocomplete相关数据
+    // const loadAll = reactive(location.value);
+    const autocompletecfg = reactive(location);
     const listcfg = toRef(props, "listcfg");
     const bladeDatas = reactive(listcfg.value.content);
-    const route = useRoute();
-    let param = route.params;
+    const route = reactive(useRoute());
     let state = reactive({
       value: "",
       showPicker: false,
@@ -131,9 +133,7 @@ export default {
       state.value = value;
       state.showPicker = false;
     };
-    if (state.value === "" && bladeDatas !== undefined) {
-      state.value = bladeDatas[param["bladeId"]]["title"];
-    }
+
     //autocomplete 选择后赋值
     const selected = (val) => {
       formData.WeldingGun = val.value;
@@ -144,10 +144,14 @@ export default {
     //提交表单
     const onSubmit = (values) => {
       values.WeldingGun = formData.WeldingGun;
-      values.BladeTypeId = param["bladeId"];
+      values.BladeTypeId = route.params["bladeId"];
       postForm(values);
       console.log("submit", values);
     };
+
+    onActivated(() => {
+      state.value = bladeDatas[route.params["bladeId"]]["title"];
+    });
 
     return {
       location,
@@ -155,8 +159,6 @@ export default {
       state,
       columns,
       onConfirm,
-      bladeDatas,
-      param,
       autocompletecfg,
       selected,
       formData,
@@ -165,16 +167,18 @@ export default {
   },
   mounted() {
     //判断store中有没有数据
-    if (this.location[0].length !== 0) {
+    // console.log(this.location);
+    if (this.location.length !== 0) {
       //有数据
-      this.autocompletecfg.loadAll = this.location[0];
+      console.log(this.location);
+      // this.autocompletecfg.loadAll = this.location[0];
     } else {
       //没有请求数据
-      // console.log("重新加载数据");
+      console.log("重新加载数据location");
       this.getLocation({ location: "all", querytype: "weldinggun" });
-      this.autocompletecfg.loadAll = this.location[0];
     }
   },
+  activated() {},
 };
 </script>
 

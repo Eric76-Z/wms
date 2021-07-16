@@ -2,6 +2,11 @@ import axios from "axios";
 import qs from "qs";
 import { Dialog, Toast } from "vant";
 
+let getCookie = function (cookie) {
+  let reg = /csrftoken=([\w]+)[;]?/g;
+  return reg.exec(cookie)[1];
+};
+
 let config = {
   baseURL: "http://192.168.198.128:8000/",
   timeout: 5000, // Timeout
@@ -20,9 +25,15 @@ Axios.interceptors.request.use(
       message: "加载中...",
       forbidClick: true,
     });
-    config.headers = Object.assign(config.headers, {
-      "Content-Type": "application/x-www-form-urlencoded",
-    });
+    let cookie = document.cookie;
+    if (config.method == "post") {
+      config.headers = Object.assign(config.headers, {
+        "Content-Type": "application/x-www-form-urlencoded",
+      });
+      if (cookie) {
+        config.headers["X-CSRFToken"] = getCookie(cookie);
+      }
+    }
     return config;
   },
   (error) => {
@@ -59,7 +70,7 @@ export default function axiosApi(type, params, method) {
   // var value = {
   //   sign: sign,
   // };
-  console.log(params);
+  // console.log(params);
   // var data = method == "post" ? qs.stringify(params) : params;
   return new Promise((resolve, reject) => {
     if (method == "post") {
@@ -69,6 +80,7 @@ export default function axiosApi(type, params, method) {
         data: qs.stringify(params),
       })
         .then((res) => {
+          console.log(res);
           if (res.data.errcode == 0) {
             resolve(res.data);
           } else {

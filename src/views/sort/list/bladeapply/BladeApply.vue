@@ -1,9 +1,15 @@
 <template>
   <div id="bladeapply">
     <main-nav-bar :navbarcfg="navbarcfg" />
-    <keep-alive include="bladeapply1, bladeapply2">
+
+    <router-view v-slot="{ Component }" :listcfg="listcfg">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
+    <!-- <keep-alive include="bladeapply1, bladeapply2">
       <router-view :listcfg="listcfg" />
-    </keep-alive>
+    </keep-alive> -->
   </div>
 </template>
 
@@ -11,7 +17,7 @@
 import { reactive, toRef } from "vue";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 // import { getBladeData } from "@/network/sort.js";
-import { useStore } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "BladeApply",
@@ -29,13 +35,12 @@ export default {
     };
 
     const bladedata = toRef(store.state, "bladedata");
-
     // console.log(bladedata);
     const {
       getBladedata: [getBladedata],
     } = store._actions;
 
-    const listcfg = reactive({});
+    const listcfg = reactive({ content: bladedata });
     return {
       navbarcfg,
       listcfg,
@@ -45,16 +50,18 @@ export default {
   },
   beforeCreate() {
     //判断store中有没有数据
-    if (this.bladedata !== undefined) {
+    // console.log(this.bladedata);
+    // console.log(this.bladedata.checked);
+    // console.log(this.bladedata.checked !== undefined);
+    if (this.bladedata.checked !== undefined) {
       //有数据
-      this.listcfg.content = this.bladedata;
+      console.log(this.bladedata);
+      // this.listcfg.content = this.bladedata;
     } else {
       //没有请求数据
       console.log("重新加载bladedata");
       this.getBladedata();
-      this.listcfg.content = this.bladedata;
     }
-    // console.log(this.listcfg.content);
   },
 };
 </script>

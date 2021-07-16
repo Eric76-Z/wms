@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, onMounted, toRef } from "vue";
+import { ref, toRef } from "vue";
 import { ElAutocomplete } from "element-plus";
 import { Field, CellGroup } from "vant";
 
@@ -36,16 +36,15 @@ export default {
   },
   setup(props, context) {
     const autocompletecfg = toRef(props, "autocompletecfg");
-    console.log(autocompletecfg.value);
-    const loadAll = autocompletecfg.value.loadAll;
-    const toShow = ref([]); //需要显示的内容
+    // console.log(autocompletecfg.value);
+    const toShow = ref(autocompletecfg); //需要显示的内容
     // console.log(toShow);
     const querySearch = (queryString, cb) => {
-      console.log(toShow);
-      // console.log(loadAll);
+      // console.log(toShow.value[0]);
+      // console.log(autocompletecfg.value);
       var results = queryString
-        ? toShow.value.filter(createFilter(queryString))
-        : toShow.value;
+        ? toShow.value[0].filter(createFilter(queryString))
+        : toShow.value[0];
       // 调用 callback 返回建议列表的数据
       cb(results);
     };
@@ -60,17 +59,16 @@ export default {
     const handleSelect = (item) => {
       context.emit("selected", item);
     };
-    onMounted(() => {
-      console.log(autocompletecfg.value.loadAll[0]);
-      toShow.value = autocompletecfg.value.loadAll[0];
-    });
+    // onMounted(() => {
+    //   console.log(autocompletecfg.value.loadAll);
+    //   toShow.value = reactive(autocompletecfg.value.loadAll);
+    // });
     return {
       toShow,
       state1: ref(""),
       state2: ref(""),
       querySearch,
       createFilter,
-      loadAll,
       handleSelect,
     };
   },

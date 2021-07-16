@@ -11,6 +11,7 @@
   </div>
   <van-cell title="用户信息" is-link value="编辑" />
   <van-cell title="联系作者" is-link value="编辑" />
+  <van-button type="success" size="large" to="/login">登录</van-button>
   <van-button type="danger" size="large">退出登录</van-button>
 </template>
 

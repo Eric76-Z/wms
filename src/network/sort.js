@@ -6,9 +6,14 @@ export function reqBladeData() {
 }
 //按query关键词返回工位信息
 export function reqLocation(query) {
-  return axiosApi("mywork/getlocation", query, "get");
+  return axiosApi("mywork/getlocation/", query, "get");
 }
 //提交刀片申请表单
 export function postForm(query) {
   return axiosApi("mywork/postform/", query, "post");
+}
+
+//用户登录
+export function postLogin(query) {
+  return axiosApi("myuser/login/", query, "post");
 }

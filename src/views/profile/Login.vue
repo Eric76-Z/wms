@@ -46,6 +46,7 @@
 
 <script>
 import { reactive } from "vue";
+import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
@@ -59,11 +60,17 @@ export default {
     };
   },
   setup() {
+    const store = useStore();
+    console.log(store._actions);
+    const {
+      "user/userChangeState": [userChangeState],
+    } = store._actions;
     const state = reactive({
       username: "",
       password: "",
     });
     const onSubmit = (values) => {
+      userChangeState(state);
       console.log("submit", values);
     };
 

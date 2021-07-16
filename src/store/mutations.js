@@ -6,7 +6,9 @@ export default {
     state.bladedata = payload;
   },
   [ADD_TO_LOCATION](state, payload) {
+    // payload.checked = true;
     state.location = [];
     state.location.push(payload);
+    console.log(state.location);
   },
 };

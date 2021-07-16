@@ -3,9 +3,9 @@ import createPersistedState from "vuex-persistedstate";
 import mutations from "./mutations";
 import actions from "./actions";
 import getters from "./getters";
-import modules from "./modules";
+import user from "./modules/user";
 
-// //因为我把模块拆分了，但是我又不想每次都导入，就通过这个自动导入modules目录下的模块
+// // //因为我把模块拆分了，但是我又不想每次都导入，就通过这个自动导入modules目录下的模块
 // const modulesFiles = require.context("./modules", true, /\.js$/);
 // const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 //   const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, "$1");
@@ -13,6 +13,8 @@ import modules from "./modules";
 //   modules[moduleName] = value.default;
 //   return modules;
 // }, {});
+
+// const PERSIST_PATHS = ["location"];
 const state = {
   bladedata: {},
   location: [],
@@ -23,6 +25,23 @@ export default createStore({
   mutations,
   actions,
   getters,
-  modules,
-  plugins: [createPersistedState()],
+  modules: {
+    user: user,
+  },
+  plugins: [
+    createPersistedState(),
+    // {
+    //   paths: PERSIST_PATHS,
+    // },
+    // {
+    //   storage: window.sessionStorage,
+    //   reducer(val) {
+    //     console.log(val);
+    //     return {
+    //       // 只储存state中的assessmentData
+    //       assessmentData: val.bladedata,
+    //     };
+    //   },
+    // }
+  ],
 });
