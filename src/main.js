@@ -43,3 +43,20 @@ app.config.devtools = true;
 
 app.mount("#app");
 // createApp(App).use(store).use(router).mount("#app");
+
+router.beforeEach((to) => {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  const type = to.meta.type;
+  // 判断该路由是否需要登录权限
+  if (type === "login") {
+    if (store.state.userState === 200) {
+      return true;
+    } else {
+      return true;
+    }
+  } else {
+    return true; // 确保一定要有next()被调用
+  }
+});

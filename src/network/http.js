@@ -98,11 +98,15 @@ export default function axiosApi(type, params, method) {
         params: params,
       })
         .then((res) => {
-          if (res.data.errcode == 0) {
-            resolve(res.data);
-          } else {
-            // 接口错误提示
-            Toast.fail(res.data.msg);
+          switch (res.data.errcode) {
+            case 0:
+              resolve(res.data);
+              break;
+
+            default:
+              // 接口错误提示
+              Toast.fail(res.data.msg);
+              break;
           }
         })
         .catch((err) => {

@@ -69,6 +69,9 @@ const routes = [
     name: "list",
     path: "/sort/list",
     component: List,
+    meta: {
+      type: "login",
+    },
   },
   {
     name: "detail",

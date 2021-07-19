@@ -12,8 +12,7 @@ export function reqLocation(query) {
 export function postForm(query) {
   return axiosApi("mywork/postform/", query, "post");
 }
-
 //用户登录
 export function postLogin(query) {
-  return axiosApi("myuser/login/", query, "post");
+  return axiosApi("myuser/login/", query, "get");
 }
