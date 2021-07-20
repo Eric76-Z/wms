@@ -7,7 +7,7 @@ const Login = () => import("@/views/profile/Login");
 const Register = () => import("@/views/profile/Register");
 
 const List = () => import("@/views/sort/list/List");
-const Detail = () => import("@/views/sort/detail/Detail");
+
 const BladeApply = () => import("@/views/sort/list/bladeapply/BladeApply");
 const BladeApply1 = () => import("@/views/sort/list/bladeapply/BladeApply1");
 const BladeApply2 = () => import("@/views/sort/list/bladeapply/BladeApply2");
@@ -18,6 +18,9 @@ const FaultRecord1 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord1");
 const FaultRecord2 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord2");
+
+const Detail = () => import("@/views/sort/detail/Detail");
+const BladeDetail = () => import("@/views/sort/detail/BladeDetail");
 
 const FaultList = () => import("@/views/sort/mtisland/faultlist/FaultList");
 const FaultList1 = () => import("@/views/sort/mtisland/faultlist/FaultList1");
@@ -80,6 +83,11 @@ const routes = [
     // meta: {
     //   title: "分类-列表明细",
     // },
+  },
+  {
+    name: "bladedetail",
+    path: "/sort/detail/bladedetail",
+    component: BladeDetail,
   },
   {
     name: "bladeapply",

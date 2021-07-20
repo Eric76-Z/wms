@@ -39,9 +39,10 @@ export default {
       },
       listcfg: {
         content: {
-          bladeapply: {
+          bladedetail: {
             title: "刀片登记详情",
             label: "刀片申请了不知道什么状态，请点击这里......",
+            to: "/sort/detail/bladedetail",
           },
           weldingguncls: {
             title: "枪衣状态详情",

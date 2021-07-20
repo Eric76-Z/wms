@@ -14,7 +14,7 @@
 import { ref } from "vue";
 
 export default {
-  name: "faultlist",
+  name: "faultlist1",
   data() {
     return {};
   },

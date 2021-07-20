@@ -12,6 +12,7 @@ import { Image as VanImage } from "vant";
 import { Button } from "vant";
 import { DatetimePicker } from "vant";
 import { Search, Lazyload } from "vant";
+import { ConfigProvider } from "vant";
 const app = createApp(App);
 app.use(store);
 app.use(router);
@@ -36,6 +37,7 @@ app.use(Button);
 app.use(DatetimePicker);
 app.use(Search);
 app.use(Lazyload);
+app.use(ConfigProvider);
 
 app.config.devtools = true;
 
