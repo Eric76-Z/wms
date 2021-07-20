@@ -1,22 +1,15 @@
 <template>
   <main-nav-bar :navbarcfg="navbarcfg" />
-  <div class="idicon">
-    <van-image
-      round
-      width="5rem"
-      height="5rem"
-      src="https://img.yzcdn.cn/vant/cat.jpeg"
-    />
-    <h1>hasaiii</h1>
-  </div>
-  <van-cell title="用户信息" is-link value="编辑" />
-  <van-cell title="联系作者" is-link value="编辑" />
-  <van-button type="success" size="large" to="/login">登录</van-button>
-  <van-button type="danger" size="large">退出登录</van-button>
+  <profile-login :isLogin="isLogin" :userinfo="userinfo"></profile-login>
+  <profile-logout :isLogin="isLogin"></profile-logout>
 </template>
 
 <script>
+import { computed, toRef } from "vue";
+import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import ProfileLogin from "@/components/content/mainuser/ProfileLogin";
+import ProfileLogout from "@/components/content/mainuser/ProfileLogout";
 
 export default {
   name: "Profile",
@@ -28,18 +21,28 @@ export default {
       },
     };
   },
+  setup() {
+    const store = useStore();
+    const userinfo = toRef(store.state.user, "userinfo").value;
+    const userState = toRef(store.state.user, "userState");
+    const isLogin = computed(() => {
+      if (userState.value === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    return {
+      isLogin,
+      userinfo,
+    };
+  },
   components: {
     MainNavBar,
+    ProfileLogin,
+    ProfileLogout,
   },
 };
 </script>
 
-<style lang="scss">
-.idicon {
-  // margin: 0 auto;
-  padding: 15px 0;
-  text-align: center;
-  border-bottom: 1px solid $border-solid;
-  background-color: #fff;
-}
-</style>
+<style lang="scss"></style>

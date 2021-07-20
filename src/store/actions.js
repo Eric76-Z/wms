@@ -4,6 +4,7 @@ export default {
   getBladedata(context) {
     reqBladeData()
       .then((res) => {
+        console.log(res);
         // context.state.listcfg.content = res.callback;
         context.commit(ADD_TO_BLADEDATA, res.callback);
       })
@@ -12,7 +13,6 @@ export default {
       });
   },
   getLocation(context, payload) {
-    // console.log(payload);
     reqLocation(payload)
       .then((res) => {
         const location = [];

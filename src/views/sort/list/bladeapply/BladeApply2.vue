@@ -77,7 +77,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { Form, Field, Picker, Popup } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
-import { postForm } from "@/network/sort.js";
+import { applyBlade } from "@/network/sort.js";
 export default {
   name: "BladeApply2",
   data() {},
@@ -145,7 +145,7 @@ export default {
     const onSubmit = (values) => {
       values.WeldingGun = formData.WeldingGun;
       values.BladeTypeId = route.params["bladeId"];
-      postForm(values);
+      applyBlade(values);
       console.log("submit", values);
     };
 

@@ -7,16 +7,23 @@
       height="8rem"
       lazy-load
       src="https://img01.yzcdn.cn/vant/cat.jpeg"
+      v-show="haveIcon"
     >
       <template v-slot:loading>
         <van-loading type="spinner" size="20" />
       </template>
     </van-image>
+    <van-icon
+      class="iconfont"
+      class-prefix="icon"
+      name="weidenglu"
+      v-show="!haveIcon"
+    />
     <van-form @submit="onSubmit">
       <van-cell-group inset>
         <van-field
           v-model="state.username"
-          name="用户名"
+          name="username"
           label="用户名"
           placeholder="用户名"
           :rules="[{ required: true, message: '请填写用户名' }]"
@@ -24,7 +31,7 @@
         <van-field
           v-model="state.password"
           type="password"
-          name="密码"
+          name="password"
           label="密码"
           placeholder="密码"
           :rules="[{ required: true, message: '请填写密码' }]"
@@ -36,7 +43,6 @@
         </van-button>
         <div class="halfbtn">
           <van-button type="success" to="/register">注册</van-button>
-
           <van-button type="warning">忘记密码</van-button>
         </div>
       </div>
@@ -45,7 +51,8 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, toRef, computed } from "vue";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
@@ -61,7 +68,8 @@ export default {
   },
   setup() {
     const store = useStore();
-    console.log(store._actions);
+    const router = useRouter();
+    const userinfo = toRef(store.state.user, "userinfo").value;
     const {
       "user/userChangeState": [userChangeState],
     } = store._actions;
@@ -70,13 +78,26 @@ export default {
       password: "",
     });
     const onSubmit = (values) => {
-      userChangeState(state);
-      console.log("submit", values);
+      values.action = "login";
+      userChangeState(values)
+        .then(() => {
+          router.push("/profile");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
-
+    const haveIcon = computed(() => {
+      if (userinfo.userIcon === "") {
+        return false;
+      } else {
+        return true;
+      }
+    });
     return {
       state,
       onSubmit,
+      haveIcon,
     };
   },
   components: {
@@ -90,6 +111,9 @@ export default {
   text-align: center;
   .van-image {
     margin: 10px 0 15px 0;
+  }
+  .iconfont {
+    font-size: 8rem;
   }
   .halfbtn {
     display: flex;

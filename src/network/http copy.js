@@ -3,7 +3,6 @@ import qs from "qs";
 import { Dialog, Toast } from "vant";
 import store from "../store";
 import router from "../router";
-import { USER_LOGOUT } from "@/store/mutation-types";
 
 let config = {
   baseURL: "http://192.168.198.128:8000/",
@@ -24,7 +23,7 @@ Axios.interceptors.request.use(
     });
 
     if (store.state.user.token !== "") {
-      config.headers.Authorization = store.state.user.token;
+      config.headers.token = store.state.user.token;
       console.log(config.headers.token);
     }
     return config;
@@ -45,7 +44,8 @@ Axios.interceptors.response.use(
       console.log(data.errcode);
       if (data.errcode == -1) {
         //登录过期 需求重新登录 情况vuex的token和localstorge的token
-        store.commit(USER_LOGOUT);
+        console.log("wwwwwwwww");
+        store.commit("settoken", "");
         //调转到login界面
         router.replace({ path: "/login" });
       }

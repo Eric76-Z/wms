@@ -9,10 +9,15 @@ export function reqLocation(query) {
   return axiosApi("mywork/getlocation/", query, "get");
 }
 //提交刀片申请表单
-export function postForm(query) {
-  return axiosApi("mywork/postform/", query, "post");
+export function applyBlade(query) {
+  return axiosApi("mywork/applyblade/", query, "post");
 }
-//用户登录
-export function postLogin(query) {
+//用户登陆
+export function userLogin(query) {
   return axiosApi("myuser/login/", query, "get");
+}
+
+//用户退出登陆
+export function userLogout(query) {
+  return axiosApi("myuser/logout/", query, "post");
 }

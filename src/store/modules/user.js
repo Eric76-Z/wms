@@ -1,44 +1,51 @@
-import { postLogin } from "@/network/sort.js";
-// mutation-types
-const CHANGE_USER_STATE = "change_user_state";
+import { userLogin } from "@/network/sort.js";
+import { USER_LOGIN, USER_LOGOUT } from "@/store/mutation-types";
 
 const state = {
-  username: "",
-  userId: "",
+  userinfo: {
+    userIcon: "",
+    username: "",
+    userId: "",
+  },
   token: "",
   userState: 400,
 };
 
 const mutations = {
-  [CHANGE_USER_STATE]: (state, data) => {
-    state.username = data.username;
-    state.userId = data.userId;
-    console.log(data);
-    state.userState = data.state;
+  [USER_LOGIN]: (state, data) => {
+    state.userinfo.username = data.username;
+    state.userinfo.userId = data.userId;
+    state.userState = data.userState;
     state.token = data.token;
+  },
+  [USER_LOGOUT]: (state) => {
+    state.userState = "400";
+    state.token = "";
   },
 };
 
 const actions = {
   //  用户login/logout
   userChangeState(context, payload) {
-    console.log(payload);
-    postLogin(payload)
-      .then((res) => {
-        if (res.state == 200) {
-          const data = {
-            username: res.username,
-            userId: res.userId,
-            token: res.token,
-            userState: res.state,
-          };
-          context.commit(CHANGE_USER_STATE, data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // context.commit(CHANGE_USER_STATE, payload);
+    if (payload.action === "login") {
+      userLogin(payload)
+        .then((res) => {
+          if (res.state == 200) {
+            const data = {
+              username: res.username,
+              userId: res.userId,
+              token: res.token,
+              userState: res.state,
+            };
+            context.commit(USER_LOGIN, data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (payload.action === "logout") {
+      context.commit(USER_LOGOUT);
+    }
   },
 };
 
