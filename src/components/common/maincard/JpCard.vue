@@ -15,7 +15,8 @@
             }}--{{ listdata.weldinggun_num }}
           </div>
           <div class="jp-card__desc">
-            <van-tag color="#7232dd" plain>申</van-tag>{{ listdata.applyblade }}
+            <van-tag color="#7232dd" plain>申</van-tag>
+            {{ listdata.applyblade }}
           </div>
         </div>
         <div class="jp-card__middle">
@@ -68,7 +69,7 @@ export default {
       .jp-card__tag {
         position: absolute;
         top: 2px;
-        left: 0;
+        left: -3px;
       }
     }
 

@@ -47,6 +47,9 @@
         </van-list>
       </van-tab>
     </van-tabs>
+    <div class="filter">
+      <div class="filter-content"><van-icon name="filter-o" /> 筛选</div>
+    </div>
   </div>
 </template>
 
@@ -74,7 +77,7 @@ export default {
   },
   setup() {
     const tabscfg = {
-      title: ["全部", "已完成", "数据分析", "公告"],
+      title: ["全部", "数据分析", "公告", ""],
     };
     const listcfg = reactive({
       loading: false, // 是否处在加载状态
@@ -124,6 +127,7 @@ export default {
 
 <style lang="scss">
 #bladedetail {
+  position: relative;
   --van-tabs-card-height: 20px;
   .van-search {
     padding: 5px 10px;
@@ -149,6 +153,27 @@ export default {
   }
   .van-tabs {
     --van-tabs-line-height: 28px;
+    .van-tab__pane {
+    }
+  }
+
+  .filter {
+    width: 25%;
+    line-height: 28px;
+    background-color: --van-white;
+    position: absolute;
+    top: 88px;
+    right: 0;
+    padding: 0 4px;
+    // align-items: center;
+    // justify-content: center;
+    // box-sizing: border-box;
+    // padding: 0 var(--van-padding-base);
+    // color: var(--van-tab-text-color);
+    // font-size: var(--van-tab-font-size);
+    // line-height: var(--van-tab-line-height);
+    // cursor: pointer;
+    z-index: 999px;
   }
 }
 </style>
