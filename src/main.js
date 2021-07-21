@@ -6,7 +6,7 @@ import store from "./store";
 import { Tabbar, TabbarItem } from "vant";
 import { NavBar, Sidebar, SidebarItem } from "vant";
 import { Icon, Toast, Card, List, Dialog } from "vant";
-import { Tab, Tabs } from "vant";
+import { Tab, Tabs, Tag } from "vant";
 import { Cell, CellGroup, Form, Field } from "vant";
 import { Image as VanImage } from "vant";
 import { Button } from "vant";
@@ -38,6 +38,7 @@ app.use(DatetimePicker);
 app.use(Search);
 app.use(Lazyload);
 app.use(ConfigProvider);
+app.use(Tag);
 
 app.config.devtools = true;
 

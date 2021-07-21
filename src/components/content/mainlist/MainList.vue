@@ -1,11 +1,12 @@
 <template>
-  <van-list
-    v-model:loading="state.loading"
-    :finished="state.finished"
-    finished-text="没有更多了"
-  >
-    <slot></slot>
-    <!-- <van-cell-group v-for="(item, index) in listcfg" :key="index">
+  <div class="mainlist">
+    <van-list
+      v-model:loading="state.loading"
+      :finished="state.finished"
+      finished-text="没有更多了"
+    >
+      <slot></slot>
+      <!-- <van-cell-group v-for="(item, index) in listcfg" :key="index">
       <van-cell
         :title="item.title"
         value="内容"
@@ -14,7 +15,8 @@
         :to="item.to"
       />
     </van-cell-group> -->
-  </van-list>
+    </van-list>
+  </div>
 </template>
 
 <script>
@@ -36,7 +38,7 @@ export default {
       error: false, // 是否加载失败
       list: [], // 列表
       page: 1, // 分页
-      page_size: 10, // 每页条数
+      page_size: 8, // 每页条数
       total: 0, // 数据总条数
     });
 
@@ -47,4 +49,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss"></style>

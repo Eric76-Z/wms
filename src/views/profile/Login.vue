@@ -52,7 +52,7 @@
 
 <script>
 import { reactive, toRef, computed } from "vue";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
@@ -68,7 +68,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
+    // const router = useRouter();
     const userinfo = toRef(store.state.user, "userinfo").value;
     const {
       "user/userChangeState": [userChangeState],
@@ -79,13 +79,13 @@ export default {
     });
     const onSubmit = (values) => {
       values.action = "login";
-      userChangeState(values)
-        .then(() => {
-          router.push("/profile");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      userChangeState(values);
+      // .then(() => {
+
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      // });
     };
     const haveIcon = computed(() => {
       if (userinfo.userIcon === "") {

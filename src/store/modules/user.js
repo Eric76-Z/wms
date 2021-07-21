@@ -1,5 +1,8 @@
 import { userLogin } from "@/network/sort.js";
+import router from "@/router";
+// import { Toast } from "vant";
 import { USER_LOGIN, USER_LOGOUT } from "@/store/mutation-types";
+// import { Toast } from "vant";
 
 const state = {
   userinfo: {
@@ -17,6 +20,7 @@ const mutations = {
     state.userinfo.userId = data.userId;
     state.userState = data.userState;
     state.token = data.token;
+    console.log(state);
   },
   [USER_LOGOUT]: (state) => {
     state.userState = "400";
@@ -28,16 +32,22 @@ const actions = {
   //  用户login/logout
   userChangeState(context, payload) {
     if (payload.action === "login") {
-      userLogin(payload)
+      const data = {
+        username: payload.username,
+        password: payload.password,
+      };
+      userLogin(data)
         .then((res) => {
+          console.log(res);
           if (res.state == 200) {
             const data = {
               username: res.username,
               userId: res.userId,
-              token: res.token,
+              token: res.access,
               userState: res.state,
             };
             context.commit(USER_LOGIN, data);
+            router.push("/profile");
           }
         })
         .catch((err) => {

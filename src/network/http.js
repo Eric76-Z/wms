@@ -1,13 +1,16 @@
 import axios from "axios";
 import qs from "qs";
 import { Dialog, Toast } from "vant";
-import store from "../store";
-import router from "../router";
-import { USER_LOGOUT } from "@/store/mutation-types";
+
+// let getCookie = function (cookie) {
+//   let reg = /csrftoken=([\w]+)[;]?/g;
+//   return reg.exec(cookie)[1];
+// };
 
 let config = {
-  baseURL: "http://192.168.198.128:8000/",
+  baseURL: "http://192.168.198.129:8000/",
   timeout: 5000, // Timeout
+  // withCredentials: true, // Check cross-site Access-Control
 };
 
 // 创建Axios对象
@@ -22,11 +25,11 @@ Axios.interceptors.request.use(
       message: "加载中...",
       forbidClick: true,
     });
-
-    if (store.state.user.token !== "") {
-      config.headers.Authorization = store.state.user.token;
-      console.log(config.headers.token);
-    }
+    // if (config.method == "post") {
+    //   config.headers = Object.assign(config.headers, {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   });
+    // }
     return config;
   },
   (error) => {
@@ -40,17 +43,6 @@ Axios.interceptors.response.use(
   (response) => {
     // Do something with response data
     Toast.clear();
-    if (response.status == 200) {
-      const data = response.data;
-      console.log(data.errcode);
-      if (data.errcode == -1) {
-        //登录过期 需求重新登录 情况vuex的token和localstorge的token
-        store.commit(USER_LOGOUT);
-        //调转到login界面
-        router.replace({ path: "/login" });
-      }
-      // return data;
-    }
     return response;
   },
   (error) => {
@@ -84,15 +76,12 @@ export default function axiosApi(type, params, method) {
         data: qs.stringify(params),
       })
         .then((res) => {
-          switch (res.data.errcode) {
-            case 0:
-              resolve(res.data);
-              break;
-
-            default:
-              // 接口错误提示
-              Toast.fail(res.data.msg);
-              break;
+          console.log(res);
+          if (res.data.errcode == 0) {
+            resolve(res.data);
+          } else {
+            // 接口错误提示
+            Toast.fail(res.data.msg);
           }
         })
         .catch((err) => {
@@ -109,6 +98,7 @@ export default function axiosApi(type, params, method) {
             case 0:
               resolve(res.data);
               break;
+
             default:
               // 接口错误提示
               Toast.fail(res.data.msg);
