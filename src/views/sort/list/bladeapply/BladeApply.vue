@@ -16,7 +16,6 @@
 <script>
 import { reactive, toRef } from "vue";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
-// import { getBladeData } from "@/network/sort.js";
 import { useStore } from "vuex";
 
 export default {
@@ -29,38 +28,37 @@ export default {
   },
   setup() {
     const store = useStore();
+    const bladeinfo = toRef(store.state.blade, "bladeinfo");
+    console.log(bladeinfo);
+    const {
+      "blade/getBladedata": [getBladedata],
+    } = store._actions;
+
     const navbarcfg = {
       title: "表单-刀片申请",
       isShow: [true, true, true],
     };
-
-    const bladedata = toRef(store.state, "bladedata");
-    // console.log(bladedata);
-    const {
-      getBladedata: [getBladedata],
-    } = store._actions;
-
-    const listcfg = reactive({ content: bladedata });
+    const listcfg = reactive({ content: bladeinfo });
+    console.log(listcfg);
     return {
       navbarcfg,
       listcfg,
-      bladedata,
+      bladeinfo,
       getBladedata,
     };
   },
   beforeCreate() {
     //判断store中有没有数据
-    // console.log(this.bladedata);
-    // console.log(this.bladedata.checked);
-    // console.log(this.bladedata.checked !== undefined);
-    if (this.bladedata.checked !== undefined) {
+    if (this.bladeinfo.checked !== undefined) {
       //有数据
-      console.log(this.bladedata);
-      // this.listcfg.content = this.bladedata;
+      console.log(this.bladeinfo);
     } else {
       //没有请求数据
-      console.log("重新加载bladedata");
-      this.getBladedata();
+      console.log("重新加载bladeinfo");
+      const params = {
+        target: "getbladeinfo",
+      };
+      this.getBladedata(params);
     }
   },
 };

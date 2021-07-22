@@ -4,6 +4,7 @@ import mutations from "./mutations";
 import actions from "./actions";
 import getters from "./getters";
 import user from "./modules/user";
+import blade from "./modules/blade/blade";
 
 // // //因为我把模块拆分了，但是我又不想每次都导入，就通过这个自动导入modules目录下的模块
 // const modulesFiles = require.context("./modules", true, /\.js$/);
@@ -14,9 +15,8 @@ import user from "./modules/user";
 //   return modules;
 // }, {});
 
-// const PERSIST_PATHS = ["location"];
+const PERSIST_PATHS = ["location", "user"];
 const state = {
-  bladedata: {},
   location: [],
 };
 
@@ -27,21 +27,21 @@ export default createStore({
   getters,
   modules: {
     user: user,
+    blade: blade,
   },
   plugins: [
-    createPersistedState(),
-    // {
-    //   paths: PERSIST_PATHS,
-    // },
-    // {
-    //   storage: window.sessionStorage,
-    //   reducer(val) {
-    //     console.log(val);
-    //     return {
-    //       // 只储存state中的assessmentData
-    //       assessmentData: val.bladedata,
-    //     };
-    //   },
-    // }
+    createPersistedState({
+      paths: PERSIST_PATHS,
+    }),
+    createPersistedState({
+      storage: window.sessionStorage,
+      reducer(val) {
+        console.log(val);
+        return {
+          bladeinfo: val.blade.bladeinfo,
+          bladeitemdata: val.blade.bladeitemdata,
+        };
+      },
+    }),
   ],
 });

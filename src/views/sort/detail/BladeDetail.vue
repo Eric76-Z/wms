@@ -2,21 +2,27 @@
   <div id="bladedetail">
     <main-nav-bar :navbarcfg="navbarcfg" />
     <van-search
-      v-model="value"
+      v-model="searchcfg.value"
       ref="search"
-      :show-action="isShow"
       placeholder="请输入搜索关键词"
     />
-    <van-tabs v-model:active="active" animated>
-      <van-tab v-for="item in tabscfg.title" :title="item" :key="item">
-        <van-list
-          v-model:loading="listcfg.loading"
-          :finished="listcfg.finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <slot>
-            <!-- <van-card
+    <van-tabs v-model:active="tabscfg.active" animated>
+      <van-tab
+        v-for="(item, index) in tabscfg.title"
+        :title="item"
+        :key="index"
+      >
+        <div class="page-list" v-if="index === 0">
+          <van-list
+            v-model:loading="listcfg.loading"
+            v-model:error="listcfg.error"
+            :finished="listcfg.finished"
+            finished-text="没有更多了"
+            @load="listcfg.onLoad"
+            @refresh="listcfg.onRefresh"
+          >
+            <slot>
+              <!-- <van-card
               v-for="item in listcfg.list"
               :key="item"
               :tag="item.tag"
@@ -38,25 +44,34 @@
                 >
               </template>
             </van-card> -->
-            <jp-card
-              v-for="item in listcfg.list"
-              :key="item.id"
-              :listdata="item"
-            ></jp-card>
-          </slot>
-        </van-list>
+              <jp-card
+                v-for="item in listcfg.list"
+                :key="item.id"
+                :listdata="item"
+              ></jp-card>
+            </slot>
+          </van-list>
+        </div>
       </van-tab>
     </van-tabs>
-    <div class="filter">
-      <div class="filter-content"><van-icon name="filter-o" /> 筛选</div>
+    <!-- 筛选器 -->
+    <div class="filter" @click="itemFilter">
+      <div class="filter-content">
+        <span>筛选<van-icon name="filter-o" /> </span>
+      </div>
     </div>
+    <back-top></back-top>
   </div>
 </template>
 
 <script>
+import { reactive, computed } from "vue";
+// import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import BackTop from "@/components/common/BackTop";
 import JpCard from "@/components/common/maincard/JpCard";
-import { reactive } from "vue";
+import { reqBladeData } from "@/network/sort.js";
+
 // import MiddleBar from "@/components/content/maintabbar/MiddleBar";
 
 export default {
@@ -72,55 +87,99 @@ export default {
   components: {
     MainNavBar,
     JpCard,
+    BackTop,
     // MiddleBar,
     // MainList,
   },
+  methods: {
+    showBackTop() {
+      console.log("wwwwwwww");
+      let vanlist = document.getElementsByClassName("van-list")[0];
+      let vanlist_scrolltop = vanlist.offsetTop;
+      console.log(vanlist_scrolltop);
+    },
+  },
   setup() {
-    const tabscfg = {
+    const tabscfg = reactive({
       title: ["全部", "数据分析", "公告", ""],
-    };
+      active: 0,
+    });
+    const searchcfg = reactive({
+      value: "",
+    });
+
     const listcfg = reactive({
       loading: false, // 是否处在加载状态
       finished: false, // 是否已加载完成
       error: false, // 是否加载失败
-      list: [
-        {
-          location_level_1: "CPH2.1",
-          location_level_2: "UB",
-          location_level_3: "LTV",
-          weldinggun_num: "1030SK1",
-          id: 379,
-          order_comments: "None",
-          repair_order_num: "None",
-          order_status: 2,
-          receive_time: "None",
-          complete_time: "None",
-          create_time: "2021-06-04 03:33",
-          update_time: "2021-06-04 06:41",
-          applicant: "张炯平",
-          receiver: "None",
-          applyblade: "邺格02G刀片|YGC-6",
-          receiveblade: "None",
-          sum: 0,
-          last_replace: "首次领用",
-        },
-      ], // 列表
+      list: [], // 列表
       totalPage: 1, // 分页
-      // pageSize: 8, // 每页条数
+      pageSize: 10, // 每页条数
       totalSize: 0, // 数据总条数
+      currPage: 1, //从1开始
+      onLoad: () => {
+        listcfg.loading = true;
+        reqBladeData({
+          target: "getbladeitemdata",
+          currPage: listcfg.currPage,
+          pageSize: listcfg.pageSize,
+        })
+          .then((res) => {
+            console.log(res);
+            console.log(res.callback.rows);
+            listcfg.list.push.apply(listcfg.list, res.callback.rows);
+            console.log(listcfg.list);
+            const finishFlag = computed(() => {
+              if (res.callback.finished === 0) {
+                return false;
+              } else {
+                return true;
+              }
+            });
+            listcfg.finished = finishFlag;
+            console.log(listcfg.finished);
+            listcfg.currPage++;
+            listcfg.loading = false;
+          })
+          .catch((err) => {
+            listcfg.error = true;
+            console.log(err);
+          });
+      },
+      onRefresh: () => {
+        console.log("刷新");
+        // 清空列表数据
+        listcfg.finished = false;
+        // 重新加载数据
+        // 将 loading 设置为 true，表示处于加载状态
+        listcfg.loading = true;
+        listcfg.onLoad();
+      },
     });
-    const mainlistcardcfg = {
-      list: listcfg.list,
+    const itemFilter = () => {
+      // console.log(bladeitemdata.rows);
+      console.log(listcfg.list);
     };
-    const onLoad = () => {
-      console.log("wwwwwwwwww");
-    };
+    // const showBackTop = () => {
+    //   console.log("wwwwwwww");
+    //   let vanlist = document.getElementsByClassName("van-list")[0];
+    //   let vanlist_scrolltop = vanlist.offsetTop;
+    //   console.log(vanlist_scrolltop);
+    // };
+
+    // onMounted(() => {
+    //   window.addEventListener("scroll", showBackTop);
+    // });
+
     return {
       tabscfg,
+      searchcfg,
       listcfg,
-      onLoad,
-      mainlistcardcfg,
+      itemFilter,
     };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.showBackTop);
   },
 };
 </script>
@@ -136,7 +195,7 @@ export default {
       line-height: 22px;
     }
   }
-  .mainlist {
+  .page-list {
     width: 100%;
     height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px - 44px);
     overflow: auto;
@@ -158,22 +217,37 @@ export default {
   }
 
   .filter {
+    display: flex;
     width: 25%;
     line-height: 28px;
     background-color: --van-white;
     position: absolute;
     top: 88px;
     right: 0;
-    padding: 0 4px;
-    // align-items: center;
-    // justify-content: center;
-    // box-sizing: border-box;
-    // padding: 0 var(--van-padding-base);
-    // color: var(--van-tab-text-color);
-    // font-size: var(--van-tab-font-size);
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 var(--van-padding-base);
+    color: var(--van-tab-text-color);
+    font-size: var(--van-tab-font-size);
+    font-weight: 500;
     // line-height: var(--van-tab-line-height);
-    // cursor: pointer;
+    cursor: pointer;
     z-index: 999px;
+    .filter-content {
+      span {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+
+  .back-top {
+    position: absolute;
+    right: 22px;
+    bottom: 40px;
   }
 }
 </style>

@@ -20,12 +20,37 @@
           </div>
         </div>
         <div class="jp-card__middle">
-          <div></div>
+          <div class="jp-card__lt">
+            <van-tag color="#7232dd" plain>申</van-tag>
+            {{ listdata.applicant }}
+          </div>
+          <div class="jp-card__rt">
+            <van-tag color="#7232dd" plain>领</van-tag>
+            {{ listdata.receiver }}
+          </div>
         </div>
-        <div class="jp-card__bottom"></div>
+        <div class="jp-card__bottom">
+          始于
+          <span class="block">21</span>
+          <span class="colon">年</span>
+          <span class="block">05</span>
+          <span class="colon">月</span>
+          <span class="block">03</span>
+          <span class="colon">日</span>
+          ,过去
+          <span class="block">20</span>
+          天
+        </div>
       </div>
     </div>
-    <div class="jp-card__footer"></div>
+    <div class="jp-card__footer">
+      <van-button
+        square
+        color="linear-gradient(to right, #ff6034, #ee0a24)"
+        size="mini"
+        >放弃</van-button
+      >
+    </div>
   </div>
 </template>
 
@@ -40,7 +65,7 @@ export default {
   },
   setup(props) {
     const listdata = toRef(props, listdata);
-    console.log(listdata);
+    // console.log(listdata);
     return {};
   },
 };
@@ -91,6 +116,35 @@ export default {
           max-height: var(--van-card-desc-line-height);
           color: var(--van-card-desc-color);
           line-height: var(--van-card-desc-line-height);
+        }
+      }
+      .jp-card__middle {
+        display: flex;
+        .jp-card__lt {
+          flex: 1;
+        }
+        .jp-card__rt {
+          flex: 1;
+        }
+      }
+      .jp-card__bottom {
+        font-size: 12px;
+        .block {
+          display: inline-block;
+          width: 22px;
+          color: #fff;
+          font-size: 12px;
+          text-align: center;
+          background-color: #ff976a;
+          border-radius: 4px;
+          &:last-child {
+            background-color: #ee0a24;
+          }
+        }
+        .colon {
+          display: inline-block;
+          margin: 0 4px;
+          color: #ff976a;
         }
       }
     }

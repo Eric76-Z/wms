@@ -1,17 +1,6 @@
-import { ADD_TO_BLADEDATA, ADD_TO_LOCATION } from "./mutation-types";
-import { reqBladeData, reqLocation } from "@/network/sort.js";
+import { ADD_TO_LOCATION } from "./mutation-types";
+import { reqLocation } from "@/network/sort.js";
 export default {
-  getBladedata(context) {
-    reqBladeData()
-      .then((res) => {
-        console.log(res);
-        // context.state.listcfg.content = res.callback;
-        context.commit(ADD_TO_BLADEDATA, res.callback);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  },
   getLocation(context, payload) {
     reqLocation(payload)
       .then((res) => {

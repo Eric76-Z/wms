@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
   const type = to.meta.type;
   // 判断该路由是否需要登录权限
   if (type === "login") {
-    if (store.state.user.userState !== 200 && store.state.token === undefined) {
+    if (store.state.user.userState !== 200) {
       next({ name: "login" });
     } else {
       next();
