@@ -18,6 +18,9 @@ import blade from "./modules/blade/blade";
 const PERSIST_PATHS = ["location", "user"];
 const state = {
   location: [],
+  listOffset: {
+    bladedetail_scrollTop: 0,
+  },
 };
 
 export default createStore({
@@ -40,6 +43,7 @@ export default createStore({
         return {
           bladeinfo: val.blade.bladeinfo,
           bladeitemdata: val.blade.bladeitemdata,
+          listOffset: val.listOffset,
         };
       },
     }),

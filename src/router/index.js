@@ -88,6 +88,9 @@ const routes = [
     name: "bladedetail",
     path: "/sort/detail/bladedetail",
     component: BladeDetail,
+    meta: {
+      keepAlive: true,
+    },
   },
   {
     name: "bladeapply",
