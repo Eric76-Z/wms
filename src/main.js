@@ -13,6 +13,7 @@ import { Button } from "vant";
 import { DatetimePicker } from "vant";
 import { Search, Lazyload } from "vant";
 import { ConfigProvider } from "vant";
+import { Popup } from "vant";
 const app = createApp(App);
 app.use(store);
 app.use(router);
@@ -39,6 +40,7 @@ app.use(Search);
 app.use(Lazyload);
 app.use(ConfigProvider);
 app.use(Tag);
+app.use(Popup);
 
 app.config.devtools = true;
 
