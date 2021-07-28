@@ -11,7 +11,6 @@
         v-for="(item, index) in tabscfg.title"
         :title="item"
         :key="index"
-        ref="scroll1"
       >
         <div class="page-list" ref="scroll" v-if="index === 0">
           <van-list
@@ -121,12 +120,12 @@ export default {
     //vuex数据
     const store = useStore();
     const listOffset = toRef(store.state, "listOffset");
-
+    //路由
     const router = reactive(useRouter());
     console.log(router);
 
     let scroll = ref(null);
-    let scroll1 = ref(null);
+
     let showBackTop = ref(false);
 
     //组件配置
@@ -221,10 +220,8 @@ export default {
         showBackTop.value = false;
       }
     }, 100);
-
     onMounted(() => {
       nextTick(() => {
-        console.log(scroll1);
         document.addEventListener("touchmove", handle);
       });
     });
@@ -259,7 +256,6 @@ export default {
       scroll,
       showBackTop,
       backtop,
-      scroll1,
       listOffset,
     };
   },

@@ -14,10 +14,12 @@ import { DatetimePicker } from "vant";
 import { Search, Lazyload } from "vant";
 import { ConfigProvider } from "vant";
 import { Popup } from "vant";
+import { DropdownMenu, DropdownItem } from "vant";
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(DropdownMenu, DropdownItem);
 app.use(Tabbar);
 app.use(TabbarItem);
 app.use(NavBar);

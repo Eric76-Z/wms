@@ -1,5 +1,9 @@
 import axiosApi from "./http";
 
+//按query关键词返回工位信息
+export function reqLocation(query) {
+  return axiosApi("workstation/location/", query, "get");
+}
 //获取刀片相关数据
 export function reqBladeData(params) {
   return axiosApi("mywork/getbladedata/", params, "get");
@@ -10,10 +14,6 @@ export function reqBladeItemData(params) {
   return axiosApi("mywork/getbladeitemdata/", params, "post");
 }
 
-//按query关键词返回工位信息
-export function reqLocation(query) {
-  return axiosApi("mywork/getlocation/", query, "get");
-}
 //提交刀片申请表单
 export function applyBlade(query) {
   return axiosApi("mywork/applyblade/", query, "post");
