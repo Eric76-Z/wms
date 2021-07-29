@@ -5,6 +5,7 @@
       v-model="searchcfg.value"
       ref="search"
       placeholder="请输入搜索关键词"
+      @search="onSearch"
     />
     <van-tabs v-model:active="tabscfg.active" animated>
       <van-tab
@@ -68,7 +69,7 @@
       :style="{ height: '100%', width: '90%' }"
     >
       <template #default>
-        <main-filter></main-filter>
+        <main-filter @queryData="queryData"></main-filter>
       </template>
     </van-popup>
     <back-top v-show="showBackTop" @click="backtop"></back-top>
@@ -125,7 +126,6 @@ export default {
     console.log(router);
 
     let scroll = ref(null);
-
     let showBackTop = ref(false);
 
     //组件配置
@@ -226,6 +226,18 @@ export default {
       });
     });
 
+    //搜索模块
+    let query = reactive();
+    const queryData = (data) => {
+      query = data;
+    };
+
+    const onSearch = () => {
+      query.queryParam = searchcfg.value;
+      console.log(query);
+      reqBladeData(query);
+    };
+
     // onActivated(() => {
     //   console.log("激活");
     //   console.log(scroll);
@@ -257,6 +269,8 @@ export default {
       showBackTop,
       backtop,
       listOffset,
+      onSearch,
+      queryData,
     };
   },
   // beforeRouteEnter() {

@@ -1,9 +1,15 @@
 import axiosApi from "./http";
 
+//获取CPH工位信息
+export function reqCphLocation(query) {
+  return axiosApi("workstation/location/cph_location_tree/", query, "get");
+}
+
 //按query关键词返回工位信息
 export function reqLocation(query) {
-  return axiosApi("workstation/location/", query, "get");
+  return axiosApi("workstation/location/cph_location_tree/", query, "get");
 }
+
 //获取刀片相关数据
 export function reqBladeData(params) {
   return axiosApi("mywork/getbladedata/", params, "get");

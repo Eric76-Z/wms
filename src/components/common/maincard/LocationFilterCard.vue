@@ -6,7 +6,7 @@
         :key="index"
         :plain="!lfcardcfg.selected[index]"
         round
-        type="primary"
+        type="success"
         size="mini"
         @click="lfcardcfg.clickBtn(index)"
         >{{ item }}</van-button
@@ -33,9 +33,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scop>
 #locationfiltercard {
-  background-color: gray;
+  background-color: var(--van-gray-2);
   padding: 5px 8px;
+  .lf-content {
+    .van-button {
+      min-width: 40px;
+    }
+  }
 }
 </style>

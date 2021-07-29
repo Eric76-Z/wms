@@ -8,7 +8,7 @@ import { Dialog, Toast } from "vant";
 // };
 
 let config = {
-  baseURL: "http://192.168.198.129:8000/",
+  baseURL: "http://127.0.0.1:8000/",
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -76,12 +76,16 @@ export default function axiosApi(type, params, method) {
         data: qs.stringify(params),
       })
         .then((res) => {
-          console.log(res);
-          if (res.data.errcode == 0) {
-            resolve(res.data);
-          } else {
-            // 接口错误提示
-            Toast.fail(res.data.msg);
+          // console.log(res);
+          switch (res.status) {
+            case 200:
+              resolve(res.data);
+              break;
+
+            default:
+              // 接口错误提示
+              Toast.fail(res.statusText);
+              break;
           }
         })
         .catch((err) => {
@@ -94,14 +98,14 @@ export default function axiosApi(type, params, method) {
         params: params,
       })
         .then((res) => {
-          switch (res.data.errcode) {
-            case 0:
+          // console.log(res);
+          switch (res.status) {
+            case 200:
               resolve(res.data);
               break;
-
             default:
               // 接口错误提示
-              Toast.fail(res.data.msg);
+              Toast.fail(res.statusText);
               break;
           }
         })
