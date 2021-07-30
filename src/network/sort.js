@@ -17,12 +17,12 @@ export function reqBladeData(params) {
 
 //获取刀片申请订单数据
 export function reqBladeItemData(params) {
-  return axiosApi("mywork/getbladeitemdata/", params, "post");
+  return axiosApi("workstation/bladeitem/blade_item/", params, "get");
 }
 
 //提交刀片申请表单
 export function applyBlade(query) {
-  return axiosApi("mywork/applyblade/", query, "post");
+  return axiosApi("workstation/applyblade/", query, "post");
 }
 //用户登陆
 export function userLogin(query) {

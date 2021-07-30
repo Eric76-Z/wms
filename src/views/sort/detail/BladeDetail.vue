@@ -93,7 +93,7 @@ import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import JpCard from "@/components/common/maincard/JpCard";
-import { reqBladeData } from "@/network/sort.js";
+import { reqBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 
 // import MiddleBar from "@/components/content/maintabbar/MiddleBar";
@@ -147,7 +147,7 @@ export default {
       currPage: 1, //从1开始
       onLoad: () => {
         listcfg.loading = true;
-        reqBladeData({
+        reqBladeItemData({
           target: "getbladeitemdata",
           currPage: listcfg.currPage,
           pageSize: listcfg.pageSize,
@@ -235,7 +235,7 @@ export default {
     const onSearch = () => {
       query.queryParam = searchcfg.value;
       console.log(query);
-      reqBladeData(query);
+      reqBladeItemData(query);
     };
 
     // onActivated(() => {
