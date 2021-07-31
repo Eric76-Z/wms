@@ -33,16 +33,19 @@
           <div class="jp-card__rt" v-show="false"></div>
         </div>
         <div class="jp-card__bottom">
-          始于
-          <span class="block">21</span>
-          <span class="colon">年</span>
-          <span class="block">05</span>
-          <span class="colon">月</span>
-          <span class="block">03</span>
-          <span class="colon">日</span>
-          ,过去
-          <span class="block">20</span>
-          天
+          <div class="start-time">
+            创建于
+            <span class="colon">{{ jpcardcfg.data.time.createTime }}</span>
+          </div>
+          <div class="end-time">
+            上次领
+            <span class="colon">21年05月03日</span>
+          </div>
+          <div class="duration">
+            ，过去
+            <span class="block">{{ jpcardcfg.data.time.lastReplace }}</span>
+            天
+          </div>
         </div>
       </div>
     </div>
@@ -59,6 +62,7 @@
 
 <script>
 import { reactive, computed, ref } from "vue";
+import { formatDate } from "@/common/utils";
 export default {
   name: "MainListCard",
   props: {
@@ -136,6 +140,17 @@ export default {
             return color;
           }),
         },
+        time: {
+          createTime: computed(() => {
+            return formatDate.format2(listData.create_time);
+          }),
+          lastReplace: computed(() => {
+            return formatDate.spacingTime(
+              listData.analyse.last_replace,
+              listData.create_time
+            );
+          }),
+        },
       },
     });
     return { listData, jpcardcfg, descTag };
@@ -166,7 +181,7 @@ export default {
       .jp-card__tag {
         position: absolute;
         top: 2px;
-        left: -3px;
+        left: -5px;
       }
     }
 
@@ -203,23 +218,32 @@ export default {
         }
       }
       .jp-card__bottom {
-        font-size: 12px;
-        .block {
+        font-size: 10px;
+
+        .start-time {
+          display: block;
+        }
+        .end-time {
           display: inline-block;
-          width: 22px;
-          color: #fff;
-          font-size: 12px;
-          text-align: center;
-          background-color: #ff976a;
-          border-radius: 4px;
-          &:last-child {
+        }
+        .duration {
+          display: inline-block;
+          .block {
+            display: inline-block;
+            width: 19px;
+            color: antiquewhite;
+            font-size: 10px;
+            text-align: center;
             background-color: #ee0a24;
+            border-radius: 4px;
           }
         }
         .colon {
           display: inline-block;
-          margin: 0 4px;
+          font-size: 10px;
+          text-align: center;
           color: #ff976a;
+          border-radius: 4px;
         }
       }
     }

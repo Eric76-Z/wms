@@ -63,6 +63,25 @@ export const formatDate = {
 
     return time;
   },
+  format2: (dateData) => {
+    let date = new Date(dateData);
+
+    let y = date.getFullYear();
+
+    let m = date.getMonth() + 1;
+
+    m = m < 10 ? "0" + m : m;
+
+    let d = date.getDate();
+    d = d < 10 ? "0" + d : d;
+    let h = date.getHours();
+    h = h < 10 ? "0" + h : h;
+    let min = date.getMinutes();
+    min = min < 10 ? "0" + min : min;
+    const time = y + "年" + m + "月" + d + "日" + " " + h + ":" + min;
+
+    return time;
+  },
   getMin: (dateData1, dateData2) => {
     let time1 = new Date(dateData1).getTime();
     let time2 = new Date(dateData2).getTime();
@@ -71,6 +90,16 @@ export const formatDate = {
     duration =
       duration < 0 && duration > -10 ? "-0" + math.abs(duration) : duration;
     return duration;
+  },
+  spacingTime: (dateData1, dateData2) => {
+    console.log(dateData1);
+    let date1 = new Date(dateData1).getTime();
+    let date2 = new Date(dateData2).getTime();
+    let delta = (date2 - date1) / (60 * 24 * 1000);
+    delta = delta < 10 && delta > 0 ? "0" + delta : delta;
+    delta = delta < 0 && delta > -10 ? "-0" + math.abs(delta) : delta;
+    console.log(delta);
+    return delta;
   },
 };
 
