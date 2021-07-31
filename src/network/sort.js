@@ -1,5 +1,10 @@
 import axiosApi from "./http";
 
+//获取刀片订单信息数据
+export function reqBladeItemData(params) {
+  return axiosApi("workstation/bladeitem/", params, "get");
+}
+
 //获取CPH工位信息
 export function reqCphLocation(query) {
   return axiosApi("workstation/location/cph_location_tree/", query, "get");
@@ -15,10 +20,10 @@ export function reqBladeData(params) {
   return axiosApi("mywork/getbladedata/", params, "get");
 }
 
-//获取刀片申请订单数据
-export function reqBladeItemData(params) {
-  return axiosApi("workstation/bladeitem/blade_item/", params, "get");
-}
+// //获取刀片申请订单数据
+// export function reqBladeItemData(params) {
+//   return axiosApi("workstation/bladeitem/blade_item/", params, "get");
+// }
 
 //提交刀片申请表单
 export function applyBlade(query) {

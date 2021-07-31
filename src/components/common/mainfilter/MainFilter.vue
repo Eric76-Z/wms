@@ -39,11 +39,11 @@
     </div>
     <div class="filter-operate">
       <van-button square class="reset" type="warning" @click="reset"
-        >重置</van-button
-      >
+        >重置
+      </van-button>
       <van-button square class="confirm" type="success" @click="confirm"
-        >确认</van-button
-      >
+        >确认
+      </van-button>
     </div>
   </div>
 </template>
@@ -65,115 +65,114 @@ export default {
   },
   setup(props, context) {
     const locationData = reactive([]);
-    const Lv2 = reactive([]);
-    const Lv3 = reactive([]);
-    // const LocationDataShow = reactive([]);
 
     reqCphLocation({}).then((res) => {
-      console.log(res);
+      // console.log(res);
       const data = res;
       for (let index = 0; index < data.length; index++) {
         locationData.push([
-          data[index]["location_level_1"],
-          data[index]["location_level_2"],
-          data[index]["location_level_3"],
+          data[index]["localLv1"],
+          data[index]["localLv2"],
+          data[index]["localLv3"],
         ]);
       }
       reShow();
     });
-    const queryData = {
-      location: {
-        Lv1: [],
-        Lv2: [],
-        Lv3: [],
-      },
-    };
 
+    const queryData = reactive({
+      localLv1: [],
+      localLv2: [],
+      localLv3: [],
+    });
+    const toshowData = reactive({
+      localLv2: [],
+      localLv3: [],
+    });
+    // 获取已选中的区域信息
     const getSelected = () => {
-      queryData.location.Lv1 = [];
-      queryData.location.Lv2 = [];
-      queryData.location.Lv3 = [];
+      queryData.localLv1 = [];
+      queryData.localLv2 = [];
+      queryData.localLv3 = [];
       for (let index = 0; index < lfcardlv1cfg.selected.length; index++) {
         if (
           lfcardlv1cfg.selected[index] === true &&
-          queryData.location.Lv1.indexOf(lfcardlv1cfg.data[index]) == -1
+          queryData.localLv1.indexOf(lfcardlv1cfg.data[index]) == -1
         ) {
-          queryData.location.Lv1.push(lfcardlv1cfg.data[index]);
+          queryData.localLv1.push(lfcardlv1cfg.data[index]);
         }
       }
       for (let index = 0; index < lfcardlv2cfg.selected.length; index++) {
         if (
           lfcardlv2cfg.selected[index] === true &&
-          queryData.location.Lv2.indexOf(lfcardlv2cfg.data[index]) == -1
+          queryData.localLv2.indexOf(lfcardlv2cfg.data[index]) == -1
         ) {
-          queryData.location.Lv2.push(lfcardlv2cfg.data[index]);
+          queryData.localLv2.push(lfcardlv2cfg.data[index]);
         }
       }
       for (let index = 0; index < lfcardlv3cfg.selected.length; index++) {
         if (
           lfcardlv3cfg.selected[index] === true &&
-          queryData.location.Lv3.indexOf(lfcardlv3cfg.data[index]) == -1
+          queryData.localLv3.indexOf(lfcardlv3cfg.data[index]) == -1
         ) {
-          queryData.location.Lv3.push(lfcardlv3cfg.data[index]);
+          queryData.localLv3.push(lfcardlv3cfg.data[index]);
         }
       }
-      context.emit("queryData", queryData);
     };
 
+    // 根据queryData中已选中的区域信息，重组区域筛选模块
     const reShow = () => {
-      const data = queryData.location;
-      Lv2.length = 0;
-      Lv3.length = 0;
-      // console.log(data);
-      if (data["Lv2"].length == 0) {
-        if (data["Lv1"].length == 0) {
-          console.log(locationData);
+      toshowData.localLv2.length = 0;
+      toshowData.localLv3.length = 0;
+      // console.log(queryData);
+      if (queryData.localLv2.length == 0) {
+        if (queryData.localLv1.length == 0) {
+          // console.log(locationData);
           for (let item of locationData) {
-            if (Lv2.indexOf(item[1]) == -1) {
-              Lv2.push(item[1]);
+            if (toshowData.localLv2.indexOf(item[1]) == -1) {
+              toshowData.localLv2.push(item[1]);
             }
-            if (Lv3.indexOf(item[2]) == -1) {
-              Lv3.push(item[2]);
+            if (toshowData.localLv3.indexOf(item[2]) == -1) {
+              toshowData.localLv3.push(item[2]);
             }
           }
         } else {
           for (let item of locationData) {
-            if (Lv2.indexOf(item[1]) == -1) {
-              Lv2.push(item[1]);
+            if (toshowData.localLv2.indexOf(item[1]) == -1) {
+              toshowData.localLv2.push(item[1]);
             }
             if (
-              Lv3.indexOf(item[2]) == -1 &&
-              data["Lv1"].indexOf(item[0]) != -1
+              toshowData.localLv3.indexOf(item[2]) == -1 &&
+              queryData.localLv1.indexOf(item[0]) != -1
             ) {
-              Lv3.push(item[2]);
+              toshowData.localLv3.push(item[2]);
             }
           }
         }
       } else {
-        if (data["Lv1"].length == 0) {
+        if (queryData.localLv1.length == 0) {
           for (let item of locationData) {
-            if (Lv2.indexOf(item[1]) == -1) {
-              Lv2.push(item[1]);
+            if (toshowData.localLv2.indexOf(item[1]) == -1) {
+              toshowData.localLv2.push(item[1]);
             }
             if (
-              Lv3.indexOf(item[2]) == -1 &&
-              data["Lv2"].indexOf(item[1]) != -1
+              toshowData.localLv3.indexOf(item[2]) == -1 &&
+              queryData.localLv2.indexOf(item[1]) != -1
             ) {
-              Lv3.push(item[2]);
+              toshowData.localLv3.push(item[2]);
             }
           }
         } else {
           for (let item of locationData) {
-            if (Lv2.indexOf(item[1]) == -1) {
-              Lv2.push(item[1]);
+            if (toshowData.localLv2.indexOf(item[1]) == -1) {
+              toshowData.localLv2.push(item[1]);
             }
             if (
-              Lv3.indexOf(item[2]) == -1 &&
-              data["Lv1"].indexOf(item[0]) != -1 &&
-              data["Lv2"].indexOf(item[1]) != -1
+              toshowData.localLv3.indexOf(item[2]) == -1 &&
+              queryData.localLv1.indexOf(item[0]) != -1 &&
+              queryData.localLv2.indexOf(item[1]) != -1
             ) {
               // console.log(item);
-              Lv3.push(item[2]);
+              toshowData.localLv3.push(item[2]);
             }
           }
         }
@@ -201,7 +200,7 @@ export default {
       },
     });
     const lfcardlv2cfg = reactive({
-      data: Lv2,
+      data: toshowData.localLv2,
       selected: [],
       isShow: computed(() => {
         return !state2.value;
@@ -217,7 +216,7 @@ export default {
       },
     });
     const lfcardlv3cfg = reactive({
-      data: Lv3,
+      data: toshowData.localLv3,
       selected: [],
       isShow: computed(() => {
         return !state3.value;
@@ -232,6 +231,7 @@ export default {
         reShow();
       },
     });
+    //展开后箭头方向转换
     const [state1, toggle1] = useToggle(true);
     const filterLv1 = () => {
       toggle1();
@@ -265,7 +265,7 @@ export default {
     //按键确认
     const confirm = () => {
       getSelected();
-      console.log(queryData);
+      context.emit("queryData", queryData);
     };
     //向父组件传递选中状态
     return {

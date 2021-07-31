@@ -69,7 +69,7 @@
       :style="{ height: '100%', width: '90%' }"
     >
       <template #default>
-        <main-filter @queryData="queryData"></main-filter>
+        <main-filter ref="MainFilter" @queryData="queryData"></main-filter>
       </template>
     </van-popup>
     <back-top v-show="showBackTop" @click="backtop"></back-top>
@@ -138,32 +138,29 @@ export default {
     });
     const listcfg = reactive({
       loading: false, // 是否处在加载状态
-      finished: false, // 是否已加载完成
+      finished: false, // 是否已加
       error: false, // 是否加载失败
       list: [], // 列表
-      totalPage: 1, // 分页
+      // totalPage: 1, // 分页
       pageSize: 10, // 每页条数
-      totalSize: 0, // 数据总条数
+      // totalSize: 0, // 数据总条数
       currPage: 1, //从1开始
       onLoad: () => {
         listcfg.loading = true;
-        reqBladeItemData({
-          target: "getbladeitemdata",
-          currPage: listcfg.currPage,
-          pageSize: listcfg.pageSize,
-        })
+        queryParam.page = listcfg.currPage;
+        queryParam.pageSize = listcfg.pageSize;
+        reqBladeItemData(queryParam)
           .then((res) => {
-            // console.log(scroll.value.scrollTop);
-            // console.log(res);
-            // console.log(res.callback.rows);
-            listcfg.list.push.apply(listcfg.list, res.callback.rows);
+            console.log(res);
+
+            listcfg.list.push.apply(listcfg.list, res.results);
             // console.log(scroll);
-            // console.log(listcfg.list);
+            console.log(listcfg.list);
             const finishFlag = computed(() => {
-              if (res.callback.finished === 0) {
-                return false;
-              } else {
+              if (res.next == null) {
                 return true;
+              } else {
+                return false;
               }
             });
             listcfg.finished = finishFlag;
@@ -176,7 +173,6 @@ export default {
             console.log(err);
           });
       },
-
       onRefresh: () => {
         console.log("刷新");
         // 清空列表数据
@@ -187,21 +183,17 @@ export default {
         listcfg.onLoad();
       },
     });
+    //查询参数
+    const queryParam = reactive({
+      page: listcfg.currPage,
+      pageSize: listcfg.pageSize,
+    });
     const popupcfg = reactive({
       show: false,
     });
     const itemFilter = () => {
       popupcfg.show = true;
-      // console.log(bladeitemdata.rows);
-      // console.log(listcfg.list);
-      // const scrollDom = reactive(document.getElementsByClassName("scroll"));
-      // console.log(scrollDom);
-      // console.log(scroll);
-      // console.log(scroll1);
-      // console.log(document.getElementsByClassName("scroll"));
-      // console.log(document.getElementById("bladedetail"));
     };
-
     const backtop = () => {
       scroll.value.scrollTo({
         top: 0,
@@ -227,37 +219,25 @@ export default {
     });
 
     //搜索模块
-    let query = reactive();
+    let listData = reactive();
     const queryData = (data) => {
-      query = data;
+      queryParam["localLv1"] = data.localLv1.toString();
+      queryParam["localLv2"] = data.localLv2.toString();
+      queryParam["localLv3"] = data.localLv3.toString();
+      listcfg.list = [];
+      listcfg.currPage = 1;
+      listcfg.pageSize = 10;
+      listcfg.finished = false;
+      listcfg.error = false;
+
+      listcfg.onLoad();
     };
 
     const onSearch = () => {
-      query.queryParam = searchcfg.value;
-      console.log(query);
-      reqBladeItemData(query);
+      listData.queryParam = searchcfg.value;
+      console.log(listData);
+      reqBladeItemData(listData);
     };
-
-    // onActivated(() => {
-    //   console.log("激活");
-    //   console.log(scroll);
-    //   console.log(document.getElementById("bladedetail"));
-    //   if (scroll.value) {
-    //     scroll.value.scrollTop = listOffset.value.bladedetail_scrollTop;
-    //   }
-    // });
-    // onDeactivated(() => {
-    //   console.log("离开");
-    //   console.log(document.getElementById("bladedetail"));
-    //   listOffset.value.bladedetail_scrollTop = scroll.value.scrollTop;
-    //   const payload = {
-    //     data: listOffset.value,
-    //     target: "bladedetail_scrollTop",
-    //   };
-    //   store.commit("change_offset", payload);
-    //   //keep-alive 的页面跳转时，移除scroll事件
-    //   document.removeEventListener("touchmove", handle);
-    // });
 
     return {
       tabscfg,

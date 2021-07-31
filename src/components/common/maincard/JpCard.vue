@@ -4,30 +4,33 @@
       <a class="jp-card__thumb">
         <van-image fit="fill" src="https://img.yzcdn.cn/vant/cat.jpeg" />
         <div class="jp-card__tag">
-          <van-tag type="danger" mark>未完成</van-tag>
+          <van-tag :color="jpcardcfg.data.cardTag.tagColor" mark>{{
+            jpcardcfg.data.cardTag.tagText
+          }}</van-tag>
         </div>
       </a>
       <div class="jp-card__content">
         <div class="jp-card__top">
           <div class="jp-card__title">
-            {{ listdata.location_level_1 }}-{{ listdata.location_level_2 }}-{{
-              listdata.location_level_3
-            }}--{{ listdata.weldinggun_num }}
+            {{ jpcardcfg.data.title }}
           </div>
           <div class="jp-card__desc">
-            <van-tag color="#7232dd" plain>申</van-tag>
-            {{ listdata.applyblade }}
+            <van-tag :color="jpcardcfg.data.descTag.tagColor">{{
+              jpcardcfg.data.descTag.tagText
+            }}</van-tag>
+            {{ listdata.bladetype_apply }}
           </div>
         </div>
         <div class="jp-card__middle">
           <div class="jp-card__lt">
-            <van-tag color="#7232dd" plain>申</van-tag>
+            <van-tag color="#1989fa" plain>申</van-tag>
             {{ listdata.applicant }}
           </div>
-          <div class="jp-card__rt">
-            <van-tag color="#7232dd" plain>领</van-tag>
+          <div class="jp-card__md" v-show="listdata.receiver">
+            <van-tag color="#07c160" plain>领</van-tag>
             {{ listdata.receiver }}
           </div>
+          <div class="jp-card__rt" v-show="false"></div>
         </div>
         <div class="jp-card__bottom">
           始于
@@ -55,7 +58,7 @@
 </template>
 
 <script>
-import { toRef } from "vue";
+import { reactive, computed, ref } from "vue";
 export default {
   name: "MainListCard",
   props: {
@@ -64,9 +67,78 @@ export default {
     },
   },
   setup(props) {
-    const listdata = toRef(props, listdata);
-    // console.log(listdata);
-    return {};
+    const listData = reactive(props.listdata);
+    const descTag = ref();
+    console.log(listData);
+    const jpcardcfg = reactive({
+      data: {
+        title:
+          listData.localLv1 +
+          "-" +
+          listData.localLv2 +
+          "-" +
+          listData.localLv3 +
+          "--" +
+          listData.weldinggun,
+        cardTag: {
+          tagText: computed(() => {
+            let tagText = "";
+            switch (listData.order_status) {
+              case 1:
+                tagText = "等待审核";
+                break;
+              case 2:
+                tagText = "审核失败";
+                break;
+              case 3:
+                tagText = "等待领取";
+                break;
+              case 4:
+                tagText = "订单完成";
+                break;
+              default:
+                break;
+            }
+            return tagText;
+          }),
+          tagColor: computed(() => {
+            let tagColor = "";
+            switch (listData.order_status) {
+              case 1:
+                tagColor = "#1989fa";
+                break;
+              case 2:
+                tagColor = "#ee0a24";
+                break;
+              case 3:
+                tagColor = "#ff976a";
+                break;
+              case 4:
+                tagColor = "#07c160";
+                break;
+              default:
+                break;
+            }
+            return tagColor;
+          }),
+        },
+        descTag: {
+          tagText: computed(() => {
+            let tag = "";
+            listData.order_status in [1, 2, 3] ? (tag = "申") : (tag = "领");
+            return tag;
+          }),
+          tagColor: computed(() => {
+            let color = "";
+            jpcardcfg.data.descTag.tagText == "申"
+              ? (color = "#1989fa")
+              : (color = "#07c160");
+            return color;
+          }),
+        },
+      },
+    });
+    return { listData, jpcardcfg, descTag };
   },
 };
 </script>
@@ -108,8 +180,8 @@ export default {
       min-height: var(--van-card-thumb-size);
       .jp-card__top {
         .jp-card__title {
-          font-size: 16px;
-          line-height: 18px;
+          font-size: 15px;
+          line-height: 17px;
           font-weight: var(--van-font-weight-bold);
         }
         .jp-card__desc {
@@ -121,6 +193,9 @@ export default {
       .jp-card__middle {
         display: flex;
         .jp-card__lt {
+          flex: 1;
+        }
+        .jp-card__md {
           flex: 1;
         }
         .jp-card__rt {
