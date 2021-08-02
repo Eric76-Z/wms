@@ -35,15 +35,24 @@
         <div class="jp-card__bottom">
           <div class="start-time">
             创建于
-            <span class="colon">{{ jpcardcfg.data.time.createTime }}</span>
+            <span class="time">{{ jpcardcfg.data.time.createTime }}</span>
+            <van-tag :show="!jpcardcfg.data.time.lastReplace" type="success">
+              首次!
+            </van-tag>
           </div>
-          <div class="end-time">
-            上次领
-            <span class="colon">21年05月03日</span>
-          </div>
-          <div class="duration">
+          <div class="duration" v-if="jpcardcfg.data.time.lastReplace">
+            <div class="end-time">
+              上次领
+              <span class="time">{{ jpcardcfg.data.time.lastReplace }}</span>
+            </div>
             ，过去
-            <span class="block">{{ jpcardcfg.data.time.lastReplace }}</span>
+            <van-tag
+              size="medium"
+              type="primary"
+              :color="jpcardcfg.data.time.deltaColor"
+            >
+              {{ jpcardcfg.data.time.deltaDay }}
+            </van-tag>
             天
           </div>
         </div>
@@ -51,9 +60,28 @@
     </div>
     <div class="jp-card__footer">
       <van-button
+        class="check-btn"
+        square
+        color="linear-gradient(to right, #01b160, #07e160)"
+        v-if="listData.order_status == 1"
+        >审核</van-button
+      >
+      <van-button
+        square
+        color="linear-gradient(to right, #01b160, #07e160)"
+        v-if="listData.order_status == 3"
+        >领取</van-button
+      >
+      <van-button
+        square
+        color="linear-gradient(to right, #cc976a, #ff976a)"
+        v-if="listData.order_status == 4"
+        >善后</van-button
+      >
+      <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        size="mini"
+        v-if="[1, 3].indexOf(listData.order_status)"
         >放弃</van-button
       >
     </div>
@@ -145,10 +173,25 @@ export default {
             return formatDate.format2(listData.create_time);
           }),
           lastReplace: computed(() => {
-            return formatDate.spacingTime(
+            console.log(listData.analyse.last_replace);
+            if (listData.analyse.last_replace == "首次领用") {
+              return undefined;
+            } else {
+              return formatDate.format3(listData.analyse.last_replace);
+            }
+          }),
+          deltaDay: computed(() => {
+            return formatDate.deltaDay(
               listData.analyse.last_replace,
               listData.create_time
             );
+          }),
+          deltaColor: computed(() => {
+            if (jpcardcfg.data.time.deltaDay <= 180) {
+              return "#ff976a";
+            } else {
+              return "#ee0a24";
+            }
           }),
         },
       },
@@ -219,26 +262,25 @@ export default {
       }
       .jp-card__bottom {
         font-size: 10px;
-
         .start-time {
           display: block;
+          .van-tag {
+            margin-left: 10px;
+            padding: 0 3px;
+          }
         }
         .end-time {
           display: inline-block;
         }
         .duration {
           display: inline-block;
-          .block {
+          .van-tag {
             display: inline-block;
-            width: 19px;
-            color: antiquewhite;
-            font-size: 10px;
-            text-align: center;
-            background-color: #ee0a24;
+            padding: 0 3px;
             border-radius: 4px;
           }
         }
-        .colon {
+        .time {
           display: inline-block;
           font-size: 10px;
           text-align: center;
@@ -251,6 +293,13 @@ export default {
   .jp-card__footer {
     flex: none;
     text-align: right;
+    .van-button {
+      margin-left: 5px;
+      height: 26px;
+      width: 58px;
+      padding: 0 10px;
+      border-radius: 6px;
+    }
   }
 }
 </style>
