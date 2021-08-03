@@ -112,6 +112,48 @@ export default function axiosApi(type, params, method) {
         .catch((err) => {
           reject(err);
         });
+    } else if (method == "delete") {
+      // console.log(params);
+      Axios({
+        method: method,
+        url: type + params.id,
+      })
+        .then((res) => {
+          // console.log(res);
+          switch (res.status) {
+            case 204:
+              resolve(res.status);
+              break;
+            default:
+              // 接口错误提示
+              Toast.fail(res.statusText);
+              break;
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else if (method == "patch") {
+      Axios({
+        method: method,
+        url: type + params.id + "/",
+        data: qs.stringify(params),
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 200:
+              resolve(res.data);
+              break;
+            default:
+              // 接口错误提示
+              Toast.fail(res.statusText);
+              break;
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
     }
   });
 }

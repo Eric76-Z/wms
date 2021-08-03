@@ -5,6 +5,16 @@ export function reqBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "get");
 }
 
+//审核刀片订单  /workstation/bladeitem/check/{id}/
+export function partupBladeItemData(params) {
+  return axiosApi("workstation/bladeitem/", params, "patch");
+}
+
+//删除刀片订单  /workstation/bladeitem/{id}/
+export function deleteBladeItemData(params) {
+  return axiosApi("workstation/bladeitem/", params, "delete");
+}
+
 //获取CPH工位信息
 export function reqCphLocation(query) {
   return axiosApi("workstation/location/cph_location_tree/", query, "get");

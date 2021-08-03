@@ -46,11 +46,11 @@
                 >
               </template>
             </van-card> -->
-              <jp-card
+              <blade-card
                 v-for="item in listcfg.list"
                 :key="item.id"
                 :listdata="item"
-              ></jp-card>
+              ></blade-card>
             </slot>
           </van-list>
         </div>
@@ -92,7 +92,7 @@ import { useRouter } from "vue-router";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
-import JpCard from "@/components/common/maincard/JpCard";
+import BladeCard from "@/components/content/cards/BladeCard";
 import { reqBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 
@@ -110,11 +110,9 @@ export default {
   },
   components: {
     MainNavBar,
-    JpCard,
+    BladeCard,
     BackTop,
     MainFilter,
-    // MiddleBar,
-    // MainList,
   },
 
   setup() {
@@ -149,13 +147,11 @@ export default {
         listcfg.loading = true;
         queryParam.page = listcfg.currPage;
         queryParam.pageSize = listcfg.pageSize;
+        const p = scroll.value.scrollTop;
         reqBladeItemData(queryParam)
           .then((res) => {
             console.log(res);
-
             listcfg.list.push.apply(listcfg.list, res.results);
-            // console.log(scroll);
-            console.log(listcfg.list);
             const finishFlag = computed(() => {
               if (res.next == null) {
                 return true;
@@ -164,9 +160,9 @@ export default {
               }
             });
             listcfg.finished = finishFlag;
-            // console.log(listcfg.finished);
             listcfg.currPage++;
             listcfg.loading = false;
+            scroll.value.scrollTop = p;
           })
           .catch((err) => {
             listcfg.error = true;
@@ -229,7 +225,6 @@ export default {
       listcfg.pageSize = 10;
       listcfg.finished = false;
       listcfg.error = false;
-
       listcfg.onLoad();
     };
 
