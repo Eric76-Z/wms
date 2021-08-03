@@ -297,15 +297,13 @@ export default {
                   id: listData.id,
                   order_status: 2,
                 }).then((res) => {
-                  if (res == 200) {
-                    Toast.fail({
-                      message: "审核不通过！",
-                      duration: 1000,
-                      onClose: () => {
-                        listData.order_status = res.order_status;
-                      },
-                    });
-                  }
+                  Toast.fail({
+                    message: "审核不通过！",
+                    duration: 1000,
+                    onClose: () => {
+                      listData.order_status = res.order_status;
+                    },
+                  });
                 });
                 break;
               default:
@@ -340,7 +338,7 @@ export default {
               // on cancel
             });
         },
-        appeal: () => {},
+        appeal: () => { },
         todolast: {
           showPopover: false,
           actions: [{ text: "上传维修单" }, { text: "其他", disabled: true }],
