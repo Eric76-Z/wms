@@ -9,7 +9,7 @@ const state = {
     username: "",
     userId: "",
     realname: "张炯平",
-    isSuper: false,
+    isSuper: true,
   },
   token: "",
   userState: 400,

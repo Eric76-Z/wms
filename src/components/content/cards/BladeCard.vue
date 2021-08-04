@@ -319,6 +319,7 @@ export default {
                   id: listData.id,
                   order_status: 3,
                 }).then((res) => {
+                  console.log(res);
                   Toast.success({
                     message: "审核通过，等待领取",
                     duration: 1000,
@@ -423,7 +424,7 @@ export default {
             partupBladeItemData({
               id: listData.id,
 
-              repair_order_img: file,
+              repair_order_img: file["file"],
             }).then((res) => {
               console.log(res);
               Toast.success({
