@@ -1,14 +1,15 @@
 import { userLogin } from "@/network/sort.js";
 import router from "@/router";
-// import { Toast } from "vant";
+
 import { USER_LOGIN, USER_LOGOUT } from "@/store/mutation-types";
-// import { Toast } from "vant";
 
 const state = {
   userinfo: {
     userIcon: "",
     username: "",
     userId: "",
+    realname: "张炯平",
+    isSuper: false,
   },
   token: "",
   userState: 400,

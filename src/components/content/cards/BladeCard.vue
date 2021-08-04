@@ -55,6 +55,10 @@
             </van-tag>
             天
           </div>
+          <div class="appeal" v-show="bladecardcfg.data.appeal.show">
+            <van-tag type="danger"> 申诉!!! </van-tag>
+            <!-- {{ bladecardcfg.data.appeal.message }} -->
+          </div>
         </div>
       </div>
     </div>
@@ -70,7 +74,10 @@
             class="check-btn"
             square
             color="linear-gradient(to right, #ff976a, #ed6a0c)"
-            v-if="[1, 2, 3].indexOf(listData.order_status) != -1"
+            v-if="
+              [1, 2, 3].indexOf(listData.order_status) != -1 &&
+              user.userinfo.isSuper == true
+            "
             @click="bladecardcfg.btn.check"
             >审核
           </van-button>
@@ -84,27 +91,31 @@
         @click="bladecardcfg.btn.receive"
         >领取</van-button
       >
+
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
         v-if="listData.order_status == 2"
+        @click="bladecardcfg.btn.appeal"
         >申诉</van-button
       >
 
       <van-popover
         v-model:show="bladecardcfg.btn.todolast.showPopover"
-        theme="dark"
-        :actions="bladecardcfg.btn.todolast.actions"
         @select="bladecardcfg.btn.todolast.onSelected"
         placement="bottom-end"
       >
+        <van-uploader
+          v-model="bladecardcfg.btn.todolast.fileList"
+          :after-read="bladecardcfg.btn.todolast.afterRead"
+          multiple
+        />
         <template #reference>
           <van-button
             class="todolast-btn"
             square
             color="linear-gradient(to right, #cc976a, #ff976a)"
             v-if="listData.order_status == 4 && listData.complete_time == null"
-            @click="bladecardcfg.btn.todolast"
             >善后
           </van-button>
         </template>
@@ -128,21 +139,28 @@
 </template>
 
 <script>
-import { reactive, computed, ref } from "vue";
+import { reactive, computed, ref, toRef } from "vue";
+import { useStore } from "vuex";
 import { formatDate } from "@/common/utils";
-import { Dialog, Toast } from "vant";
+import { Dialog, Toast, Grid, GridItem } from "vant";
 import { deleteBladeItemData, partupBladeItemData } from "@/network/sort";
 export default {
   name: "MainListCard",
   components: {
     [Dialog.Component.name]: Dialog.Component,
+    [Grid.name]: Grid,
+    [GridItem.name]: GridItem,
   },
   props: {
     listdata: {
       type: Object,
     },
   },
-  setup(props) {
+  setup(props, context) {
+    const store = useStore();
+
+    const user = toRef(store.state, "user").value;
+
     const listData = reactive(props.listdata);
     const descTag = ref();
     // console.log(listData);
@@ -249,6 +267,24 @@ export default {
             }
           }),
         },
+        appeal: {
+          show: computed(() => {
+            var reg = new RegExp("[申诉]");
+            if (reg.test(listData.order_comments)) {
+              return true;
+            } else {
+              return false;
+            }
+          }),
+          message: computed(() => {
+            var reg = new RegExp("[申诉]");
+            if (reg.test(listData.order_comments)) {
+              return true;
+            } else {
+              return false;
+            }
+          }),
+        },
       },
       btn: {
         delete: () => {
@@ -338,7 +374,10 @@ export default {
               // on cancel
             });
         },
-        appeal: () => { },
+        appeal: () => {
+          let data = { id: listData.id, workstation: listData.weldinggun };
+          context.emit("selectedid", data);
+        },
         todolast: {
           showPopover: false,
           actions: [{ text: "上传维修单" }, { text: "其他", disabled: true }],
@@ -362,11 +401,46 @@ export default {
                 break;
             }
           },
+          fileList: [
+            {
+              url: "https://img.yzcdn.cn/vant/leaf.jpg",
+              status: "uploading",
+              message: "上传中...",
+            },
+            // Uploader 根据文件后缀来判断是否为图片文件
+            // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+            {
+              url: "https://cloud-image",
+              isImage: true,
+              status: "failed",
+              message: "上传失败",
+            },
+          ],
+          afterRead: (file) => {
+            // 此时可以自行将文件上传至服务器
+            console.log(bladecardcfg.btn.todolast.fileList);
+            console.log(file);
+            partupBladeItemData({
+              id: listData.id,
+
+              repair_order_img: file,
+            }).then((res) => {
+              console.log(res);
+              Toast.success({
+                message: "领取成功",
+                duration: 1000,
+                onClose: () => {
+                  listData.order_status = res.order_status;
+                  listData.receive_time = res.receive_time;
+                },
+              });
+            });
+          },
         },
       },
     });
 
-    return { listData, bladecardcfg, descTag };
+    return { listData, bladecardcfg, descTag, user };
   },
 };
 </script>

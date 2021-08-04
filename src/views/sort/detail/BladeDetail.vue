@@ -5,7 +5,8 @@
       v-model="searchcfg.value"
       ref="search"
       placeholder="请输入搜索关键词"
-      @search="onSearch"
+      @search="searchcfg.onSearch"
+      @clear="searchcfg.onClear"
     />
     <van-tabs v-model:active="tabscfg.active" animated>
       <van-tab
@@ -50,6 +51,7 @@
                 v-for="item in listcfg.list"
                 :key="item.id"
                 :listdata="item"
+                @selectedid="selectedid"
               ></blade-card>
             </slot>
           </van-list>
@@ -62,6 +64,7 @@
         <span>筛选<van-icon name="filter-o" /> </span>
       </div>
     </div>
+    <!-- 过滤弹出层 -->
     <van-popup
       v-model:show="popupcfg.show"
       position="right"
@@ -73,27 +76,58 @@
       </template>
     </van-popup>
     <back-top v-show="showBackTop" @click="backtop"></back-top>
+    <!-- 申诉弹出层 -->
+    <van-popup
+      class="appeal-popup"
+      v-model:show="appealpopupcfg.show"
+      closeable
+      position="bottom"
+      :style="{ height: '60%' }"
+    >
+      <template #default>
+        <van-divider
+          :style="{
+            color: '#1989fa',
+            borderColor: '#1989fa',
+            padding: '0 16px',
+          }"
+        >
+          {{ appealpopupcfg.workstation }}
+        </van-divider>
+        <van-cell-group inset>
+          <van-field
+            v-model="appealpopupcfg.message"
+            rows="6"
+            autosize
+            label="申诉"
+            type="textarea"
+            maxlength="150"
+            placeholder="有什么想要说的......"
+            show-word-limit
+          />
+        </van-cell-group>
+        <van-button
+          @click="appealpopupcfg.btnSub"
+          type="primary"
+          size="normal"
+          block
+          >提交</van-button
+        >
+      </template>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import {
-  reactive,
-  computed,
-  // onActivated,
-  // onDeactivated,
-  ref,
-  toRef,
-  nextTick,
-  onMounted,
-} from "vue";
+import { reactive, computed, ref, toRef, nextTick, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import BladeCard from "@/components/content/cards/BladeCard";
-import { reqBladeItemData } from "@/network/sort.js";
+import { Dialog, Toast } from "vant";
+import { reqBladeItemData, partupBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 
 // import MiddleBar from "@/components/content/maintabbar/MiddleBar";
@@ -119,6 +153,9 @@ export default {
     //vuex数据
     const store = useStore();
     const listOffset = toRef(store.state, "listOffset");
+
+    const user = toRef(store.state, "user");
+    console.log(user.value.userinfo);
     //路由
     const router = reactive(useRouter());
     console.log(router);
@@ -133,6 +170,24 @@ export default {
     });
     const searchcfg = reactive({
       value: "",
+      onSearch: () => {
+        queryParam.search = searchcfg.value;
+        listcfg.list = [];
+        listcfg.currPage = 1;
+        listcfg.pageSize = 10;
+        listcfg.finished = false;
+        listcfg.error = false;
+        listcfg.onLoad();
+      },
+      onClear: () => {
+        delete queryParam.search;
+        listcfg.list = [];
+        listcfg.currPage = 1;
+        listcfg.pageSize = 10;
+        listcfg.finished = false;
+        listcfg.error = false;
+        listcfg.onLoad();
+      },
     });
     const listcfg = reactive({
       loading: false, // 是否处在加载状态
@@ -215,7 +270,7 @@ export default {
     });
 
     //搜索模块
-    let listData = reactive();
+    // let listData = reactive();
     const queryData = (data) => {
       queryParam["localLv1"] = data.localLv1.toString();
       queryParam["localLv2"] = data.localLv2.toString();
@@ -227,11 +282,52 @@ export default {
       listcfg.error = false;
       listcfg.onLoad();
     };
-
-    const onSearch = () => {
-      listData.queryParam = searchcfg.value;
-      console.log(listData);
-      reqBladeItemData(listData);
+    //申诉模块，子传父
+    const appealpopupcfg = reactive({
+      show: false,
+      message: "",
+      workstation: "",
+      itemid: 0,
+      btnSub: () => {
+        Dialog.confirm({
+          title: "确认提交",
+          message: "确认提交申诉信息？",
+        })
+          .then(() => {
+            partupBladeItemData({
+              id: appealpopupcfg.itemid,
+              order_status: 1,
+              order_comments:
+                "[申诉]" +
+                "[" +
+                user.value.userinfo.realname +
+                "]" +
+                appealpopupcfg.message,
+            }).then((res) => {
+              console.log(res);
+              Toast.success({
+                message: "提交成功",
+                duration: 1000,
+                onClose: () => {
+                  for (let index = 0; index < listcfg.list.length; index++) {
+                    if (listcfg.list[index]["id"] == appealpopupcfg.itemid) {
+                      listcfg.list[index]["order_status"] = res.order_status;
+                    }
+                    appealpopupcfg.show = false;
+                  }
+                },
+              });
+            });
+          })
+          .catch(() => {
+            // on cancel
+          });
+      },
+    });
+    const selectedid = (data) => {
+      appealpopupcfg.workstation = data.workstation;
+      appealpopupcfg.itemid = data.id;
+      appealpopupcfg.show = true;
     };
 
     return {
@@ -244,8 +340,10 @@ export default {
       showBackTop,
       backtop,
       listOffset,
-      onSearch,
+
       queryData,
+      selectedid,
+      appealpopupcfg,
     };
   },
   // beforeRouteEnter() {
@@ -353,6 +451,13 @@ export default {
     position: absolute;
     right: 22px;
     bottom: 40px;
+  }
+  .appeal-popup {
+    padding-top: 20px;
+    background-color: var(--van-gray-1);
+    .van-button {
+      margin-top: 20px;
+    }
   }
 }
 </style>

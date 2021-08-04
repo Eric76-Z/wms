@@ -13,7 +13,7 @@ import { Button } from "vant";
 import { DatetimePicker } from "vant";
 import { Search, Lazyload } from "vant";
 import { ConfigProvider } from "vant";
-import { Popup } from "vant";
+import { Popup, Divider } from "vant";
 import {
   DropdownMenu,
   DropdownItem,
@@ -21,10 +21,16 @@ import {
   Collapse,
   CollapseItem,
 } from "vant";
+import { Grid, GridItem } from "vant";
+import { Uploader } from "vant";
+
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(Uploader);
+app.use(Grid, GridItem);
+app.use(Divider);
 app.use(Collapse);
 app.use(CollapseItem);
 app.use(Popover);
