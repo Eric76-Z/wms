@@ -2,7 +2,7 @@
   <div class="jp-card" v-show="bladecardcfg.isShow">
     <div class="jp-card__header">
       <a class="jp-card__thumb">
-        <van-image fit="fill" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+        <van-image fit="fill" :src="bladecardcfg.data.img" lazy-load />
         <div class="jp-card__tag">
           <van-tag :color="bladecardcfg.data.cardTag.tagColor" mark>{{
             bladecardcfg.data.cardTag.tagText
@@ -109,13 +109,17 @@
           v-model="bladecardcfg.btn.todolast.fileList"
           :after-read="bladecardcfg.btn.todolast.afterRead"
           multiple
+          :max-count="1"
         />
         <template #reference>
           <van-button
             class="todolast-btn"
             square
             color="linear-gradient(to right, #cc976a, #ff976a)"
-            v-if="listData.order_status == 4 && listData.complete_time == null"
+            v-if="
+              (listData.order_status == 4 && listData.complete_time == null) ||
+              user.userinfo.isSuper == true
+            "
             >善后
           </van-button>
         </template>
@@ -175,6 +179,14 @@ export default {
           listData.localLv3 +
           "--" +
           listData.weldinggun,
+        img: computed(() => {
+          let url = "";
+          listData.repair_order_img
+            ? (url = listData.repair_order_img.img)
+            : (url = undefined);
+          console.log(url);
+          return url;
+        }),
         cardTag: {
           tagText: computed(() => {
             let tagText = "";
@@ -402,40 +414,38 @@ export default {
                 break;
             }
           },
-          fileList: [
-            {
-              url: "https://img.yzcdn.cn/vant/leaf.jpg",
-              status: "uploading",
-              message: "上传中...",
-            },
-            // Uploader 根据文件后缀来判断是否为图片文件
-            // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-            {
-              url: "https://cloud-image",
-              isImage: true,
-              status: "failed",
-              message: "上传失败",
-            },
-          ],
+          fileList: [],
           afterRead: (file) => {
             // 此时可以自行将文件上传至服务器
-            console.log(bladecardcfg.btn.todolast.fileList);
-            console.log(file);
+            file.status = "uploading";
+            file.message = "上传中...";
+            var formData = new FormData();
+            formData.append("id", listData.id);
+            formData.append("sort", "repair_order_img");
+            formData.append("img", file.file);
             partupBladeItemData({
               id: listData.id,
-
-              repair_order_img: file["file"],
-            }).then((res) => {
-              console.log(res);
-              Toast.success({
-                message: "领取成功",
-                duration: 1000,
-                onClose: () => {
-                  listData.order_status = res.order_status;
-                  listData.receive_time = res.receive_time;
-                },
+              formData: formData,
+            })
+              .then((res) => {
+                file.status = "done";
+                file.url = res.repair_order_img.img;
+                listData.order_status = res.order_status;
+                listData.complete_time = res.complete_time;
+                listData.repair_order_img = res.repair_order_img;
+                // Toast.success({
+                //   message: "领取成功",
+                //   duration: 1000,
+                //   onClose: () => {
+                //     listData.order_status = res.order_status;
+                //     listData.receive_time = res.receive_time;
+                //   },
+                // });
+              })
+              .catch(() => {
+                file.status = "failed";
+                file.message = "上传失败";
               });
-            });
           },
         },
       },

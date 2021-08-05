@@ -70,6 +70,7 @@ export default function axiosApi(type, params, method) {
   // var data = method == "post" ? qs.stringify(params) : params;
   return new Promise((resolve, reject) => {
     if (method == "post") {
+      console.log(params);
       Axios({
         method: method,
         url: type,
@@ -119,7 +120,6 @@ export default function axiosApi(type, params, method) {
         url: type + params.id,
       })
         .then((res) => {
-          // console.log(res);
           switch (res.status) {
             case 204:
               resolve(res.status);
@@ -134,10 +134,22 @@ export default function axiosApi(type, params, method) {
           reject(err);
         });
     } else if (method == "patch") {
+      // console.log(params.repair_order_img);
+      // var formData = new FormData();
+      // formData.append(
+      //   "img",
+      //   params.repair_order_img.content.replace(/^data:image\/\w+;base64,/, "")
+      // );
+      // formData.append("img_name", "jjj");
+      console.log(params.id);
+      let data = params;
+      if (params.formData != undefined) {
+        data = params.formData;
+      }
       Axios({
         method: method,
         url: type + params.id + "/",
-        data: qs.stringify(params),
+        data: data,
       })
         .then((res) => {
           console.log(res);

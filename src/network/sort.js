@@ -5,10 +5,15 @@ export function reqBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "get");
 }
 
-//审核刀片订单  /workstation/bladeitem/check/{id}/
+//更新刀片订单  /workstation/bladeitem/{id}/
 export function partupBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "patch");
 }
+
+// //
+// export function createImage(params) {
+//   return axiosApi("workstation/bladeitem/406", params, "patch");
+// }
 
 //删除刀片订单  /workstation/bladeitem/{id}/
 export function deleteBladeItemData(params) {
