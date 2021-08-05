@@ -80,7 +80,7 @@ import HAutocomplete from "@/components/common/HaAutocomplete";
 import { applyBlade } from "@/network/sort.js";
 export default {
   name: "BladeApply2",
-  data() {},
+  data() { },
   components: {
     HAutocomplete,
     [Form.name]: Form,
@@ -178,7 +178,6 @@ export default {
       this.getLocation({ location: "all", querytype: "weldinggun" });
     }
   },
-  activated() {},
 };
 </script>
 

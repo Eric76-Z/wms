@@ -25,9 +25,9 @@ export function reqCphLocation(query) {
   return axiosApi("workstation/location/cph_location_tree/", query, "get");
 }
 
-//按query关键词返回工位信息
-export function reqLocation(query) {
-  return axiosApi("workstation/location/cph_location_tree/", query, "get");
+//获取焊枪信息
+export function reqWeldingGun(query) {
+  return axiosApi("/workstation/weldinggun/", query, "get");
 }
 
 //获取刀片相关数据

@@ -1,17 +1,18 @@
 import { ADD_TO_LOCATION } from "./mutation-types";
-import { reqLocation } from "@/network/sort.js";
+import { reqWeldingGun } from "@/network/sort.js";
 export default {
   getLocation(context, payload) {
-    reqLocation(payload)
+    reqWeldingGun(payload)
       .then((res) => {
+        console.log(res);
         const location = [];
-        res.rows.forEach((element) => {
+        res.forEach((element) => {
           const area =
-            element["location_level_1"] +
+            element["location"]["location_level_1"] +
             "-" +
-            element["location_level_2"] +
+            element["location"]["location_level_2"] +
             "-" +
-            element["location_level_3"];
+            element["location"]["location_level_3"];
           location.push({
             value: element["weldinggun_num"],
             area: area,

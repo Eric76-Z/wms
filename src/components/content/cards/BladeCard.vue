@@ -75,7 +75,7 @@
             square
             color="linear-gradient(to right, #ff976a, #ed6a0c)"
             v-if="
-              [1, 2, 3].indexOf(listData.order_status) != -1 &&
+              [1, 2, 3].indexOf(listData.order_status) != -1 ||
               user.userinfo.isSuper == true
             "
             @click="bladecardcfg.btn.check"
@@ -117,8 +117,8 @@
             square
             color="linear-gradient(to right, #cc976a, #ff976a)"
             v-if="
-              (listData.order_status == 4 && listData.complete_time == null) ||
-              user.userinfo.isSuper == true
+              listData.order_status == 4 &&
+              (listData.complete_time == null || user.userinfo.isSuper == true)
             "
             >善后
           </van-button>
@@ -433,6 +433,7 @@ export default {
                 listData.order_status = res.order_status;
                 listData.complete_time = res.complete_time;
                 listData.repair_order_img = res.repair_order_img;
+                console.log(listData);
                 // Toast.success({
                 //   message: "领取成功",
                 //   duration: 1000,

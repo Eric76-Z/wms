@@ -36,11 +36,11 @@ export default {
   },
   setup(props, context) {
     const autocompletecfg = toRef(props, "autocompletecfg");
-    // console.log(autocompletecfg.value);
+    console.log(autocompletecfg.value);
     const toShow = ref(autocompletecfg); //需要显示的内容
     // console.log(toShow);
     const querySearch = (queryString, cb) => {
-      // console.log(toShow.value[0]);
+      console.log(toShow.value[0]);
       // console.log(autocompletecfg.value);
       var results = queryString
         ? toShow.value[0].filter(createFilter(queryString))

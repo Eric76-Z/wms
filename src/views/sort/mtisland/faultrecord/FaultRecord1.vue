@@ -1,5 +1,5 @@
 <template>
-  <div id="bladeapply1">
+  <div id="faultrecord1">
     <div class="list-card">
       <main-list :listcfg="listcfg">
         <slot>
@@ -35,7 +35,7 @@
 import MainList from "@/components/content/mainlist/MainList";
 // import { getBladeData } from "@/network/sort.js";
 export default {
-  name: "BladeApply1",
+  name: "FaultRecord1",
   data() {
     return {};
   },
