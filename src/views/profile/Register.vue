@@ -87,6 +87,7 @@
 
 <script>
 import { reactive } from "vue";
+import { useStore } from "vuex";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
@@ -100,12 +101,17 @@ export default {
     };
   },
   setup() {
+    const store = useStore();
+    const {
+      "user/Register": [Register],
+    } = store._actions;
     const state = reactive({
       username: "",
       password: "",
     });
     const onSubmit = (values) => {
       console.log("submit", values);
+      Register(values);
     };
     const form_reg = {
       username_reg1: /^.{2,10}$/,

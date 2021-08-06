@@ -46,7 +46,12 @@ export function applyBlade(query) {
 }
 //用户登陆
 export function userLogin(query) {
-  return axiosApi("myuser/login/", query, "get");
+  return axiosApi("myuser/login/", query, "post");
+}
+
+//用户注册
+export function userRegister(query) {
+  return axiosApi("myuser/register/", query, "post");
 }
 
 //用户退出登陆

@@ -17,7 +17,11 @@ import blade from "./modules/blade/blade";
 
 const PERSIST_PATHS = ["location", "user"];
 const state = {
-  location: [],
+  location: {
+    local: [],
+    robot: [],
+    weldinggun: [],
+  },
   listOffset: {
     bladedetail_scrollTop: 0,
   },

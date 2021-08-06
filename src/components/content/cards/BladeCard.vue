@@ -75,7 +75,7 @@
             square
             color="linear-gradient(to right, #ff976a, #ed6a0c)"
             v-if="
-              [1, 2, 3].indexOf(listData.order_status) != -1 ||
+              [1, 2, 3].indexOf(listData.order_status) != -1 &&
               user.userinfo.isSuper == true
             "
             @click="bladecardcfg.btn.check"

@@ -1,7 +1,7 @@
 <template>
   <div id="faultrecord2">
     <h-autocomplete :autocompletecfg="autocompletecfg" @selected="selected" />
-    <van-form @submit="onSubmit">
+    <van-form @submit="formData.onSubmit">
       <van-field
         readonly
         required
@@ -58,13 +58,14 @@
         placeholder="持续时间"
       />
       <van-field
-        v-model="message"
+        v-model="formData.message"
+        name="Message"
         required
         rows="2"
         autosize
         label="维修记录"
         type="textarea"
-        maxlength="50"
+        maxlength="250"
         placeholder="请输入维修记录......"
         show-word-limit
       />
@@ -85,7 +86,7 @@
     <van-popup v-model:show="formData.DeviceType.showPicker" position="bottom">
       <van-picker
         title="选择设备类型"
-        :columns="columns"
+        :columns="formData.DeviceType.columns"
         @confirm="formData.DeviceType.onConfirm"
         @cancel="formData.DeviceType.showPicker = false"
       />
@@ -162,7 +163,7 @@ export default {
           formData.CarModel.value = value;
           formData.CarModel.showPicker = false;
         },
-        columns: ["杭州", "宁波", "温州", "嘉兴", "湖州"],
+        columns: ["BSUV", "BMPV", "COUPE"],
       },
       DeviceType: {
         value: "",
@@ -170,7 +171,19 @@ export default {
         onConfirm: (value) => {
           formData.DeviceType.value = value;
           formData.DeviceType.showPicker = false;
+          reloadLocaltion();
         },
+        columns: ["机器人", "焊枪"],
+        deviceSelected: computed(() => {
+          switch (formData.DeviceType.value) {
+            case formData.DeviceType.columns[0]:
+              return "robot";
+            case formData.DeviceType.columns[1]:
+              return "weldinggun";
+            default:
+              return "";
+          }
+        }),
       },
       Time: {
         maxDate: new Date(2025, 10, 1),
@@ -209,6 +222,14 @@ export default {
         }),
       },
       message: "",
+      //提交表单
+      onSubmit: (values) => {
+        console.log(values);
+        // values.WeldingGun = formData.WeldingGun;
+        // values.BladeTypeId = route.params["bladeId"];
+        // applyBlade(values);
+        // console.log("submit", values);
+      },
     });
 
     //autocomplete 选择后赋值
@@ -218,18 +239,55 @@ export default {
       return true;
     };
 
+    const reloadLocaltion = () => {
+      console.log(formData.DeviceType.deviceSelected);
+      if (formData.DeviceType.deviceSelected == "") {
+        if (location.value.local.length !== 0) {
+          console.log(location);
+        } else {
+          getLocation({ location: "all", target: "local" });
+        }
+      } else {
+        if (location.value[formData.DeviceType.deviceSelected].length !== 0) {
+          console.log(location);
+        } else {
+          getLocation({
+            location: "all",
+            target: formData.DeviceType.deviceSelected,
+          });
+        }
+      }
+    };
+
     onMounted(() => {
       //判断store中有没有数据
-      // console.log(this.location);
-      if (location.value.length !== 0) {
-        //有数据
-        console.log(location);
-        // this.autocompletecfg.loadAll = this.location[0];
-      } else {
-        //没有请求数据
-        console.log("重新加载数据location");
-        getLocation({ location: "all", querytype: "weldinggun" });
-      }
+      reloadLocaltion();
+
+      // if (formData.DeviceType.deviceSelected == "") {
+      //   if (location.value.local.length !== 0) {
+      //     console.log(location);
+      //   } else {
+      //     getLocation({ location: "all", querytype: "local" });
+      //   }
+      // } else {
+      //   if (location.value[formData.DeviceType.deviceSelected].length !== 0) {
+      //     console.log(location);
+      //   } else {
+      //     getLocation({
+      //       location: "all",
+      //       querytype: formatDate.DeviceType.deviceSelected,
+      //     });
+      //   }
+      // }
+      // if (location.value.weldinggun.length !== 0) {
+      //   //有数据
+      //   console.log(location);
+      //   // this.autocompletecfg.loadAll = this.location[0];
+      // } else {
+      //   //没有请求数据
+      //   console.log("重新加载数据location");
+      //   getLocation({ location: "all", querytype: "weldinggun" });
+      // }
     });
     return {
       formData,

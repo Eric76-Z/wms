@@ -77,12 +77,14 @@ export default function axiosApi(type, params, method) {
         data: qs.stringify(params),
       })
         .then((res) => {
-          // console.log(res);
           switch (res.status) {
             case 200:
+              res.data.state = 200;
               resolve(res.data);
               break;
-
+            case 201:
+              resolve(res.data);
+              break;
             default:
               // 接口错误提示
               Toast.fail(res.statusText);
@@ -157,6 +159,7 @@ export default function axiosApi(type, params, method) {
             case 200:
               resolve(res.data);
               break;
+
             default:
               // 接口错误提示
               Toast.fail(res.statusText);
