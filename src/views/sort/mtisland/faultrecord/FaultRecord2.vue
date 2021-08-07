@@ -1,65 +1,71 @@
 <template>
   <div id="faultrecord2">
-    <h-autocomplete :autocompletecfg="autocompletecfg" @selected="selected" />
     <van-form @submit="formData.onSubmit">
+      <van-field
+        v-model="formData.DeviceType.value"
+        readonly
+        clickable
+        required
+        name="device_type"
+        label="设备类型"
+        placeholder="点击选择发生故障的设备类型......"
+        @click="formData.DeviceType.showPicker = true"
+        :rules="[{ required: true, message: '请填写设备类型' }]"
+      />
+      <h-autocomplete :autocompletecfg="autocompletecfg" @selected="selected" />
       <van-field
         readonly
         required
         v-model="formData.MyLocation"
         name="MyLocation"
         label="区域"
+        :rules="[{ required: true, message: '请填写区域' }]"
       />
       <van-field
         v-model="formData.CarModel.value"
         readonly
         clickable
         required
-        name="CarModel"
+        name="car_model"
         label="车型"
         placeholder="选择发生故障时车型......"
         @click="formData.CarModel.showPicker = true"
+        :rules="[{ required: true, message: '请填写车型' }]"
       />
-      <van-field
-        v-model="formData.DeviceType.value"
-        readonly
-        clickable
-        required
-        name="DeviceType"
-        label="设备类型"
-        placeholder="点击选择发生故障的设备类型......"
-        @click="formData.DeviceType.showPicker = true"
-      />
+
       <van-field
         v-model="formData.Time.StartTime.value"
         readonly
         clickable
         required
-        name="StartTime"
+        name="start_time"
         label="开始时间"
         placeholder="点击选择故障开始时间......"
         @click="formData.Time.StartTime.showPicker = true"
+        :rules="[{ required: true, message: '请填写开始时间' }]"
       />
       <van-field
         v-model="formData.Time.EndTime.value"
         readonly
         clickable
         required
-        name="EndTime"
+        name="end_time"
         label="结束时间"
         placeholder="点击选择故障结束时间......"
         @click="formData.Time.EndTime.showPicker = true"
+        :rules="[{ required: true, message: '请填写结束时间' }]"
       />
       <van-field
         v-model="formData.Time.Duration"
         readonly
         required
-        name="Duraion"
+        name="duration"
         label="持续时间"
         placeholder="持续时间"
       />
       <van-field
-        v-model="formData.message"
-        name="Message"
+        v-model="formData.MaintenanceRecord"
+        name="maintenance_record"
         required
         rows="2"
         autosize
@@ -68,6 +74,7 @@
         maxlength="250"
         placeholder="请输入维修记录......"
         show-word-limit
+        :rules="[{ required: true, message: '请填写维修记录' }]"
       />
       <div style="margin: 16px">
         <van-button round block type="success" native-type="submit"
@@ -128,6 +135,7 @@ import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { Form, Field, Picker, Popup } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
+import { createMaintenanceRecords } from "@/network/sort.js";
 
 import { formatDate } from "@/common/utils";
 export default {
@@ -144,17 +152,17 @@ export default {
     const store = useStore();
     const location = toRef(store.state, "location");
     const params = toRef(props, "params");
+    const user = toRef(store.state, "user");
     const {
       getLocation: [getLocation],
     } = store._actions;
     const route = useRoute();
     console.log(params);
     console.log(route.params);
-    //autocomplete相关数据
-    const autocompletecfg = reactive(location);
+
     //表单相关数据
     const formData = reactive({
-      WeldingGun: "",
+      workstation: "",
       MyLocation: "",
       CarModel: {
         value: "",
@@ -171,6 +179,8 @@ export default {
         onConfirm: (value) => {
           formData.DeviceType.value = value;
           formData.DeviceType.showPicker = false;
+          formData.MyLocation = "";
+          formData.workstation = "";
           reloadLocaltion();
         },
         columns: ["机器人", "焊枪"],
@@ -221,10 +231,15 @@ export default {
           }
         }),
       },
-      message: "",
+      MaintenanceRecord: "",
       //提交表单
       onSubmit: (values) => {
-        console.log(values);
+        values.workstation = formData.workstation;
+        values.sort = "设备故障";
+        values.duration = parseInt(values.duration);
+        values.applicant_id = user.value.userinfo.userId;
+        values.order_status = 1;
+        createMaintenanceRecords(values);
         // values.WeldingGun = formData.WeldingGun;
         // values.BladeTypeId = route.params["bladeId"];
         // applyBlade(values);
@@ -232,9 +247,25 @@ export default {
       },
     });
 
+    //autocomplete相关数据
+    const autocompletecfg = reactive({
+      workstation: computed(() => {
+        switch (formData.DeviceType.value) {
+          case formData.DeviceType.columns[0]:
+            return location.value["robot"];
+          case formData.DeviceType.columns[1]:
+            return location.value["weldinggun"];
+          default:
+            return location.value["local"];
+        }
+      }),
+      state: formData,
+    });
     //autocomplete 选择后赋值
     const selected = (val) => {
-      formData.WeldingGun = val.value;
+      // console.log(val);
+
+      formData.workstation = val.value;
       formData.MyLocation = val.area;
       return true;
     };
@@ -291,8 +322,8 @@ export default {
     });
     return {
       formData,
-      selected,
       autocompletecfg,
+      selected,
     };
   },
 };

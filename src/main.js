@@ -23,11 +23,14 @@ import {
 } from "vant";
 import { Grid, GridItem } from "vant";
 import { Uploader } from "vant";
+import { Step, Steps } from "vant";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(Step);
+app.use(Steps);
 app.use(Uploader);
 app.use(Grid, GridItem);
 app.use(Divider);

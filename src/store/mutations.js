@@ -6,17 +6,17 @@ export default {
     switch (payload.target) {
       case "local":
         state.location.local.length = 0;
-        state.location.local.push(payload.local);
+        state.location.local = payload.local;
         console.log(state.location);
         break;
       case "robot":
         state.location.robot.length = 0;
-        state.location.robot.push(payload.robot);
+        state.location.robot = payload.robot;
         console.log(state.location);
         break;
       case "weldinggun":
         state.location.weldinggun.length = 0;
-        state.location.weldinggun.push(payload.weldinggun);
+        state.location.weldinggun = payload.weldinggun;
         console.log(state.location);
         break;
       default:

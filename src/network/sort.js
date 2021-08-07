@@ -10,11 +10,6 @@ export function partupBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "patch");
 }
 
-// //
-// export function createImage(params) {
-//   return axiosApi("workstation/bladeitem/406", params, "patch");
-// }
-
 //删除刀片订单  /workstation/bladeitem/{id}/
 export function deleteBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "delete");
@@ -25,14 +20,29 @@ export function reqCphLocation(query) {
   return axiosApi("workstation/location/cph_location_tree/", query, "get");
 }
 
+//[{'value': '1060', 'area': 'CPH2.1-UB-LTVR'}, {'value': '1080', 'area': 'CPH2.1-UB-LTVR'}......]
+export function reqLocationByTarget(query) {
+  return axiosApi("workstation/location/back_by_target/", query, "get");
+}
+
 //获取焊枪信息
 export function reqWeldingGun(query) {
   return axiosApi("/workstation/weldinggun/", query, "get");
 }
 
-//获取刀片相关数据
-export function reqBladeData(params) {
-  return axiosApi("mywork/getbladedata/", params, "get");
+//申报故障
+export function createMaintenanceRecords(params) {
+  return axiosApi("workstation/maintenance/", params, "post");
+}
+
+//申报故障
+export function listMaintenanceRecords(params) {
+  return axiosApi("workstation/maintenance/", params, "get");
+}
+
+//删除故障
+export function deleteMaintenanceRecords(params) {
+  return axiosApi("workstation/maintenance/", params, "delete");
 }
 
 // //获取刀片申请订单数据
@@ -40,10 +50,15 @@ export function reqBladeData(params) {
 //   return axiosApi("workstation/bladeitem/blade_item/", params, "get");
 // }
 
-//提交刀片申请表单
-export function applyBlade(query) {
-  return axiosApi("workstation/applyblade/", query, "post");
-}
+// //提交刀片申请表单
+// export function applyBlade(query) {
+//   return axiosApi("workstation/applyblade/", query, "post");
+// }
+
+// //获取刀片相关数据
+// export function reqBladeData(params) {
+//   return axiosApi("workstation/maintenance/", params, "get");
+// }
 //用户登陆
 export function userLogin(query) {
   return axiosApi("myuser/login/", query, "post");

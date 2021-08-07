@@ -1,32 +1,43 @@
 import { ADD_TO_LOCATION } from "./mutation-types";
-import { reqWeldingGun } from "@/network/sort.js";
+import { reqLocationByTarget } from "@/network/sort.js";
 export default {
   getLocation(context, payload) {
     switch (payload.target) {
       case "local":
+        reqLocationByTarget(payload)
+          .then((res) => {
+            const data = {
+              target: "local",
+              local: res,
+            };
+            context.commit(ADD_TO_LOCATION, data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         break;
       case "robot":
-        break;
-      case "weldinggun":
-        reqWeldingGun(payload)
+        reqLocationByTarget(payload)
           .then((res) => {
             console.log(res);
             const data = {
-              weldinggun: [],
+              target: "robot",
+              robot: res,
             };
-            res.forEach((element) => {
-              const area =
-                element["location"]["location_level_1"] +
-                "-" +
-                element["location"]["location_level_2"] +
-                "-" +
-                element["location"]["location_level_3"];
-              data.weldinggun.push({
-                value: element["weldinggun_num"],
-                area: area,
-              });
-            });
-            data.target = "weldinggun";
+            context.commit(ADD_TO_LOCATION, data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        break;
+      case "weldinggun":
+        reqLocationByTarget(payload)
+          .then((res) => {
+            console.log(res);
+            const data = {
+              target: "weldinggun",
+              weldinggun: res,
+            };
             context.commit(ADD_TO_LOCATION, data);
           })
           .catch((err) => {

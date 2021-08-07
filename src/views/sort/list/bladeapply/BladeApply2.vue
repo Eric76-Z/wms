@@ -1,6 +1,10 @@
 <template>
   <div id="bladeapply2">
-    <h-autocomplete :autocompletecfg="autocompletecfg" @selected="selected" />
+    <h-autocomplete
+      v-model="formData.work_station"
+      :autocompletecfg="autocompletecfg"
+      @selected="selected"
+    />
     <van-form @submit="onSubmit">
       <van-field
         readonly

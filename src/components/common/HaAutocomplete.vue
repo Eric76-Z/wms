@@ -3,10 +3,10 @@
     <van-field v-model="value" label="文本" placeholder="请输入用户名" />
   </van-cell-group> -->
   <div id="hautocomplete">
-    <div class="h-autocomplete-label">工位</div>
+    <div class="h-autocomplete-label" @click="test">工位</div>
     <el-autocomplete
       class="inline-input"
-      v-model="state2"
+      v-model="state.value.state.workstation"
       :popper-append-to-body="false"
       :fetch-suggestions="querySearch"
       placeholder="请输入工位号"
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { ref, toRef } from "vue";
+import { reactive, toRef } from "vue";
 import { ElAutocomplete } from "element-plus";
 import { Field, CellGroup } from "vant";
 
@@ -29,6 +29,7 @@ export default {
     [Field.name]: Field,
     [CellGroup.name]: CellGroup,
   },
+  emits: ["selected"],
   props: {
     autocompletecfg: {
       type: Object,
@@ -36,15 +37,18 @@ export default {
   },
   setup(props, context) {
     const autocompletecfg = toRef(props, "autocompletecfg");
-    console.log(autocompletecfg.value);
-    const toShow = ref(autocompletecfg); //需要显示的内容
+    const test = () => {
+      console.log(autocompletecfg);
+      console.log(autocompletecfg.value.state);
+      console.log(state);
+    };
     // console.log(toShow);
     const querySearch = (queryString, cb) => {
-      console.log(toShow.value[0]);
-      // console.log(autocompletecfg.value);
+      console.log(autocompletecfg.value.state);
+      // state.value = "";
       var results = queryString
-        ? toShow.value[0].filter(createFilter(queryString))
-        : toShow.value[0];
+        ? autocompletecfg.value.workstation.filter(createFilter(queryString))
+        : autocompletecfg.value.workstation;
       // 调用 callback 返回建议列表的数据
       cb(results);
     };
@@ -58,18 +62,22 @@ export default {
     };
     const handleSelect = (item) => {
       context.emit("selected", item);
+      console.log(autocompletecfg);
     };
-    // onMounted(() => {
-    //   console.log(autocompletecfg.value.loadAll);
-    //   toShow.value = reactive(autocompletecfg.value.loadAll);
-    // });
+
+    const state = reactive({
+      // value: computed(() => {
+      //   return autocompletecfg.value.state;
+      // }),
+      value: autocompletecfg,
+    });
+
     return {
-      toShow,
-      state1: ref(""),
-      state2: ref(""),
+      state,
       querySearch,
       createFilter,
       handleSelect,
+      test,
     };
   },
 };

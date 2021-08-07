@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 import { Dialog, Toast } from "vant";
+import store from "../store";
 
 // let getCookie = function (cookie) {
 //   let reg = /csrftoken=([\w]+)[;]?/g;
@@ -30,6 +31,10 @@ Axios.interceptors.request.use(
     //     "Content-Type": "application/x-www-form-urlencoded",
     //   });
     // }
+    if (store.state.user.token !== "") {
+      // 判断是否存在token，如果存在的话，则每个http header都加上token
+      config.headers.Authorization = "Bearer " + store.state.user.token;
+    }
     return config;
   },
   (error) => {
