@@ -45,6 +45,11 @@ export function deleteMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "delete");
 }
 
+//获取备件信息
+export function listParts(params) {
+  return axiosApi("workstation/parts/", params, "get");
+}
+
 // //获取刀片申请订单数据
 // export function reqBladeItemData(params) {
 //   return axiosApi("workstation/bladeitem/blade_item/", params, "get");

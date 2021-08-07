@@ -4,7 +4,7 @@
       <main-list :listcfg="listcfg">
         <slot>
           <van-card
-            v-for="(item, index) in listcfg.content"
+            v-for="(item, index) in listcfg"
             :key="index"
             :tag="item.tag"
             :title="item.title"
@@ -32,23 +32,48 @@
 </template>
 
 <script>
-// import { toRef } from "vue";
+import { toRef, reactive, computed, onMounted, nextTick } from "vue";
 import MainList from "@/components/content/mainlist/MainList";
 
 export default {
   name: "BladeApply1",
-  data() {
-    return {};
-  },
   components: {
     MainList,
   },
   props: {
-    listcfg: {
+    bladeinfo: {
       type: Object,
     },
   },
-  setup() {},
+  setup(props) {
+    onMounted(() => {
+      nextTick(() => {
+        const bladeinfo = toRef(props, "bladeinfo");
+        console.log(bladeinfo.value.part_num);
+        const listcfg = reactive({
+          tag: computed(() => {
+            if (bladeinfo.value.part_num == "TV553514") {
+              return "常用";
+            } else {
+              return " ";
+            }
+          }),
+          title: computed(() => {
+            if (bladeinfo.value.my_spec != null) {
+              return bladeinfo.value.my_spec;
+            }
+            return bladeinfo.value.setech_spec;
+          }),
+          price: bladeinfo.value.price,
+          desc: bladeinfo.value.usefor,
+        });
+        console.log(listcfg);
+        return {
+          listcfg,
+        };
+      });
+    });
+  },
 };
 </script>
 

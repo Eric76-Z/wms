@@ -1,18 +1,16 @@
 import { ADD_TO_BLADEINFO, ADD_TO_BLADEITEMDATA } from "@/store/mutation-types";
-import { reqBladeData } from "@/network/sort.js";
+import { listParts } from "@/network/sort.js";
 // import router from "@/router";
 // import { Toast } from "vant";
 // import { Toast } from "vant";
 
 const state = {
-  bladeinfo: {},
+  bladeinfo: [],
   bladeitemdata: {},
 };
 
 const mutations = {
   [ADD_TO_BLADEINFO](state, payload) {
-    payload.checked = true;
-    // console.log(payload);
     state.bladeinfo = payload;
   },
   [ADD_TO_BLADEITEMDATA](state, payload) {
@@ -23,8 +21,18 @@ const mutations = {
 };
 
 const actions = {
+  getBladeInfo(context, payload) {
+    listParts(payload)
+      .then((res) => {
+        console.log(res);
+        context.commit(ADD_TO_BLADEINFO, res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   getBladedata(context, payload) {
-    reqBladeData(payload)
+    listParts(payload)
       .then((res) => {
         switch (payload.target) {
           case "getbladeinfo":
