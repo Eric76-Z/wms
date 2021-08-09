@@ -5,6 +5,11 @@ export function reqBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "get");
 }
 
+//创建刀片订单信息数据
+export function createBladeItemData(params) {
+  return axiosApi("workstation/bladeitem/", params, "post");
+}
+
 //更新刀片订单  /workstation/bladeitem/{id}/
 export function partupBladeItemData(params) {
   return axiosApi("workstation/bladeitem/", params, "patch");

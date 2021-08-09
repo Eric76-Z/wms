@@ -16,7 +16,7 @@
               <van-button
                 :to="{
                   name: 'bladeapply2',
-                  params: { bladeId: index },
+                  params: { bladeId: item.id },
                 }"
                 type="success"
                 size="mini"
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { toRef, reactive, computed, onMounted, nextTick } from "vue";
+import { toRef, reactive, computed } from "vue";
 import MainList from "@/components/content/mainlist/MainList";
 
 export default {
@@ -46,33 +46,42 @@ export default {
     },
   },
   setup(props) {
-    onMounted(() => {
-      nextTick(() => {
-        const bladeinfo = toRef(props, "bladeinfo");
-        console.log(bladeinfo.value.part_num);
-        const listcfg = reactive({
+    const bladeinfo = toRef(props, "bladeinfo");
+    // console.log(bladeinfo);
+    const listcfg = reactive([]);
+    setTimeout(() => {
+      for (const iterator of bladeinfo.value) {
+        // console.log(iterator);
+        const list = reactive({
+          id: iterator.id,
           tag: computed(() => {
-            if (bladeinfo.value.part_num == "TV553514") {
+            if (iterator.part_num == "TV553514") {
               return "常用";
             } else {
               return " ";
             }
           }),
           title: computed(() => {
-            if (bladeinfo.value.my_spec != null) {
-              return bladeinfo.value.my_spec;
+            if (iterator.my_spec != null) {
+              return iterator.my_spec.split("|")[0];
             }
-            return bladeinfo.value.setech_spec;
+            return iterator.setech_spec.split("|")[0];
           }),
-          price: bladeinfo.value.price,
-          desc: bladeinfo.value.usefor,
+          price: iterator.price,
+          desc: computed(() => {
+            if (iterator.my_spec != null) {
+              return iterator.my_spec.split("|")[1];
+            }
+            return iterator.setech_spec.split("|")[1];
+          }),
         });
-        console.log(listcfg);
-        return {
-          listcfg,
-        };
-      });
-    });
+        listcfg.push(list);
+      }
+    }, 500);
+
+    return {
+      listcfg,
+    };
   },
 };
 </script>

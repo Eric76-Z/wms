@@ -18,17 +18,17 @@
             <van-tag :color="bladecardcfg.data.descTag.tagColor">{{
               bladecardcfg.data.descTag.tagText
             }}</van-tag>
-            {{ listdata.bladetype_apply }}
+            {{ bladecardcfg.data.descTag.tagValue }}
           </div>
         </div>
         <div class="jp-card__middle">
           <div class="jp-card__lt">
             <van-tag color="#1989fa" plain>申</van-tag>
-            {{ listdata.applicant }}
+            {{ bladecardcfg.data.applicant }}
           </div>
           <div class="jp-card__md" v-show="listdata.receiver">
             <van-tag color="#07c160" plain>领</van-tag>
-            {{ listdata.receiver }}
+            {{ bladecardcfg.data.receiver }}
           </div>
           <div class="jp-card__rt" v-show="false"></div>
         </div>
@@ -134,9 +134,12 @@
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="[1, 3].indexOf(listData.order_status) != -1"
+        v-if="
+          [1, 3].indexOf(listData.order_status) != -1 &&
+          user.userinfo.isSuper == true
+        "
         @click="bladecardcfg.btn.delete"
-        >放弃</van-button
+        >删除</van-button
       >
     </div>
   </div>
@@ -178,14 +181,45 @@ export default {
           "-" +
           listData.localLv3 +
           "--" +
-          listData.weldinggun,
+          listData.weldinggun.weldinggun_num,
         img: computed(() => {
           let url = "";
           listData.repair_order_img
             ? (url = listData.repair_order_img.img)
             : (url = undefined);
-          console.log(url);
           return url;
+        }),
+        applicant: computed(() => {
+          if (
+            listData.applicant != undefined &&
+            listData.applicant.first_name != null &&
+            listData.applicant.last_name != null
+          ) {
+            return listData.applicant.last_name + listData.applicant.first_name;
+          } else if (
+            listData.applicant != undefined &&
+            listData.applicant.username != null
+          ) {
+            return listData.applicant.username;
+          } else {
+            return "";
+          }
+        }),
+        receiver: computed(() => {
+          if (
+            listData.receiver != undefined &&
+            listData.receiver.first_name != null &&
+            listData.receiver.last_name != null
+          ) {
+            return listData.receiver.last_name + listData.receiver.first_name;
+          } else if (
+            listData.receiver != undefined &&
+            listData.receiver.username != null
+          ) {
+            return listData.receiver.username;
+          } else {
+            return "";
+          }
         }),
         cardTag: {
           tagText: computed(() => {
@@ -240,7 +274,9 @@ export default {
         descTag: {
           tagText: computed(() => {
             let tag = "";
-            listData.order_status in [1, 2, 3] ? (tag = "申") : (tag = "领");
+            [1, 2, 3].indexOf(listData.order_status) != -1
+              ? (tag = "申")
+              : (tag = "领");
             return tag;
           }),
           tagColor: computed(() => {
@@ -249,6 +285,23 @@ export default {
               ? (color = "#1989fa")
               : (color = "#07c160");
             return color;
+          }),
+          tagValue: computed(() => {
+            let value = "";
+            switch (bladecardcfg.data.descTag.tagText) {
+              case "申":
+                value = listData.bladetype_apply.my_spec;
+                break;
+              case "领":
+                if (listData.bladetype_received != null) {
+                  value = listData.bladetype_received.my_spec;
+                } else {
+                  value = "未填写领用何种刀片！";
+                }
+
+                break;
+            }
+            return value;
           }),
         },
         time: {

@@ -296,7 +296,7 @@ export default {
           //   }
           // }),
           duration: computed(() => {
-            console.log(listData.duration);
+            // console.log(listData.duration);
             return listData.duration;
           }),
           durationColor: computed(() => {
