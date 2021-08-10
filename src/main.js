@@ -24,11 +24,17 @@ import {
 import { Grid, GridItem } from "vant";
 import { Uploader } from "vant";
 import { Step, Steps } from "vant";
+import { RadioGroup, Radio } from "vant";
+import { Checkbox, CheckboxGroup } from "vant";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(Checkbox);
+app.use(CheckboxGroup);
+app.use(RadioGroup);
+app.use(Radio);
 app.use(Step);
 app.use(Steps);
 app.use(Uploader);

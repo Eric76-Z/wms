@@ -28,7 +28,7 @@ export default {
       iconText: {
         故障申报: ["jiqiren", "/sort/mtisland/faultrecord"],
         故障记录: ["hanzhuang", "/sort/mtisland/faultlist"],
-        故障代码: ["shebei", "/"],
+        交接白板: ["shebei", "/"],
         维修经验: ["shenqing", "/sort/list"],
         项目问题: ["liebiao", "/sort/detail"],
         备件查询: ["kucunguanli", "/"],

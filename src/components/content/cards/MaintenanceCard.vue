@@ -37,17 +37,6 @@
             {{ listdata.applicant.last_name + listdata.applicant.first_name }}
           </div>
         </div>
-        <van-steps
-          :active="maintenancecardcfg.step.active"
-          :active-icon="maintenancecardcfg.step.activeIcon"
-          active-color="#38f"
-        >
-          <van-step
-            v-for="(item, index) in maintenancecardcfg.step.steps"
-            :key="index"
-            >{{ item }}</van-step
-          >
-        </van-steps>
         <div class="jp-card__bottom">
           <div class="start-time">
             开始于
@@ -68,7 +57,7 @@
                 maintenancecardcfg.data.time.endTime
               }}</span>
             </div>
-            ，过去
+            ，历时
             <van-tag
               size="medium"
               type="primary"
@@ -78,6 +67,17 @@
             </van-tag>
             分钟
           </div>
+          <van-steps
+            :active="maintenancecardcfg.step.active"
+            :active-icon="maintenancecardcfg.step.activeIcon"
+            active-color="#38f"
+          >
+            <van-step
+              v-for="(item, index) in maintenancecardcfg.step.steps"
+              :key="index"
+              >{{ item }}</van-step
+            >
+          </van-steps>
           <!-- <div class="appeal" v-show="maintenancecardcfg.data.appeal.show">
             <van-tag type="danger"> 申诉!!! </van-tag>
           </div> -->

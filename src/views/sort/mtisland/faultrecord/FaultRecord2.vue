@@ -12,6 +12,17 @@
         @click="formData.DeviceType.showPicker = true"
         :rules="[{ required: true, message: '请填写设备类型' }]"
       />
+      <van-field name="maintenance_status" label="故障当前状态">
+        <template #input>
+          <van-radio-group
+            v-model="formData.MaintenanceStatus.checked"
+            direction="horizontal"
+          >
+            <van-radio name="1" icon-size="16px">完全修复</van-radio>
+            <van-radio name="2" icon-size="16px">临时修复</van-radio>
+          </van-radio-group>
+        </template>
+      </van-field>
       <h-autocomplete :autocompletecfg="autocompletecfg" @selected="selected" />
       <van-field
         readonly
@@ -82,6 +93,17 @@
         >
       </div>
     </van-form>
+    <van-popup
+      v-model:show="formData.MaintenanceStatus.showPicker"
+      position="bottom"
+    >
+      <van-picker
+        title="选择故障状态"
+        :columns="formData.MaintenanceStatus.columns"
+        @confirm="formData.MaintenanceStatus.onConfirm"
+        @cancel="formData.MaintenanceStatus.showPicker = false"
+      />
+    </van-popup>
     <van-popup v-model:show="formData.CarModel.showPicker" position="bottom">
       <van-picker
         title="选择车型"
@@ -194,6 +216,17 @@ export default {
               return "";
           }
         }),
+      },
+      MaintenanceStatus: {
+        checked: "1",
+        // value: "",
+        // showPicker: false,
+        // onConfirm: (value) => {
+        //   console.log(value);
+        //   formData.MaintenanceStatus.value = value;
+        //   formData.MaintenanceStatus.showPicker = false;
+        // },
+        // columns: ["完全修复", "临时修复"],
       },
       Time: {
         maxDate: new Date(2025, 10, 1),
