@@ -40,7 +40,7 @@ export function createMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "post");
 }
 
-//申报故障
+//获取故障信息
 export function listMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "get");
 }

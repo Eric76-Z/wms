@@ -305,6 +305,7 @@ export default {
 
     const reloadLocaltion = () => {
       console.log(formData.DeviceType.deviceSelected);
+      console.log(location.value);
       if (formData.DeviceType.deviceSelected == "") {
         if (location.value.local.length !== 0) {
           console.log(location);

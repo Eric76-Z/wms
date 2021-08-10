@@ -27,6 +27,8 @@ const FaultList1 = () => import("@/views/sort/mtisland/faultlist/FaultList1");
 const FaultListSearch = () =>
   import("@/views/sort/mtisland/faultlist/FaultListSearch");
 
+const FaultDetail = () => import("@/views/sort/mtisland/faultlist/FaultDetail");
+
 const routes = [
   {
     name: "notFound",
@@ -148,6 +150,12 @@ const routes = [
         component: FaultList1,
         props: true,
         alias: "",
+      },
+      {
+        name: "faultdetail",
+        path: "faultdetail/:maintenanceId",
+        component: FaultDetail,
+        props: true,
       },
       {
         name: "faultlistsearch",

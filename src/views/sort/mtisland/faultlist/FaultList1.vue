@@ -1,6 +1,5 @@
 <template>
-  <div id="bladedetail">
-    <main-nav-bar :navbarcfg="navbarcfg" />
+  <div id="faultlist1">
     <van-search
       v-model="searchcfg.value"
       ref="search"
@@ -25,34 +24,13 @@
             class="scroll"
           >
             <slot>
-              <!-- <van-card
-              v-for="item in listcfg.list"
-              :key="item"
-              :tag="item.tag"
-              :title="item.weldinggun_num"
-              :price="item.price"
-              :desc="item.desc"
-              thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-            >
-              <template #footer>
-                <van-button
-                  :to="{
-                    name: 'bladeapply2',
-                    params: { bladeId: index },
-                  }"
-                  type="success"
-                  size="mini"
-                  round
-                  >点击领用</van-button
-                >
-              </template>
-            </van-card> -->
-              <blade-card
+              <maintenance-card
                 v-for="item in listcfg.list"
                 :key="item.id"
                 :listdata="item"
                 @selectedid="selectedid"
-              ></blade-card>
+                @click="toFaultDetail(item.id)"
+              ></maintenance-card>
             </slot>
           </van-list>
         </div>
@@ -122,29 +100,19 @@
 import { reactive, computed, ref, toRef, nextTick, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
-import BladeCard from "@/components/content/cards/BladeCard";
+import MaintenanceCard from "@/components/content/cards/MaintenanceCard";
 import { Dialog, Toast } from "vant";
-import { reqBladeItemData, partupBladeItemData } from "@/network/sort.js";
+import { listMaintenanceRecords, partupBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 
 // import MiddleBar from "@/components/content/maintabbar/MiddleBar";
 
 export default {
-  name: "BladeDetail",
-  data() {
-    return {
-      navbarcfg: {
-        title: "刀片申请明细",
-        isShow: [true, true, true],
-      },
-    };
-  },
+  name: "faultlist1",
   components: {
-    MainNavBar,
-    BladeCard,
+    MaintenanceCard,
     BackTop,
     MainFilter,
   },
@@ -153,7 +121,6 @@ export default {
     //vuex数据
     const store = useStore();
     const listOffset = toRef(store.state, "listOffset");
-
     const user = toRef(store.state, "user");
     console.log(user.value.userinfo);
     //路由
@@ -203,7 +170,7 @@ export default {
         queryParam.page = listcfg.currPage;
         queryParam.pageSize = listcfg.pageSize;
         const p = scroll.value.scrollTop;
-        reqBladeItemData(queryParam)
+        listMaintenanceRecords(queryParam)
           .then((res) => {
             console.log(res);
             listcfg.list.push.apply(listcfg.list, res.results);
@@ -234,6 +201,15 @@ export default {
         listcfg.onLoad();
       },
     });
+
+    //card跳转
+    const toFaultDetail = (val) => {
+      console.log(val);
+      router.push({
+        name: "faultdetail",
+        params: { maintenanceId: val },
+      });
+    };
     //查询参数
     const queryParam = reactive({
       page: listcfg.currPage,
@@ -253,7 +229,8 @@ export default {
     };
 
     const handle = debounce(() => {
-      if (scroll.value.scrollTop >= 1000) {
+      console.log(scroll);
+      if (scroll.value.scrollTop != null && scroll.value.scrollTop >= 1000) {
         // console.log(scroll.value.scrollTop);
         // console.log(showBackTop.value);
         showBackTop.value = true;
@@ -340,39 +317,17 @@ export default {
       showBackTop,
       backtop,
       listOffset,
-
       queryData,
       selectedid,
       appealpopupcfg,
+      toFaultDetail,
     };
   },
-  // beforeRouteEnter() {
-  //   console.log("激活");
-  //   console.log(scroll.value);
-  //   console.log(document.getElementsByClassName("scroll"));
-
-  //   // if (scroll.value) {
-  //   //   scroll.value.scrollTop = listOffset.value.bladedetail_scrollTop;
-  //   // }
-  // },
-  // beforeRouteLeave() {
-  //   console.log("离开");
-  //   console.log(scroll.value);
-  //   console.log(document.getElementsByClassName("scroll"));
-  //   // listOffset.value.bladedetail_scrollTop = scroll.value.scrollTop;
-  //   // const payload = {
-  //   //   data: listOffset.value,
-  //   //   target: "bladedetail_scrollTop",
-  //   // };
-  //   // store.commit("change_offset", payload);
-  //   // //keep-alive 的页面跳转时，移除scroll事件
-  //   // document.removeEventListener("touchmove", handle);
-  // },
 };
 </script>
 
 <style lang="scss">
-#bladedetail {
+#faultlist1 {
   position: relative;
   --van-tabs-card-height: 20px;
   .van-search {
@@ -425,7 +380,7 @@ export default {
     line-height: 28px;
     background-color: --van-white;
     position: absolute;
-    top: 88px;
+    top: 44px;
     right: 0;
     align-items: center;
     justify-content: center;
@@ -433,7 +388,7 @@ export default {
     padding: 0 var(--van-padding-base);
     color: var(--van-tab-text-color);
     font-size: var(--van-tab-font-size);
-    font-weight: 500;
+    font-weight: 800;
     // line-height: var(--van-tab-line-height);
     cursor: pointer;
     z-index: 999px;
