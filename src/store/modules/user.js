@@ -8,6 +8,8 @@ const state = {
     userIcon: "",
     username: "",
     userId: "",
+    firstname: "",
+    lastname: "",
     realname: "张炯平",
     isSuper: true,
     groups: [],
@@ -24,6 +26,8 @@ const mutations = {
     console.log(data);
     state.userinfo.username = data.username;
     state.userinfo.userId = data.userId;
+    state.userinfo.firstname = data.firstname;
+    state.userinfo.lastname = data.lastname;
     state.userinfo.realname = data.realname;
     state.userinfo.isSuper = data.isSuper;
     state.userinfo.groups = data.groups;

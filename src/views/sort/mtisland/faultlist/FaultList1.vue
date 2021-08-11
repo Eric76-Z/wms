@@ -29,7 +29,7 @@
                 :key="item.id"
                 :listdata="item"
                 @selectedid="selectedid"
-                @click="toFaultDetail(item.id)"
+                @faultdetail="item"
               ></maintenance-card>
             </slot>
           </van-list>
@@ -99,7 +99,7 @@
 <script>
 import { reactive, computed, ref, toRef, nextTick, onMounted } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import MaintenanceCard from "@/components/content/cards/MaintenanceCard";
@@ -123,9 +123,6 @@ export default {
     const listOffset = toRef(store.state, "listOffset");
     const user = toRef(store.state, "user");
     console.log(user.value.userinfo);
-    //路由
-    const router = reactive(useRouter());
-    console.log(router);
 
     let scroll = ref(null);
     let showBackTop = ref(false);
@@ -202,14 +199,6 @@ export default {
       },
     });
 
-    //card跳转
-    const toFaultDetail = (val) => {
-      console.log(val);
-      router.push({
-        name: "faultdetail",
-        params: { maintenanceId: val },
-      });
-    };
     //查询参数
     const queryParam = reactive({
       page: listcfg.currPage,
@@ -320,7 +309,6 @@ export default {
       queryData,
       selectedid,
       appealpopupcfg,
-      toFaultDetail,
     };
   },
 };

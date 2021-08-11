@@ -9,7 +9,12 @@
       />
       <h1>{{ userinfo.username }}</h1>
     </div>
-    <van-cell title="用户信息" is-link value="编辑" />
+    <van-cell
+      title="用户信息"
+      is-link
+      value="编辑"
+      :to="{ name: 'userinfo' }"
+    />
     <van-cell title="联系作者" is-link value="编辑" />
     <van-button type="danger" size="large" @click="userLogout"
       >退出登录</van-button

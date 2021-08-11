@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       navbarcfg: {
-        title: "myproject-用户",
+        title: "用户",
         isShow: [false, true, false],
       },
     };

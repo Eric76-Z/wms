@@ -5,6 +5,7 @@ const Sort = () => import("@/views/sort/Sort");
 const Profile = () => import("@/views/profile/Profile");
 const Login = () => import("@/views/profile/Login");
 const Register = () => import("@/views/profile/Register");
+const UserInfo = () => import("@/views/profile/UserInfo");
 
 const List = () => import("@/views/sort/list/List");
 
@@ -47,6 +48,7 @@ const routes = [
     path: "/home",
     component: Home,
   },
+  //用户模块
   {
     name: "profile",
     path: "/profile",
@@ -62,14 +64,17 @@ const routes = [
     path: "/register",
     component: Register,
   },
-
+  {
+    name: "userinfo",
+    path: "/profile/userinfo",
+    component: UserInfo,
+  },
   // sort下相关模块
   {
     name: "sort",
     path: "/sort",
     component: Sort,
   },
-
   {
     name: "list",
     path: "/sort/list",

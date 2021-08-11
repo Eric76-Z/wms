@@ -22,7 +22,7 @@ export default {
   },
   setup() {
     const navbarcfg = reactive({
-      title: "myproject-分类",
+      title: "分类",
       isShow: [false, true, false],
     });
     const gridcfg = reactive({

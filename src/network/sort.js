@@ -34,7 +34,9 @@ export function reqLocationByTarget(query) {
 export function reqWeldingGun(query) {
   return axiosApi("/workstation/weldinggun/", query, "get");
 }
-
+/*
+=======================故障申报模块相关接口=======================
+*/
 //申报故障
 export function createMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "post");
@@ -45,9 +47,19 @@ export function listMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "get");
 }
 
+//获取单个故障信息
+export function readMaintenanceRecords(params) {
+  return axiosApi("workstation/maintenance/" + params.id + "/", params, "get");
+}
+
 //删除故障
 export function deleteMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "delete");
+}
+
+//更新故障信息
+export function partupMaintenanceRecords(params) {
+  return axiosApi("workstation/maintenance/", params, "patch");
 }
 
 //获取备件信息

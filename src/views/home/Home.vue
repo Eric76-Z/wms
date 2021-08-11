@@ -30,7 +30,7 @@ export default {
   },
   setup() {
     const navbarcfg = reactive({
-      title: "myproject-首页",
+      title: "首页",
       isShow: [false, true, false],
     });
     const swipercfg = reactive({

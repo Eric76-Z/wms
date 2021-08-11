@@ -26,11 +26,13 @@ import { Uploader } from "vant";
 import { Step, Steps } from "vant";
 import { RadioGroup, Radio } from "vant";
 import { Checkbox, CheckboxGroup } from "vant";
+import { ContactCard } from "vant";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(ContactCard);
 app.use(Checkbox);
 app.use(CheckboxGroup);
 app.use(RadioGroup);
@@ -73,22 +75,22 @@ app.config.devtools = true;
 app.mount("#app");
 // createApp(App).use(store).use(router).mount("#app");
 
-// 注册一个全局自定义指令 `v-lazydom`
-app.directive("lazydom", {
-  mounted(el, binding, vnode) {
-    console.log("eeeeeeee");
-    console.log(el);
-    console.log(binding);
-    console.log(vnode);
-    var context = vnode.appContext;
-    console.log(context);
-    if (context && typeof context.lazyready == "function") {
-      setTimeout(() => {
-        context.lazyready(el);
-      }, 10);
-    }
-  },
-});
+// // 注册一个全局自定义指令 `v-lazydom`
+// app.directive("lazydom", {
+//   mounted(el, binding, vnode) {
+//     console.log("eeeeeeee");
+//     console.log(el);
+//     console.log(binding);
+//     console.log(vnode);
+//     var context = vnode.appContext;
+//     console.log(context);
+//     if (context && typeof context.lazyready == "function") {
+//       setTimeout(() => {
+//         context.lazyready(el);
+//       }, 10);
+//     }
+//   },
+// });
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {

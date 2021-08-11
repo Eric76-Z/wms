@@ -14,7 +14,7 @@
         <div class="jp-card__top">
           <div class="jp-card__title">
             {{ maintenancecardcfg.data.title }}
-            <van-tag type="primary">{{ listdata.sort }}</van-tag>
+            <van-tag type="primary">{{ listData.sort }}</van-tag>
           </div>
           <div class="jp-card__desc">
             <van-tag :color="maintenancecardcfg.data.desc.descTag.tagColor">{{
@@ -78,9 +78,13 @@
               >{{ item }}</van-step
             >
           </van-steps>
-          <!-- <div class="appeal" v-show="maintenancecardcfg.data.appeal.show">
-            <van-tag type="danger"> 申诉!!! </van-tag>
-          </div> -->
+          <van-tag
+            mark
+            type="primary"
+            size="medium"
+            v-show="maintenancecardcfg.data.needSummary"
+            >需经验总结</van-tag
+          >
         </div>
       </div>
     </div>
@@ -95,10 +99,11 @@
           <van-button
             class="check-btn"
             square
-            color="linear-gradient(to right, #ff976a, #ed6a0c)"
+            color="linear-gradient(to right, #ff6034, #ee0a24)"
             v-if="
               [1, 2, 3].indexOf(listData.order_status) != -1 &&
-              user.userinfo.isSuper == true
+              (user.userinfo.isSuper == true ||
+                user.userinfo.groups.indexOf(1) != -1)
             "
             @click="maintenancecardcfg.btn.check"
             >审核
@@ -108,55 +113,18 @@
 
       <van-button
         square
-        color="linear-gradient(to right, #01b160, #07e160)"
-        v-if="listData.order_status == 3"
-        @click="maintenancecardcfg.btn.receive"
-        >领取</van-button
-      >
-
-      <van-button
-        square
-        color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="listData.order_status == 2"
-        @click="maintenancecardcfg.btn.appeal"
-        >申诉</van-button
-      >
-
-      <van-popover
-        v-model:show="maintenancecardcfg.btn.todolast.showPopover"
-        @select="maintenancecardcfg.btn.todolast.onSelected"
-        placement="bottom-end"
-      >
-        <van-uploader
-          v-model="maintenancecardcfg.btn.todolast.fileList"
-          :after-read="maintenancecardcfg.btn.todolast.afterRead"
-          multiple
-          :max-count="1"
-        />
-        <template #reference>
-          <van-button
-            class="todolast-btn"
-            square
-            color="linear-gradient(to right, #cc976a, #ff976a)"
-            v-if="
-              listData.order_status == 4 &&
-              (listData.complete_time == null || user.userinfo.isSuper == true)
-            "
-            >善后
-          </van-button>
-        </template>
-      </van-popover>
-
-      <!-- <van-button
-        square
         color="linear-gradient(to right, #cc976a, #ff976a)"
-        v-if="listData.order_status == 4 && listData.complete_time == null"
-        >善后</van-button
-      > -->
+        @click="maintenancecardcfg.btn.detail(listdata.id)"
+        >详情</van-button
+      >
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="[2].indexOf(listData.order_status) != 1"
+        v-if="
+          [1].indexOf(listData.order_status) != -1 ||
+          user.userinfo.isSuper == true ||
+          user.userinfo.groups.indexOf(1) != -1
+        "
         @click="maintenancecardcfg.btn.delete"
         >放弃</van-button
       >
@@ -167,9 +135,13 @@
 <script>
 import { reactive, computed, toRef } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { formatDate, beautySub } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
-import { deleteMaintenanceRecords, partupBladeItemData } from "@/network/sort";
+import {
+  deleteMaintenanceRecords,
+  partupMaintenanceRecords,
+} from "@/network/sort";
 export default {
   name: "MainListCard",
   components: {
@@ -185,6 +157,10 @@ export default {
   setup(props, context) {
     const store = useStore();
     const user = toRef(store.state, "user").value;
+
+    //路由
+    const router = reactive(useRouter());
+    console.log(router);
     const listData = reactive(props.listdata);
     console.log(listData);
     const maintenancecardcfg = reactive({
@@ -206,56 +182,6 @@ export default {
         //   console.log(url);
         //   return url;
         // }),
-        cardTag: {
-          tagText: computed(() => {
-            let tagText = "";
-            switch (listData.order_status) {
-              case 1:
-                tagText = "等待审核";
-                break;
-              case 2:
-                tagText = "审核失败";
-                break;
-              case 3:
-                tagText = "等待领取";
-                break;
-              case 4:
-                if (listData.complete_time == null) {
-                  tagText = "等待善后";
-                } else {
-                  tagText = "订单完成";
-                }
-                break;
-              default:
-                break;
-            }
-            return tagText;
-          }),
-          tagColor: computed(() => {
-            let tagColor = "";
-            switch (listData.order_status) {
-              case 1:
-                tagColor = "#1989fa";
-                break;
-              case 2:
-                tagColor = "#ee0a24";
-                break;
-              case 3:
-                tagColor = "#ff976a";
-                break;
-              case 4:
-                if (listData.complete_time == null) {
-                  tagColor = "#1989fa";
-                } else {
-                  tagColor = "#07c160";
-                }
-                break;
-              default:
-                break;
-            }
-            return tagColor;
-          }),
-        },
         desc: {
           descTag: {
             tagText: "描述",
@@ -325,6 +251,9 @@ export default {
             }
           }),
         },
+        needSummary: computed(() => {
+          return listData.need_summary;
+        }),
       },
       btn: {
         delete: () => {
@@ -349,20 +278,27 @@ export default {
               // on cancel
             });
         },
+        detail: (val) => {
+          console.log(val);
+          router.push({
+            name: "faultdetail",
+            params: { maintenanceId: val },
+          });
+        },
         check: {
           showPopover: false,
           actions: [
-            { text: "后续措施" },
+            { text: "指定责任人" },
             { text: "维修经验" },
-            { text: "直接通过" },
             { text: "直接通过" },
           ],
           onSelected: (action) => {
             switch (action.text) {
-              case "通过":
-                partupBladeItemData({
+              case "指定责任人":
+                partupMaintenanceRecords({
                   id: listData.id,
                   order_status: 3,
+                  need_summary: 1,
                 }).then((res) => {
                   console.log(res);
                   Toast.success({
@@ -370,117 +306,41 @@ export default {
                     duration: 1000,
                     onClose: () => {
                       listData.order_status = res.order_status;
+                      listData.need_summary = res.need_summary;
                     },
                   });
                 });
                 break;
-              case "不通过":
-                partupBladeItemData({
+              case "维修经验":
+                partupMaintenanceRecords({
                   id: listData.id,
-                  order_status: 2,
+                  order_status: 3,
+                  need_summary: !maintenancecardcfg.data.needSummary,
                 }).then((res) => {
-                  Toast.fail({
-                    message: "审核不通过！",
-                    duration: 1000,
-                    onClose: () => {
-                      listData.order_status = res.order_status;
-                    },
-                  });
+                  console.log(res);
+                  listData.order_status = res.order_status;
+                  listData.need_summary = res.need_summary;
+                });
+                break;
+              case "直接通过":
+                partupMaintenanceRecords({
+                  id: listData.id,
+                  order_status: 3,
+                  need_summary: !maintenancecardcfg.data.needSummary,
+                }).then((res) => {
+                  console.log(res);
+                  listData.order_status = res.order_status;
+                  listData.need_summary = res.need_summary;
                 });
                 break;
               default:
                 break;
             }
           },
-        },
-        receive: () => {
-          Dialog.confirm({
-            title: "确认领取",
-            message: "确认领取刀片？",
-          })
-            .then(() => {
-              console.log(formatDate.nowDateTime());
-              partupBladeItemData({
-                id: listData.id,
-                order_status: 4,
-                receive_time: formatDate.nowDateTime(),
-              }).then((res) => {
-                console.log(res);
-                Toast.success({
-                  message: "领取成功",
-                  duration: 1000,
-                  onClose: () => {
-                    listData.order_status = res.order_status;
-                    listData.receive_time = res.receive_time;
-                  },
-                });
-              });
-            })
-            .catch(() => {
-              // on cancel
-            });
         },
         appeal: () => {
           let data = { id: listData.id, workstation: listData.weldinggun };
           context.emit("selectedid", data);
-        },
-        todolast: {
-          showPopover: false,
-          actions: [{ text: "上传维修单" }, { text: "其他", disabled: true }],
-          onSelected: (action) => {
-            switch (action.text) {
-              case "上传维修单":
-                partupBladeItemData({
-                  id: listData.id,
-                  order_status: 3,
-                }).then((res) => {
-                  Toast.success({
-                    message: "审核通过，等待领取",
-                    duration: 1000,
-                    onClose: () => {
-                      listData.order_status = res.order_status;
-                    },
-                  });
-                });
-                break;
-              default:
-                break;
-            }
-          },
-          fileList: [],
-          afterRead: (file) => {
-            // 此时可以自行将文件上传至服务器
-            file.status = "uploading";
-            file.message = "上传中...";
-            var formData = new FormData();
-            formData.append("id", listData.id);
-            formData.append("sort", "repair_order_img");
-            formData.append("img", file.file);
-            partupBladeItemData({
-              id: listData.id,
-              formData: formData,
-            })
-              .then((res) => {
-                file.status = "done";
-                file.url = res.repair_order_img.img;
-                listData.order_status = res.order_status;
-                listData.complete_time = res.complete_time;
-                listData.repair_order_img = res.repair_order_img;
-                console.log(listData);
-                // Toast.success({
-                //   message: "领取成功",
-                //   duration: 1000,
-                //   onClose: () => {
-                //     listData.order_status = res.order_status;
-                //     listData.receive_time = res.receive_time;
-                //   },
-                // });
-              })
-              .catch(() => {
-                file.status = "failed";
-                file.message = "上传失败";
-              });
-          },
         },
       },
       step: {
