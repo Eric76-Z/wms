@@ -66,6 +66,9 @@ const actions = {
         });
     } else if (payload.action === "logout") {
       context.commit(USER_LOGOUT);
+    } else if (payload.action === "partup") {
+      console.log(payload);
+      context.commit(USER_LOGIN, payload);
     }
   },
   Register(context, payload) {

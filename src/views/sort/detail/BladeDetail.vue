@@ -340,7 +340,6 @@ export default {
       showBackTop,
       backtop,
       listOffset,
-
       queryData,
       selectedid,
       appealpopupcfg,

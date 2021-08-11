@@ -62,6 +62,9 @@ export function partupMaintenanceRecords(params) {
   return axiosApi("workstation/maintenance/", params, "patch");
 }
 
+/*
+=======================备件模块相关接口=======================
+*/
 //获取备件信息
 export function listParts(params) {
   return axiosApi("workstation/parts/", params, "get");
@@ -94,4 +97,9 @@ export function userRegister(query) {
 //用户退出登陆
 export function userLogout(query) {
   return axiosApi("myuser/logout/", query, "post");
+}
+
+//用户信息更新
+export function partupUser(query) {
+  return axiosApi("myuser/user/", query, "patch");
 }
