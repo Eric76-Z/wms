@@ -4,7 +4,7 @@ function resolve(dir) {
   return path.join(__dirname, dir); //path.join(__dirname)设置绝对路径
 }
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "./" : "/", // 公共路径(必须有的)
+  publicPath: "./", // 公共路径(必须有的)
   indexPath: "index.html", // 相对于打包路径index.html的路径
   outputDir: "dist", // 'dist', 生产环境构建文件的目录
   // publicPath: "./",
