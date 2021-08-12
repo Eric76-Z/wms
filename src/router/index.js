@@ -175,6 +175,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  base: "/",
 });
 
 router.beforeEach((to, from, next) => {

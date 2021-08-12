@@ -1,22 +1,24 @@
-// module.exports = {
-//   configureWebpack: {
-//     resolve: {
-//       alias: {
-//         components: "@/components",
-//         views: "@/views",
-//         common: "@/common",
-//         assets: "@/assets",
-//         network: "@/network",
-//       },
-//     },
-//   },
-// };
-
 const path = require("path"); //引入path模块
+const IS_PROD = ["production", "prod"].includes(process.env.NODE_ENV);
 function resolve(dir) {
   return path.join(__dirname, dir); //path.join(__dirname)设置绝对路径
 }
 module.exports = {
+  publicPath: process.env.NODE_ENV === "production" ? "./" : "/", // 公共路径(必须有的)
+  indexPath: "index.html", // 相对于打包路径index.html的路径
+  outputDir: "dist", // 'dist', 生产环境构建文件的目录
+  // publicPath: "./",
+  assetsDir: "static", // 相对于outputDir的静态资源(js、css、img、fonts)目录
+  lintOnSave: false, // 是否在开发环境下通过 eslint-loader 在每次保存时 lint 代码
+  // productionSourceMap: false, //去除打包后js的map文件
+  productionSourceMap: !IS_PROD, // 生产环境的 source map
+  // devServer: {
+  //   //启动项目在8080端口自动打开
+  //   open: true,
+  //   port: 8080,
+  //   proxy: null,
+  // },
+
   chainWebpack: (config) => {
     config.resolve.alias
       .set("@", resolve("./src"))
@@ -38,4 +40,62 @@ module.exports = {
       },
     },
   },
+
+  //去掉console
+  configureWebpack: (config) => {
+    // 判断为生产模式下，因为开发模式我们是想保存console的
+    if (process.env.NODE_ENV === "production") {
+      config.optimization.minimizer.map((arg) => {
+        const option = arg.options.terserOptions.compress;
+        option.drop_console = true; // 打开开关
+        return arg;
+      });
+    }
+  },
+
+  // configureWebpack: {
+  //   // 关闭 webpack 的性能提示
+  //   // performance: {
+  //   //   hints:false
+  //   // }
+
+  //   // //或者
+
+  //   // 警告 webpack 的性能提示
+  //   performance: {
+  //     hints: "warning",
+  //     // 入口起点的最大体积
+  //     maxEntrypointSize: 50000000,
+  //     // 生成文件的最大体积
+  //     maxAssetSize: 30000000,
+  //     // 只给出 js 文件的性能提示
+  //     assetFilter: function (assetFilename) {
+  //       return assetFilename.endsWith(".js");
+  //     },
+  //   },
+  // },
+
+  // devServer: {
+  //   proxy: {
+  //     [process.env.VUE_APP_DEV]: {
+  //       target: process.env.VUE_APP_BASE,
+  //       changeOrigin: true,
+  //       ws: true,
+  //       pathRewrite: {
+  //         [`^${process.env.VUE_APP_DEV}`]: "",
+  //       },
+  //     },
+  //   },
+  // },
+  // pluginOptions: {
+  //   electronBuilder: {
+  //     builderOptions: {
+  //       productName: "product",
+  //       appId: "com.company.product",
+  //       nsis: {
+  //         deleteAppDataOnUninstall: true,
+  //       },
+  //     },
+  //   },
+  // },
 };

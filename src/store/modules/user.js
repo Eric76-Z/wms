@@ -1,7 +1,11 @@
-import { userLogin, userRegister } from "@/network/sort.js";
+import { userLogin, userRegister, partupUser } from "@/network/sort.js";
 import router from "@/router";
 
-import { USER_LOGIN, USER_LOGOUT } from "@/store/mutation-types";
+import {
+  USER_LOGIN,
+  USER_LOGOUT,
+  USERINFO_CHANGE,
+} from "@/store/mutation-types";
 
 const state = {
   userinfo: {
@@ -31,17 +35,25 @@ const mutations = {
     state.userinfo.realname = data.realname;
     state.userinfo.isSuper = data.isSuper;
     state.userinfo.groups = data.groups;
+
+    state.userinfo.email = data.email;
+    state.userinfo.phonenum = data.phonenum;
+
     state.userState = 200;
-    state.token = data.token;
-    state.refresh = data.refresh;
-    state.email = data.email;
-    state.phonenum = data.phonenum;
+
+    data.token != null ? (state.token = data.token) : console.log(state.token);
+    data.refresh != null
+      ? (state.refresh = data.refresh)
+      : console.log(state.refresh);
     console.log(state);
   },
   [USER_LOGOUT]: (state) => {
     state.userState = "400";
     state.token = "";
     state.refresh = "";
+  },
+  [USERINFO_CHANGE]: (state) => {
+    console.log(state);
   },
 };
 
@@ -67,8 +79,12 @@ const actions = {
     } else if (payload.action === "logout") {
       context.commit(USER_LOGOUT);
     } else if (payload.action === "partup") {
-      console.log(payload);
-      context.commit(USER_LOGIN, payload);
+      partupUser({
+        id: payload.id,
+        username: payload.username,
+      }).then((res) => {
+        context.commit(USER_LOGIN, res);
+      });
     }
   },
   Register(context, payload) {

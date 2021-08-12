@@ -258,8 +258,10 @@ export default {
 </script>
 
 <style lang="scss">
-#app {
-  height: 100vh;
+#faultdetail {
+  position: relative;
+  height: calc(100vh - #{$tabbar-height + $navbar-height});
+  overflow: auto;
   .van-collapse {
     .van-collapse-item {
       .van-cell__value {

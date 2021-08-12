@@ -205,13 +205,17 @@ export default {
           formData.workstation = "";
           reloadLocaltion();
         },
-        columns: ["机器人", "焊枪"],
+        columns: ["机器人", "焊枪", "修模器", "激光焊"],
         deviceSelected: computed(() => {
           switch (formData.DeviceType.value) {
             case formData.DeviceType.columns[0]:
               return "robot";
             case formData.DeviceType.columns[1]:
               return "weldinggun";
+            case formData.DeviceType.columns[2]:
+              return "tipdresser";
+            case formData.DeviceType.columns[3]:
+              return "laserwelding";
             default:
               return "";
           }
@@ -288,6 +292,10 @@ export default {
             return location.value["robot"];
           case formData.DeviceType.columns[1]:
             return location.value["weldinggun"];
+          case formData.DeviceType.columns[2]:
+            return location.value["weldinggun"];
+          case formData.DeviceType.columns[3]:
+            return location.value["robot"];
           default:
             return location.value["local"];
         }

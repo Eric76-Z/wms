@@ -50,7 +50,7 @@
 import { reactive, toRef, computed } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { partupUser } from "@/network/sort.js";
+// import { partupUser } from "@/network/sort.js";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
@@ -96,7 +96,6 @@ export default {
           isFoucs: false,
           changeUserName: () => {
             userinfocfg.popup.username.showUserName = true;
-            console.log(userinfocfg.data.userinfo.username);
             userinfocfg.popup.username.value =
               userinfocfg.data.userinfo.username;
           },
@@ -113,13 +112,12 @@ export default {
             userinfocfg.popup.username.showUserName = false;
           },
           onClickRight: () => {
-            partupUser({
+            userChangeState({
               id: userinfocfg.data.userinfo.userId,
               username: userinfocfg.popup.username.value,
+              action: "partup",
             }).then((res) => {
               console.log(res);
-              res.action = "partup";
-              userChangeState(res);
               userinfocfg.popup.username.showUserName = false;
             });
           },

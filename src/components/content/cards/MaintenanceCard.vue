@@ -195,7 +195,7 @@ export default {
           },
           content: computed(() => {
             if (listData.maintenance_record != null) {
-              const str = beautySub(listData.maintenance_record, 10);
+              const str = beautySub(listData.maintenance_record, 47);
               return str;
             }
             return "没有故障记录";
@@ -397,7 +397,7 @@ export default {
           font-weight: var(--van-font-weight-bold);
         }
         .jp-card__desc {
-          max-height: var(--van-card-desc-line-height);
+          max-height: calc(var(--van-card-desc-line-height) * 2);
           color: var(--van-card-desc-color);
           line-height: var(--van-card-desc-line-height);
         }
