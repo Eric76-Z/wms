@@ -41,7 +41,7 @@ const routes = [
   {
     name: "/",
     path: "",
-    redirect: "/profile",
+    redirect: "/home",
   },
   {
     name: "home",

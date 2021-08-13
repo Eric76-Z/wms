@@ -9,7 +9,8 @@ import store from "../store";
 // };
 
 let config = {
-  baseURL: "https://www.xiuxiu.work/",
+  // baseURL: "https://www.xiuxiu.work/",
+  baseURL: "http://127.0.0.1:8000",
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -34,7 +35,7 @@ Axios.interceptors.request.use(
     if (store.state.user.token !== "") {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
       config.headers.Authorization = "Bearer " + store.state.user.token;
-      // console.log(config.headers.Authorization);
+      console.log(config.headers.Authorization);
     }
     return config;
   },
@@ -54,10 +55,21 @@ Axios.interceptors.response.use(
   (error) => {
     // Do something with response error
     Toast.clear();
-    Dialog.alert({
-      title: "提示",
-      message: "网络请求失败，反馈给客服",
-    });
+    switch (error.response.status) {
+      case 401:
+        Dialog.alert({
+          title: "认证失败",
+          message: "请检查用户名密码或重新登录  ！",
+        });
+        break;
+      default:
+        Dialog.alert({
+          title: "提示",
+          message: "网络请求失败，反馈给客服",
+        });
+        break;
+    }
+
     return Promise.reject(error);
   }
 );
@@ -165,7 +177,6 @@ export default function axiosApi(type, params, method) {
             case 200:
               resolve(res.data);
               break;
-
             default:
               // 接口错误提示
               Toast.fail(res.statusText);

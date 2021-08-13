@@ -1,7 +1,4 @@
 <template>
-  <!-- <van-cell-group>
-    <van-field v-model="value" label="文本" placeholder="请输入用户名" />
-  </van-cell-group> -->
   <div id="hautocomplete">
     <div class="h-autocomplete-label" @click="test">工位</div>
     <el-autocomplete
@@ -37,12 +34,9 @@ export default {
   },
   setup(props, context) {
     const autocompletecfg = toRef(props, "autocompletecfg");
-    const test = () => {
-      console.log(autocompletecfg);
-      console.log(autocompletecfg.value.state);
-      console.log(state);
-    };
-    // console.log(toShow);
+
+    // console.log(autocompletecfg);
+    // console.log(autocompletecfg.value.workstation);
     const querySearch = (queryString, cb) => {
       console.log(autocompletecfg.value.state);
       // state.value = "";
@@ -77,7 +71,6 @@ export default {
       querySearch,
       createFilter,
       handleSelect,
-      test,
     };
   },
 };

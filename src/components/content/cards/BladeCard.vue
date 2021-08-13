@@ -414,34 +414,44 @@ export default {
           },
         },
         receive: () => {
-          Dialog.confirm({
-            title: "确认领取",
-            message: "确认领取刀片？",
-          })
-            .then(() => {
-              console.log(formatDate.nowDateTime());
-              partupBladeItemData({
-                id: listData.id,
-                order_status: 4,
-                receive_time: formatDate.nowDateTime(),
-              }).then((res) => {
-                console.log(res);
-                Toast.success({
-                  message: "领取成功",
-                  duration: 1000,
-                  onClose: () => {
-                    listData.order_status = res.order_status;
-                    listData.receive_time = res.receive_time;
-                  },
-                });
-              });
-            })
-            .catch(() => {
-              // on cancel
-            });
+          let data = {
+            id: listData.id,
+            workstation: listData.weldinggun,
+            action: "receive",
+          };
+          context.emit("selectedid", data);
+          // Dialog.confirm({
+          //   title: "确认领取",
+          //   message: "确认领取刀片？",
+          // })
+          //   .then(() => {
+          //     console.log(formatDate.nowDateTime());
+          //     partupBladeItemData({
+          //       id: listData.id,
+          //       order_status: 4,
+          //       receive_time: formatDate.nowDateTime(),
+          //     }).then((res) => {
+          //       console.log(res);
+          //       Toast.success({
+          //         message: "领取成功",
+          //         duration: 1000,
+          //         onClose: () => {
+          //           listData.order_status = res.order_status;
+          //           listData.receive_time = res.receive_time;
+          //         },
+          //       });
+          //     });
+          //   })
+          //   .catch(() => {
+          //     // on cancel
+          //   });
         },
         appeal: () => {
-          let data = { id: listData.id, workstation: listData.weldinggun };
+          let data = {
+            id: listData.id,
+            workstation: listData.weldinggun,
+            action: "appeal",
+          };
           context.emit("selectedid", data);
         },
         todolast: {

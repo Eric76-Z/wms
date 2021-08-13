@@ -1,5 +1,6 @@
 import { userLogin, userRegister, partupUser } from "@/network/sort.js";
 import router from "@/router";
+import { Toast } from "vant";
 
 import {
   USER_LOGIN,
@@ -12,8 +13,8 @@ const state = {
     userIcon: "",
     username: "",
     userId: "",
-    firstname: "",
-    lastname: "",
+    first_name: "",
+    last_name: "",
     realname: "张炯平",
     isSuper: true,
     groups: [],
@@ -30,15 +31,13 @@ const mutations = {
     console.log(data);
     state.userinfo.username = data.username;
     state.userinfo.userId = data.userId;
-    state.userinfo.firstname = data.firstname;
-    state.userinfo.lastname = data.lastname;
+    state.userinfo.first_name = data.first_name;
+    state.userinfo.last_name = data.last_name;
     state.userinfo.realname = data.realname;
     state.userinfo.isSuper = data.isSuper;
     state.userinfo.groups = data.groups;
-
     state.userinfo.email = data.email;
     state.userinfo.phonenum = data.phonenum;
-
     state.userState = 200;
 
     data.token != null ? (state.token = data.token) : console.log(state.token);
@@ -70,7 +69,13 @@ const actions = {
           console.log(res);
           if (res.state == 200) {
             context.commit(USER_LOGIN, res);
-            router.push("/profile");
+            Toast({
+              message: "登陆成功",
+              duration: 1000,
+              onClose: () => {
+                router.push("/profile");
+              },
+            });
           }
         })
         .catch((err) => {
@@ -79,10 +84,8 @@ const actions = {
     } else if (payload.action === "logout") {
       context.commit(USER_LOGOUT);
     } else if (payload.action === "partup") {
-      partupUser({
-        id: payload.id,
-        username: payload.username,
-      }).then((res) => {
+      partupUser(payload).then((res) => {
+        console.log(res);
         context.commit(USER_LOGIN, res);
       });
     }

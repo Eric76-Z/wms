@@ -25,17 +25,13 @@ export default {
       isShow: [true, true, true],
     });
     const gridcfg = reactive({
-      iconText: {
-        故障申报: ["jiqiren", "/sort/mtisland/faultrecord"],
-        故障记录: ["hanzhuang", "/sort/mtisland/faultlist"],
-        交接白板: ["shebei", "/"],
-        维修经验: ["shenqing", "/sort/list"],
-        项目问题: ["liebiao", "/sort/detail"],
-        备件查询: ["kucunguanli", "/"],
-        资料查询: ["ziliao", "/"],
-        故障代码1: ["faultcode", "/"],
-        维修专家: ["weixiuqiye", "/sort/mtisland"],
-      },
+      iconText: [
+        ["故障申报", "jiqiren", "/sort/mtisland/faultrecord"],
+        ["故障记录", "hanzhuang", "/sort/mtisland/faultlist"],
+        ["交接白板-未完成", "shebei", "/sort/mtisland"],
+        ["维修经验-未完成", "shenqing", "/sort/mtisland"],
+        ["项目问题-未完成", "liebiao", "/sort/mtisland"],
+      ],
       columnNum: 4,
     });
     return {

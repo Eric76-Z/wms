@@ -3,10 +3,12 @@ export default {
     console.log(state.location);
     return state.location;
   },
-  bladeinfolist(state) {
-    for (const iterator of state.blade.bladeinfo) {
-      console.log(iterator);
+  //["鸿柏02G刀片", "鲁兹02G刀具", "鲁兹02G刀片", "邺格02G刀片", ......
+  bladeinfoCol(state) {
+    let col = [];
+    for (let i of state.blade.bladeinfo) {
+      col.push(i["my_spec"].split("|")[0]);
     }
-    return state.blade.bladeinfo;
+    return col;
   },
 };

@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { onActivated, reactive, toRef, computed } from "vue";
+import { onActivated, reactive, toRef, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRoute, useRouter } from "vue-router";
 import { Form, Field, Picker, Popup, Toast } from "vant";
@@ -85,7 +85,6 @@ import { createBladeItemData } from "@/network/sort.js";
 // import LoginVue from "../../../profile/Login.vue";
 export default {
   name: "BladeApply2",
-  data() {},
   components: {
     HAutocomplete,
     [Form.name]: Form,
@@ -105,6 +104,9 @@ export default {
     const {
       getLocation: [getLocation],
     } = store._actions;
+    const bladeinfoCol = computed(() => {
+      return store.getters.bladeinfoCol;
+    });
     //route
     const route = reactive(useRoute());
     const router = reactive(useRouter());
@@ -174,17 +176,26 @@ export default {
     };
 
     onActivated(() => {
-      console.log(bladeinfo);
-      for (let i of bladeinfo.value) {
-        console.log(i);
-        popupcfg.columns.push(i["my_spec"].split("|")[0]);
-        if (i["id"] == route.params["bladeId"]) {
-          popupcfg.state.value = i["my_spec"].split("|")[0];
+      // console.log(bladeinfo);
+      setTimeout(() => {
+        for (let i of bladeinfo.value) {
+          popupcfg.columns = bladeinfoCol.value;
+          if (i["id"] == route.params["bladeId"]) {
+            popupcfg.state.value = i["my_spec"].split("|")[0];
+          }
         }
-      }
-      console.log(popupcfg.columns);
+      }, 300);
+      // console.log(popupcfg.columns);
     });
-
+    onMounted(() => {
+      //判断store中有没有数据
+      // console.log(this.location);
+      if (location.value.weldinggun.length == 0) {
+        //没有数据请求数据
+        console.log("重新加载数据location");
+        getLocation({ location: "all", target: "weldinggun" });
+      }
+    });
     return {
       location,
       getLocation,
@@ -194,22 +205,8 @@ export default {
       formData,
     };
   },
-  mounted() {
-    //判断store中有没有数据
-    // console.log(this.location);
-    if (this.location.length !== 0) {
-      //有数据
-      console.log(this.location);
-      // this.autocompletecfg.loadAll = this.location[0];
-    } else {
-      //没有请求数据
-      console.log("重新加载数据location");
-      this.getLocation({ location: "all", querytype: "weldinggun" });
-    }
-  },
 };
 </script>
-
 <style lang="scss">
 .ha-autocomplete {
   display: flex;

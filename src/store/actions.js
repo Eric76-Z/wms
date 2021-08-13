@@ -1,5 +1,6 @@
 import { ADD_TO_LOCATION } from "./mutation-types";
 import { reqLocationByTarget } from "@/network/sort.js";
+
 export default {
   getLocation(context, payload) {
     switch (payload.target) {

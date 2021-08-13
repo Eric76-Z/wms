@@ -1,17 +1,17 @@
 <template>
   <van-grid :column-num="gridcfg.columnNum">
     <van-grid-item
-      v-for="(value, key, index) in gridcfg.iconText"
+      v-for="(value, index) in gridcfg.iconText"
       :key="index"
       icon="photo-o"
-      :to="value[1]"
+      :to="value[2]"
     >
       <van-icon
         class="iconfont"
         class-prefix="icon"
-        :name="value[0]"
+        :name="value[1]"
       ></van-icon>
-      <span class="van-grid-item__text">{{ key }}</span>
+      <span class="van-grid-item__text">{{ value[0] }}</span>
     </van-grid-item>
   </van-grid>
 </template>

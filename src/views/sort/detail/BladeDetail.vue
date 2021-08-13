@@ -115,6 +115,17 @@
         >
       </template>
     </van-popup>
+    <!-- 领取刀片类型选择器 -->
+    <van-popup v-model:show="receivepickercfg.show" round position="bottom">
+      <van-picker
+        title="领取刀片"
+        :columns="receivepickercfg.columns"
+        @confirm="onConfirm"
+        @cancel="onCancel"
+        @change="onChange"
+        :default-index="2"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -153,9 +164,18 @@ export default {
     //vuex数据
     const store = useStore();
     const listOffset = toRef(store.state, "listOffset");
+    const bladeinfo = computed(() => {
+      return store.state.blade.bladeinfo;
+    });
+    const {
+      "blade/getBladeInfo": [getBladeInfo],
+    } = store._actions;
+    const bladeinfoCol = computed(() => {
+      return store.getters.bladeinfoCol;
+    });
 
     const user = toRef(store.state, "user");
-    console.log(user.value.userinfo);
+
     //路由
     const router = reactive(useRouter());
     console.log(router);
@@ -284,6 +304,7 @@ export default {
     };
     //申诉模块，子传父
     const appealpopupcfg = reactive({
+      label: "",
       show: false,
       message: "",
       workstation: "",
@@ -324,10 +345,31 @@ export default {
           });
       },
     });
+    const receivepickercfg = reactive({
+      show: false,
+      colums: [],
+    });
     const selectedid = (data) => {
-      appealpopupcfg.workstation = data.workstation;
-      appealpopupcfg.itemid = data.id;
-      appealpopupcfg.show = true;
+      switch (data.action) {
+        case "appeal":
+          appealpopupcfg.workstation = data.workstation.weldinggun_num;
+          appealpopupcfg.itemid = data.id;
+          appealpopupcfg.show = true;
+          break;
+        case "receive":
+          console.log(bladeinfo);
+          if (bladeinfo.value.length == 0) {
+            //没有数据请求数据
+            console.log("重新加载bladeinfo");
+            const params = {
+              tag: 1,
+            };
+            getBladeInfo(params);
+          }
+          receivepickercfg.colums = bladeinfoCol;
+          receivepickercfg.show = true;
+          break;
+      }
     };
 
     return {
@@ -343,6 +385,7 @@ export default {
       queryData,
       selectedid,
       appealpopupcfg,
+      receivepickercfg,
     };
   },
   // beforeRouteEnter() {

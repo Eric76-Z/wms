@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { computed, toRefs } from "vue";
+import { computed } from "vue";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import { useStore } from "vuex";
 
@@ -36,10 +36,10 @@ export default {
     } = store._actions;
 
     //mapGetters
-    const { bladeinfolist, weldinggunNum } = toRefs(store.getters);
-    console.log(bladeinfo.value);
-    console.log(bladeinfolist);
-    console.log(weldinggunNum);
+    // const { bladeinfolist, weldinggunNum } = toRefs(store.getters);
+    // console.log(bladeinfo.value);
+    // console.log(bladeinfolist);
+    // console.log(weldinggunNum);
 
     const navbarcfg = {
       title: "表单-刀片申请",
@@ -47,7 +47,7 @@ export default {
     };
 
     //判断store中有没有数据
-    console.log(bladeinfo);
+    // console.log(bladeinfo);
     if (bladeinfo.value.length == 0) {
       //没有数据请求数据
       console.log("重新加载bladeinfo");
