@@ -334,7 +334,7 @@ export default {
         width: 100%;
         height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px - 44px);
         overflow: auto;
-        overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch; /* ios5+ */
         .scroll {
           // scroll-behavior: smooth;

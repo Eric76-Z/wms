@@ -2,7 +2,12 @@
   <div class="jp-card" v-show="bladecardcfg.isShow">
     <div class="jp-card__header">
       <a class="jp-card__thumb">
-        <van-image fit="fill" :src="bladecardcfg.data.img" lazy-load />
+        <van-image
+          fit="scale-down"
+          :src="bladecardcfg.data.img"
+          lazy-load
+          @click="bladecardcfg.data.viewImg"
+        />
         <div class="jp-card__tag">
           <van-tag :color="bladecardcfg.data.cardTag.tagColor" mark>{{
             bladecardcfg.data.cardTag.tagText
@@ -124,13 +129,6 @@
           </van-button>
         </template>
       </van-popover>
-
-      <!-- <van-button
-        square
-        color="linear-gradient(to right, #cc976a, #ff976a)"
-        v-if="listData.order_status == 4 && listData.complete_time == null"
-        >善后</van-button
-      > -->
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
@@ -189,6 +187,13 @@ export default {
             : (url = undefined);
           return url;
         }),
+        viewImg: () => {
+          let data = {
+            id: listData.id,
+            img: bladecardcfg.data.img,
+          };
+          context.emit("viewImg", data);
+        },
         applicant: computed(() => {
           if (
             listData.applicant != undefined &&
@@ -298,7 +303,6 @@ export default {
                 } else {
                   value = "未填写领用何种刀片！";
                 }
-
                 break;
             }
             return value;
@@ -420,31 +424,6 @@ export default {
             action: "receive",
           };
           context.emit("selectedid", data);
-          // Dialog.confirm({
-          //   title: "确认领取",
-          //   message: "确认领取刀片？",
-          // })
-          //   .then(() => {
-          //     console.log(formatDate.nowDateTime());
-          //     partupBladeItemData({
-          //       id: listData.id,
-          //       order_status: 4,
-          //       receive_time: formatDate.nowDateTime(),
-          //     }).then((res) => {
-          //       console.log(res);
-          //       Toast.success({
-          //         message: "领取成功",
-          //         duration: 1000,
-          //         onClose: () => {
-          //           listData.order_status = res.order_status;
-          //           listData.receive_time = res.receive_time;
-          //         },
-          //       });
-          //     });
-          //   })
-          //   .catch(() => {
-          //     // on cancel
-          //   });
         },
         appeal: () => {
           let data = {
@@ -486,17 +465,18 @@ export default {
             formData.append("id", listData.id);
             formData.append("sort", "repair_order_img");
             formData.append("img", file.file);
+            // formData.append("complete_time", formatDate.nowDateTime());
             partupBladeItemData({
               id: listData.id,
               formData: formData,
             })
               .then((res) => {
+                console.log(res);
                 file.status = "done";
                 file.url = res.repair_order_img.img;
                 listData.order_status = res.order_status;
                 listData.complete_time = res.complete_time;
                 listData.repair_order_img = res.repair_order_img;
-                console.log(listData);
                 // Toast.success({
                 //   message: "领取成功",
                 //   duration: 1000,

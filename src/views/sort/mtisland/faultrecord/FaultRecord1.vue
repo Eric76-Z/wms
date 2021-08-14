@@ -13,14 +13,7 @@
             thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
           >
             <template #footer>
-              <van-button
-                type="success"
-                size="mini"
-                :to="{
-                  name: 'faultrecord2',
-                  params: { type: index, bladeData: item },
-                }"
-                round
+              <van-button type="success" size="mini" :to="item.to" round
                 >开始申报</van-button
               >
             </template>
@@ -48,10 +41,18 @@ export default {
         type1: {
           title: "设备类故障",
           desc: "此向导主要针对设备类故障，如机器人，焊枪等发生故障......",
+          to: {
+            name: "faultrecord2",
+            params: { type: 1 },
+          },
         },
         type2: {
           title: "高频故障",
           desc: "此向导主要针对高频故障，如滞后误差，传感器误感应......",
+        },
+        type3: {
+          title: "截图导入",
+          desc: "待开放......",
         },
       },
     };

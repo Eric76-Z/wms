@@ -9,8 +9,8 @@ import store from "../store";
 // };
 
 let config = {
-  // baseURL: "https://www.xiuxiu.work/",
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://www.xiuxiu.work/",
+  // baseURL: "http://127.0.0.1:8000",
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
@@ -35,7 +35,7 @@ Axios.interceptors.request.use(
     if (store.state.user.token !== "") {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
       config.headers.Authorization = "Bearer " + store.state.user.token;
-      console.log(config.headers.Authorization);
+      // console.log(config.headers.Authorization);
     }
     return config;
   },

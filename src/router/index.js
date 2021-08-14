@@ -79,14 +79,12 @@ const routes = [
     name: "list",
     path: "/sort/list",
     component: List,
-    meta: {
-      type: "login",
-    },
   },
   {
     name: "detail",
     path: "/sort/detail",
     component: Detail,
+
     // meta: {
     //   title: "分类-列表明细",
     // },
@@ -97,13 +95,16 @@ const routes = [
     component: BladeDetail,
     meta: {
       keepAlive: true,
+      type: "login",
     },
   },
   {
     name: "bladeapply",
     path: "/sort/list/bladeapply",
     component: BladeApply,
-
+    meta: {
+      type: "login",
+    },
     children: [
       {
         name: "bladeapply1",
@@ -128,6 +129,9 @@ const routes = [
     name: "faultrecord",
     path: "/sort/mtisland/faultrecord",
     component: FaultRecord,
+    meta: {
+      type: "login",
+    },
     children: [
       {
         name: "faultrecord1",
@@ -148,6 +152,9 @@ const routes = [
     name: "faultlist",
     path: "/sort/mtisland/faultlist",
     component: FaultList,
+    meta: {
+      type: "login",
+    },
     children: [
       {
         name: "faultlist1",

@@ -28,9 +28,9 @@ export default {
       iconText: [
         ["故障申报", "jiqiren", "/sort/mtisland/faultrecord"],
         ["故障记录", "hanzhuang", "/sort/mtisland/faultlist"],
-        ["交接白板-未完成", "shebei", "/sort/mtisland"],
-        ["维修经验-未完成", "shenqing", "/sort/mtisland"],
-        ["项目问题-未完成", "liebiao", "/sort/mtisland"],
+        ["交接白板-未开放", "shebei", "/sort/mtisland"],
+        ["维修经验-未开放", "shenqing", "/sort/mtisland"],
+        ["项目问题-未开放", "liebiao", "/sort/mtisland"],
       ],
       columnNum: 4,
     });

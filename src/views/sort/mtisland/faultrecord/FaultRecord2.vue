@@ -78,7 +78,7 @@
         v-model="formData.MaintenanceRecord"
         name="maintenance_record"
         required
-        rows="2"
+        rows="5"
         autosize
         label="维修记录"
         type="textarea"
@@ -158,6 +158,7 @@ import { useRoute } from "vue-router";
 import { Form, Field, Picker, Popup } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
 import { createMaintenanceRecords } from "@/network/sort.js";
+import { carModel, deviceType } from "@/common/constant.js";
 
 import { formatDate } from "@/common/utils";
 export default {
@@ -190,36 +191,25 @@ export default {
         value: "",
         showPicker: false,
         onConfirm: (value) => {
-          formData.CarModel.value = value;
+          formData.CarModel.value = value[1];
           formData.CarModel.showPicker = false;
         },
-        columns: ["BSUV", "BMPV", "COUPE"],
+        columns: carModel,
       },
       DeviceType: {
         value: "",
         showPicker: false,
         onConfirm: (value) => {
-          formData.DeviceType.value = value;
+          console.log(value);
+          formData.DeviceType.value = value.text;
+          formData.DeviceType.localBy = value.localBy;
           formData.DeviceType.showPicker = false;
           formData.MyLocation = "";
           formData.workstation = "";
           reloadLocaltion();
         },
-        columns: ["机器人", "焊枪", "修模器", "激光焊"],
-        deviceSelected: computed(() => {
-          switch (formData.DeviceType.value) {
-            case formData.DeviceType.columns[0]:
-              return "robot";
-            case formData.DeviceType.columns[1]:
-              return "weldinggun";
-            case formData.DeviceType.columns[2]:
-              return "tipdresser";
-            case formData.DeviceType.columns[3]:
-              return "laserwelding";
-            default:
-              return "";
-          }
-        }),
+        columns: deviceType,
+        localBy: "local",
       },
       MaintenanceStatus: {
         checked: "1",
@@ -234,7 +224,7 @@ export default {
       },
       Time: {
         maxDate: new Date(2025, 10, 1),
-        minDate: new Date(2020, 0, 1),
+        minDate: new Date(2010, 0, 1),
         currentDate: new Date(),
         StartTime: {
           value: "",
@@ -258,7 +248,7 @@ export default {
             formData.Time.EndTime.value != ""
           ) {
             return (
-              formatDate.getMin(
+              formatDate.deltaMin(
                 formData.Time.StartTime.value,
                 formData.Time.EndTime.value
               ) + " min"
@@ -287,48 +277,25 @@ export default {
     //autocomplete相关数据
     const autocompletecfg = reactive({
       workstation: computed(() => {
-        switch (formData.DeviceType.value) {
-          case formData.DeviceType.columns[0]:
-            return location.value["robot"];
-          case formData.DeviceType.columns[1]:
-            return location.value["weldinggun"];
-          case formData.DeviceType.columns[2]:
-            return location.value["weldinggun"];
-          case formData.DeviceType.columns[3]:
-            return location.value["robot"];
-          default:
-            return location.value["local"];
-        }
+        console.log(formData.DeviceType.localBy);
+        return location.value[formData.DeviceType.localBy];
       }),
       state: formData,
     });
     //autocomplete 选择后赋值
     const selected = (val) => {
       // console.log(val);
-
       formData.workstation = val.value;
       formData.MyLocation = val.area;
       return true;
     };
 
     const reloadLocaltion = () => {
-      console.log(formData.DeviceType.deviceSelected);
-      console.log(location.value);
-      if (formData.DeviceType.deviceSelected == "") {
-        if (location.value.local.length !== 0) {
-          console.log(location);
-        } else {
-          getLocation({ location: "all", target: "local" });
-        }
-      } else {
-        if (location.value[formData.DeviceType.deviceSelected].length !== 0) {
-          console.log(location);
-        } else {
-          getLocation({
-            location: "all",
-            target: formData.DeviceType.deviceSelected,
-          });
-        }
+      if (location.value[formData.DeviceType.localBy].length == 0) {
+        getLocation({
+          location: "all",
+          target: formData.DeviceType.localBy,
+        });
       }
     };
 
@@ -372,13 +339,18 @@ export default {
 </script>
 
 <style lang="scss">
-.ha-autocomplete {
-  display: flex;
-  .ha-autocomplete-label {
-    width: 6.2em;
-  }
-  .inline-input {
-    flex: 1;
+#faultrecord2 {
+  position: relative;
+  height: calc(100vh - #{$tabbar-height + $navbar-height});
+  overflow: auto;
+  .ha-autocomplete {
+    display: flex;
+    .ha-autocomplete-label {
+      width: 6.2em;
+    }
+    .inline-input {
+      flex: 1;
+    }
   }
 }
 </style>

@@ -112,9 +112,12 @@ export const formatDate = {
 
     return time;
   },
-  getMin: (dateData1, dateData2) => {
-    let time1 = new Date(dateData1).getTime();
-    let time2 = new Date(dateData2).getTime();
+  deltaMin: (dateData1, dateData2) => {
+    // console.log(dateData1.replace(/-/g, "/"));
+    //安卓和ios系统对于日期的格式不懂，将****-**-**转化为****/**/**的格式
+    let time1 = new Date(dateData1.replace(/-/g, "/")).getTime();
+    let time2 = new Date(dateData2.replace(/-/g, "/")).getTime();
+
     let duration = (time2 - time1) / (60 * 1000);
     duration = duration < 10 && duration > 0 ? "0" + duration : duration;
     duration =
@@ -122,7 +125,6 @@ export const formatDate = {
     return duration;
   },
   deltaDay: (dateData1, dateData2) => {
-    // console.log(dateData1);
     let date1 = new Date(dateData1).getTime();
     let date2 = new Date(dateData2).getTime();
     let delta = (date2 - date1) / (60 * 60 * 24 * 1000);

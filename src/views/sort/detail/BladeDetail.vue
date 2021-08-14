@@ -52,6 +52,7 @@
                 :key="item.id"
                 :listdata="item"
                 @selectedid="selectedid"
+                @viewImg="viewImg"
               ></blade-card>
             </slot>
           </van-list>
@@ -120,12 +121,15 @@
       <van-picker
         title="领取刀片"
         :columns="receivepickercfg.columns"
-        @confirm="onConfirm"
-        @cancel="onCancel"
-        @change="onChange"
+        @confirm="receivepickercfg.click.onConfirm"
+        @cancel="receivepickercfg.show = false"
         :default-index="2"
       />
     </van-popup>
+    <!-- 图片预览弹出层 -->
+    <van-popup v-model:show="imgpopupcfg.show">
+      <van-image :src="imgpopupcfg.img"
+    /></van-popup>
   </div>
 </template>
 
@@ -137,7 +141,7 @@ import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import BladeCard from "@/components/content/cards/BladeCard";
-import { Dialog, Toast } from "vant";
+import { Dialog, Toast, Picker } from "vant";
 import { reqBladeItemData, partupBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 
@@ -158,6 +162,7 @@ export default {
     BladeCard,
     BackTop,
     MainFilter,
+    [Picker.name]: Picker,
   },
 
   setup() {
@@ -170,9 +175,17 @@ export default {
     const {
       "blade/getBladeInfo": [getBladeInfo],
     } = store._actions;
-    const bladeinfoCol = computed(() => {
-      return store.getters.bladeinfoCol;
+    const bladeDataCom = computed(() => {
+      return store.getters.bladeDataCom;
     });
+    if (bladeinfo.value.length == 0) {
+      //没有数据请求数据
+      console.log("重新加载bladeinfo");
+      const params = {
+        tag: 1,
+      };
+      getBladeInfo(params);
+    }
 
     const user = toRef(store.state, "user");
 
@@ -347,7 +360,50 @@ export default {
     });
     const receivepickercfg = reactive({
       show: false,
-      colums: [],
+      itemid: 0,
+      columns: [],
+      click: {
+        onConfirm: (val) => {
+          const recId = bladeDataCom.value.titleToId[val];
+          receivepickercfg.show = false;
+          Dialog.confirm({
+            title: "确认领取",
+            message: "确认领取" + val,
+          })
+            .then(() => {
+              partupBladeItemData({
+                id: receivepickercfg.itemid,
+                order_status: 4,
+                bladetype_received_id: recId,
+                receiver_id: user.value.userinfo.userId,
+              }).then((res) => {
+                console.log(res);
+                Toast.success({
+                  message: "领取成功",
+                  duration: 1000,
+                  onClose: () => {
+                    for (let index = 0; index < listcfg.list.length; index++) {
+                      if (
+                        listcfg.list[index]["id"] == receivepickercfg.itemid
+                      ) {
+                        listcfg.list[index]["order_status"] = res.order_status;
+                        listcfg.list[index]["bladetype_received"] =
+                          res.bladetype_received;
+                        listcfg.list[index]["receiver"] = res.receiver;
+                        listcfg.list[index] = res;
+                      }
+                    }
+                    appealpopupcfg.show = false;
+                  },
+                });
+              });
+            })
+            .catch(() => {
+              // on cancel
+              receivepickercfg.show = true;
+            });
+        },
+      },
     });
     const selectedid = (data) => {
       switch (data.action) {
@@ -357,18 +413,23 @@ export default {
           appealpopupcfg.show = true;
           break;
         case "receive":
-          console.log(bladeinfo);
-          if (bladeinfo.value.length == 0) {
-            //没有数据请求数据
-            console.log("重新加载bladeinfo");
-            const params = {
-              tag: 1,
-            };
-            getBladeInfo(params);
-          }
-          receivepickercfg.colums = bladeinfoCol;
+          console.log(data);
+          receivepickercfg.columns = bladeDataCom.value.titleCol;
+          receivepickercfg.itemid = data.id;
           receivepickercfg.show = true;
           break;
+      }
+    };
+
+    const imgpopupcfg = reactive({
+      show: false,
+      img: "",
+    });
+    const viewImg = (data) => {
+      console.log(data);
+      if (data.img != undefined) {
+        imgpopupcfg.show = true;
+        imgpopupcfg.img = data.img;
       }
     };
 
@@ -386,6 +447,8 @@ export default {
       selectedid,
       appealpopupcfg,
       receivepickercfg,
+      imgpopupcfg,
+      viewImg,
     };
   },
   // beforeRouteEnter() {
@@ -433,7 +496,7 @@ export default {
         width: 100%;
         height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px - 44px);
         overflow: auto;
-        overflow-y: auto;
+        overflow-x: hidden;
         -webkit-overflow-scrolling: touch; /* ios5+ */
         .scroll {
           // scroll-behavior: smooth;

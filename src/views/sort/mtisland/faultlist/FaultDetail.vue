@@ -51,9 +51,11 @@
           </div>
         </template>
       </van-collapse-item>
-      <van-collapse-item title="故障描述" name="2">{{
-        collapsecfg.record.maintenance_record
-      }}</van-collapse-item>
+      <van-collapse-item title="故障描述" name="2">
+        <p style="white-space: pre-wrap">
+          {{ collapsecfg.record.maintenance_record }}
+        </p>
+      </van-collapse-item>
       <van-collapse-item title="经验总结" name="3">
         <div class="add">
           <van-icon
@@ -85,7 +87,9 @@
             collapsecfg.summary.isEdit == 0
           "
         >
-          {{ collapsecfg.summary.experience_summary }}
+          <p style="white-space: pre-wrap">
+            {{ collapsecfg.summary.experience_summary }}
+          </p>
         </div>
         <van-button
           type="success"

@@ -160,9 +160,9 @@ export default {
 
     //路由
     const router = reactive(useRouter());
-    console.log(router);
+    // console.log(router);
     const listData = reactive(props.listdata);
-    console.log(listData);
+    // console.log(listData);
     const maintenancecardcfg = reactive({
       isShow: true,
       data: {
@@ -195,7 +195,7 @@ export default {
           },
           content: computed(() => {
             if (listData.maintenance_record != null) {
-              const str = beautySub(listData.maintenance_record, 47);
+              const str = beautySub(listData.maintenance_record, 52);
               return str;
             }
             return "没有故障记录";
@@ -222,7 +222,7 @@ export default {
           //   }
           // }),
           duration: computed(() => {
-            // console.log(listData.duration);
+            console.log(listData.duration);
             return listData.duration;
           }),
           durationColor: computed(() => {
@@ -288,7 +288,7 @@ export default {
         check: {
           showPopover: false,
           actions: [
-            { text: "指定责任人" },
+            { text: "指定责任人", disabled: true },
             { text: "维修经验" },
             { text: "直接通过" },
           ],
@@ -325,8 +325,7 @@ export default {
               case "直接通过":
                 partupMaintenanceRecords({
                   id: listData.id,
-                  order_status: 3,
-                  need_summary: !maintenancecardcfg.data.needSummary,
+                  order_status: 4,
                 }).then((res) => {
                   console.log(res);
                   listData.order_status = res.order_status;
@@ -397,7 +396,7 @@ export default {
           font-weight: var(--van-font-weight-bold);
         }
         .jp-card__desc {
-          max-height: calc(var(--van-card-desc-line-height) * 2);
+          max-height: calc(var(--van-card-desc-line-height) * 3);
           color: var(--van-card-desc-color);
           line-height: var(--van-card-desc-line-height);
         }
