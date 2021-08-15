@@ -154,8 +154,8 @@
 <script>
 import { reactive, toRef, computed, onMounted } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
-import { Form, Field, Picker, Popup } from "vant";
+import { useRoute, useRouter } from "vue-router";
+import { Form, Field, Picker, Popup, Toast } from "vant";
 import HAutocomplete from "@/components/common/HaAutocomplete";
 import { createMaintenanceRecords } from "@/network/sort.js";
 import { carModel, deviceType } from "@/common/constant.js";
@@ -179,7 +179,9 @@ export default {
     const {
       getLocation: [getLocation],
     } = store._actions;
+    //route
     const route = useRoute();
+    const router = useRouter();
     console.log(params);
     console.log(route.params);
 
@@ -266,11 +268,24 @@ export default {
         values.duration = parseInt(values.duration);
         values.applicant_id = user.value.userinfo.userId;
         values.order_status = 1;
-        createMaintenanceRecords(values);
-        // values.WeldingGun = formData.WeldingGun;
-        // values.BladeTypeId = route.params["bladeId"];
-        // applyBlade(values);
-        // console.log("submit", values);
+        createMaintenanceRecords(values)
+          .then(() => {
+            // console.log(res);
+            Toast.success({
+              message: "提交成功",
+              duration: 1000,
+              onClose: () => {
+                // 命名的路由，并加上参数，让路由建立 url
+                router.push({ name: "faultlist1" });
+              },
+            });
+          })
+          .catch(() => {
+            Toast.fail({
+              message: "提交失败，请重新检查表单",
+              duration: 1000,
+            });
+          });
       },
     });
 

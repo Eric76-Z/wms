@@ -150,3 +150,18 @@ export const beautySub = (str, len) => {
     realen = slice.length * 2 - chineseCharNum;
   return str.substr(0, realen) + (realen < str.length ? "..." : "");
 };
+
+/**
+ * 判断arry1 是否包含 arry2
+ */
+
+export const innerArry = (arry1, arry2) => {
+  for (const i of arry2) {
+    console.log(i);
+
+    if (arry1.indexOf(i) == -1) {
+      return false;
+    }
+  }
+  return true;
+};

@@ -43,12 +43,6 @@
             <span class="time">{{
               maintenancecardcfg.data.time.startTime
             }}</span>
-            <!-- <van-tag
-              :show="!maintenancecardcfg.data.time.lastReplace"
-              type="success"
-            >
-              首次!
-            </van-tag> -->
           </div>
           <div class="duration" v-if="maintenancecardcfg.data.time.endTime">
             <div class="end-time">
@@ -100,11 +94,7 @@
             class="check-btn"
             square
             color="linear-gradient(to right, #ff6034, #ee0a24)"
-            v-if="
-              [1, 2, 3].indexOf(listData.order_status) != -1 &&
-              (user.userinfo.isSuper == true ||
-                user.userinfo.groups.indexOf(1) != -1)
-            "
+            v-if="maintenancecardcfg.btn.check.permit"
             @click="maintenancecardcfg.btn.check"
             >审核
           </van-button>
@@ -136,7 +126,7 @@
 import { reactive, computed, toRef } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { formatDate, beautySub } from "@/common/utils";
+import { formatDate, beautySub, innerArry } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import {
   deleteMaintenanceRecords,
@@ -154,7 +144,7 @@ export default {
       type: Object,
     },
   },
-  setup(props, context) {
+  setup(props) {
     const store = useStore();
     const user = toRef(store.state, "user").value;
 
@@ -211,16 +201,6 @@ export default {
           endTime: computed(() => {
             return formatDate.format2(listData.end_time);
           }),
-          // lastReplace: computed(() => {
-          //   if (
-          //     listData.analyse.last_replace == undefined ||
-          //     listData.analyse.last_replace == "首次领用"
-          //   ) {
-          //     return undefined;
-          //   } else {
-          //     return formatDate.format3(listData.analyse.last_replace);
-          //   }
-          // }),
           duration: computed(() => {
             console.log(listData.duration);
             return listData.duration;
@@ -230,24 +210,6 @@ export default {
               return "#ff976a";
             } else {
               return "#ee0a24";
-            }
-          }),
-        },
-        appeal: {
-          show: computed(() => {
-            var reg = new RegExp("[申诉]");
-            if (reg.test(listData.order_comments)) {
-              return true;
-            } else {
-              return false;
-            }
-          }),
-          message: computed(() => {
-            var reg = new RegExp("[申诉]");
-            if (reg.test(listData.order_comments)) {
-              return true;
-            } else {
-              return false;
             }
           }),
         },
@@ -312,6 +274,7 @@ export default {
                 });
                 break;
               case "维修经验":
+                console.log(innerArry([1, 18, 4, 5], user.userinfo.groups));
                 partupMaintenanceRecords({
                   id: listData.id,
                   order_status: 3,
@@ -336,10 +299,13 @@ export default {
                 break;
             }
           },
-        },
-        appeal: () => {
-          let data = { id: listData.id, workstation: listData.weldinggun };
-          context.emit("selectedid", data);
+          permit: computed(() => {
+            return (
+              [1, 2, 3].indexOf(listData.order_status) != -1 &&
+              (user.userinfo.isSuper == true ||
+                innerArry(user.userinfo.groups, [1, 18, 4, 5]) == true)
+            );
+          }),
         },
       },
       step: {

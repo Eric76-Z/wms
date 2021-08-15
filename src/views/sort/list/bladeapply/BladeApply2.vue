@@ -126,17 +126,24 @@ export default {
         values.weldinggunnum = formData.weldinggunnum;
         values.bladetype_apply_id = formData.selectedBladeId;
         values.order_status = 1;
-        createBladeItemData(values).then(() => {
-          // console.log(res);
-          Toast.success({
-            message: "提交成功",
-            duration: 1000,
-            onClose: () => {
-              // 命名的路由，并加上参数，让路由建立 url
-              router.push({ name: "bladedetail" });
-            },
+        createBladeItemData(values)
+          .then(() => {
+            // console.log(res);
+            Toast.success({
+              message: "提交成功",
+              duration: 1000,
+              onClose: () => {
+                // 命名的路由，并加上参数，让路由建立 url
+                router.push({ name: "bladedetail" });
+              },
+            });
+          })
+          .catch(() => {
+            Toast.fail({
+              message: "提交失败，请重新检查表单",
+              duration: 1000,
+            });
           });
-        });
         console.log("submit", values);
       },
     });

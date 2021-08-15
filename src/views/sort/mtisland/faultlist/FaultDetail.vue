@@ -71,9 +71,15 @@
           ></van-icon>
           <van-cell-group inset v-show="collapsecfg.summary.isEdit">
             <van-field
-              v-model="collapsecfg.summary.messageVal"
+              v-model="collapsecfg.summary.title"
+              label="标题"
+              placeholder="请输入标题"
+            />
+            <van-field
+              v-model="collapsecfg.summary.message"
               rows="5"
               autosize
+              label="正文"
               type="textarea"
               maxlength="1000"
               placeholder="请输入经验总结"
@@ -87,8 +93,11 @@
             collapsecfg.summary.isEdit == 0
           "
         >
+          <h2 style="text-align: center">
+            {{ collapsecfg.summary.experience_summary.title }}
+          </h2>
           <p style="white-space: pre-wrap">
-            {{ collapsecfg.summary.experience_summary }}
+            {{ collapsecfg.summary.experience_summary.body }}
           </p>
         </div>
         <van-button
@@ -109,6 +118,7 @@
 // import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 // import MainGrid from "@/components/content/maingrid/MainGrid";
 import { reactive, toRef, computed } from "vue";
+import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import {
   readMaintenanceRecords,
@@ -125,6 +135,8 @@ export default {
   },
   components: {},
   setup(props) {
+    const store = useStore();
+    const user = toRef(store.state, "user").value;
     const faultdetail = toRef(props, "faultdetail");
     console.log(faultdetail);
     const route = reactive(useRoute());
@@ -212,14 +224,27 @@ export default {
             if (collapsecfg.summary.experience_summary == null) {
               return "";
             } else {
-              return collapsecfg.summary.experience_summary;
+              return collapsecfg.summary.experience_summary.body;
             }
           },
           set: (val) => {
-            collapsecfg.summary.messageVal = val;
+            collapsecfg.summary.messageVal.body = val;
+          },
+        }),
+        title: computed({
+          get: () => {
+            if (collapsecfg.summary.experience_summary == null) {
+              return "";
+            } else {
+              return collapsecfg.summary.experience_summary.title;
+            }
+          },
+          set: (val) => {
+            collapsecfg.summary.experience_summary.titleVal = val;
           },
         }),
         messageVal: "",
+        titleVal: "",
         isEdit: 0,
       },
       click: {
@@ -239,8 +264,11 @@ export default {
         },
         operate: () => {
           if (collapsecfg.click.btnVal == "提交") {
+            console.log(collapsecfg.summary.title);
             partupMaintenanceRecords({
               id: collapsecfg.id,
+              userId: user.userinfo.userId,
+              title: collapsecfg.summary.title,
               experience_summary: collapsecfg.summary.messageVal,
             }).then((res) => {
               console.log(res);
