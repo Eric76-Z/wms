@@ -1,5 +1,9 @@
 import axiosApi from "./http";
 
+// const URL_PREFIX = "fontend";
+// const URL_MODULE_WORKSTATION = "workstation";
+// const URL_MODULE_USER = "user";
+
 //获取刀片订单信息数据
 export function reqBladeItemData(params) {
   return axiosApi("api/workstation/bladeitem/", params, "get");

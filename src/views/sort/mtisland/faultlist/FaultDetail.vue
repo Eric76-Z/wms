@@ -76,7 +76,7 @@
               placeholder="请输入标题"
             />
             <van-field
-              v-model="collapsecfg.summary.message"
+              v-model="collapsecfg.summary.experience_summary.body"
               rows="5"
               autosize
               label="正文"
@@ -203,7 +203,6 @@ export default {
       },
       record: {
         maintenance_record: computed(() => {
-          // console.log(listData.duration);
           return maintenceItem.data.maintenance_record;
         }),
       },
@@ -218,7 +217,6 @@ export default {
             return maintenceItem.data.experience_summary;
           }
         }),
-
         message: computed({
           get: () => {
             if (collapsecfg.summary.experience_summary == null) {
@@ -228,7 +226,7 @@ export default {
             }
           },
           set: (val) => {
-            collapsecfg.summary.messageVal.body = val;
+            collapsecfg.summary.experience_summary.body = val;
           },
         }),
         title: computed({
@@ -240,11 +238,11 @@ export default {
             }
           },
           set: (val) => {
-            collapsecfg.summary.experience_summary.titleVal = val;
+            collapsecfg.summary.experience_summary.title = val;
           },
         }),
-        messageVal: "",
-        titleVal: "",
+        // messageVal: "",
+        // titleVal: "",
         isEdit: 0,
       },
       click: {
@@ -264,19 +262,19 @@ export default {
         },
         operate: () => {
           if (collapsecfg.click.btnVal == "提交") {
-            console.log(collapsecfg.summary.title);
             partupMaintenanceRecords({
               id: collapsecfg.id,
               userId: user.userinfo.userId,
-              title: collapsecfg.summary.title,
-              experience_summary: collapsecfg.summary.messageVal,
+              title: collapsecfg.summary.experience_summary.title,
+              experience_summary: collapsecfg.summary.experience_summary.body,
             }).then((res) => {
               console.log(res);
               maintenceItem.data = res;
               collapsecfg.summary.isEdit = 0;
             });
           } else if (collapsecfg.click.btnVal == "编辑") {
-            collapsecfg.summary.messageVal = collapsecfg.summary.message;
+            // collapsecfg.summary.messageVal = collapsecfg.summary.message;
+            // collapsecfg.summary.titleVal = collapsecfg.summary.title;
             collapsecfg.summary.isEdit = 1;
           }
         },

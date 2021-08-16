@@ -107,6 +107,7 @@ export default {
     const bladeinfoCol = computed(() => {
       return store.getters.bladeinfoCol;
     });
+    const user = toRef(store.state, "user");
     //route
     const route = reactive(useRoute());
     const router = reactive(useRouter());
@@ -123,28 +124,38 @@ export default {
       order_comments: "",
       //提交表单
       onSubmit: (values) => {
-        values.weldinggunnum = formData.weldinggunnum;
-        values.bladetype_apply_id = formData.selectedBladeId;
-        values.order_status = 1;
-        createBladeItemData(values)
-          .then(() => {
-            // console.log(res);
-            Toast.success({
-              message: "提交成功",
-              duration: 1000,
-              onClose: () => {
-                // 命名的路由，并加上参数，让路由建立 url
-                router.push({ name: "bladedetail" });
-              },
-            });
-          })
-          .catch(() => {
-            Toast.fail({
-              message: "提交失败，请重新检查表单",
-              duration: 1000,
-            });
+        if (
+          user.value.userinfo.first_name == null ||
+          user.value.userinfo.last_name == null
+        ) {
+          Toast({
+            message: "请实名，我的-用户编辑-填写姓名",
+            duration: 1000,
           });
-        console.log("submit", values);
+        } else {
+          values.weldinggunnum = formData.weldinggunnum;
+          values.bladetype_apply_id = formData.selectedBladeId;
+          values.order_status = 1;
+          createBladeItemData(values)
+            .then(() => {
+              // console.log(res);
+              Toast.success({
+                message: "提交成功",
+                duration: 1000,
+                onClose: () => {
+                  // 命名的路由，并加上参数，让路由建立 url
+                  router.push({ name: "bladedetail" });
+                },
+              });
+            })
+            .catch(() => {
+              Toast.fail({
+                message: "提交失败，请重新检查表单",
+                duration: 1000,
+              });
+            });
+          console.log("submit", values);
+        }
       },
     });
     const popupcfg = reactive({

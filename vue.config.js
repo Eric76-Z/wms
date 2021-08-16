@@ -8,7 +8,7 @@ module.exports = {
   indexPath: "index.html", // 相对于打包路径index.html的路径
   outputDir: "dist", // 'dist', 生产环境构建文件的目录
   // publicPath: "./",
-  assetsDir: "static", // 相对于outputDir的静态资源(js、css、img、fonts)目录
+  assetsDir: "static/wms", // 相对于outputDir的静态资源(js、css、img、fonts)目录
   lintOnSave: false, // 是否在开发环境下通过 eslint-loader 在每次保存时 lint 代码
   // productionSourceMap: false, //去除打包后js的map文件
   productionSourceMap: !IS_PROD, // 生产环境的 source map

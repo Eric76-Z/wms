@@ -263,29 +263,39 @@ export default {
       MaintenanceRecord: "",
       //提交表单
       onSubmit: (values) => {
-        values.workstation = formData.workstation;
-        values.sort = "设备故障";
-        values.duration = parseInt(values.duration);
-        values.applicant_id = user.value.userinfo.userId;
-        values.order_status = 1;
-        createMaintenanceRecords(values)
-          .then(() => {
-            // console.log(res);
-            Toast.success({
-              message: "提交成功",
-              duration: 1000,
-              onClose: () => {
-                // 命名的路由，并加上参数，让路由建立 url
-                router.push({ name: "faultlist1" });
-              },
-            });
-          })
-          .catch(() => {
-            Toast.fail({
-              message: "提交失败，请重新检查表单",
-              duration: 1000,
-            });
+        if (
+          user.value.userinfo.first_name == null ||
+          user.value.userinfo.last_name == null
+        ) {
+          Toast({
+            message: "请实名，我的-用户编辑-填写姓名",
+            duration: 1000,
           });
+        } else {
+          values.workstation = formData.workstation;
+          values.sort = "设备故障";
+          values.duration = parseInt(values.duration);
+          values.applicant_id = user.value.userinfo.userId;
+          values.order_status = 1;
+          createMaintenanceRecords(values)
+            .then(() => {
+              // console.log(res);
+              Toast.success({
+                message: "提交成功",
+                duration: 1000,
+                onClose: () => {
+                  // 命名的路由，并加上参数，让路由建立 url
+                  router.push({ name: "faultlist1" });
+                },
+              });
+            })
+            .catch(() => {
+              Toast.fail({
+                message: "提交失败，请重新检查表单",
+                duration: 1000,
+              });
+            });
+        }
       },
     });
 

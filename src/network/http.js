@@ -9,8 +9,8 @@ import store from "../store";
 // };
 
 let config = {
-  // baseURL: "https://www.xiuxiu.work/",
-  baseURL: "http://127.0.0.1:8000",
+  baseURL: "https://www.xiuxiu.work/",
+  // baseURL: "http://127.0.0.1:8000",
   timeout: 5000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };

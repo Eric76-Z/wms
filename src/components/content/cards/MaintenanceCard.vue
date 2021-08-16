@@ -164,14 +164,6 @@ export default {
           listData.localLv3 +
           "--" +
           listData.workstation,
-        // img: computed(() => {
-        //   let url = "";
-        //   listData.repair_order_img
-        //     ? (url = listData.repair_order_img.img)
-        //     : (url = undefined);
-        //   console.log(url);
-        //   return url;
-        // }),
         desc: {
           descTag: {
             tagText: "描述",
