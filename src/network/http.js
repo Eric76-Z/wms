@@ -54,6 +54,7 @@ Axios.interceptors.response.use(
   },
   (error) => {
     // Do something with response error
+    console.log(error.response);
     Toast.clear();
     switch (error.response.status) {
       case 401:

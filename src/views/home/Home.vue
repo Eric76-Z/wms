@@ -4,7 +4,7 @@
     <van-notice-bar
       wrapable
       :scrollable="false"
-      text="21/05/31:申请列表中填不了姓名，请在首页点击用户界面，在里面完成姓名填写。此后填写表单自动填充姓名。"
+      text="21/08/17: 版本更迭快速，遇到问题可以试试清除浏览器数据，重新加载！。"
     />
     <main-swiper :swipercfg="swipercfg" />
   </div>
@@ -35,8 +35,9 @@ export default {
     });
     const swipercfg = reactive({
       images: [
-        "https://img.yzcdn.cn/vant/apple-1.jpg",
-        "https://img.yzcdn.cn/vant/apple-2.jpg",
+        "https://www.kuka.com/-/media/kuka-corporate/images/products/robots/kuka-industrieroboter-2020.jpg?rev=e171cda184c04682ac4afa44958bd6b7&w=767&hash=536DC432A7A64179E6A6A734D61B0728",
+        "https://www.kuka.com/-/media/kuka-corporate/images/products/robots/kr-delta/kr-delta_kv.jpg?rev=-1&w=767&hash=484B82F1CE4C775E6B692F901FEB2BC2",
+        "http://nimak.cn/static/kindeditor/attached/image/20180827/20180827161937_78354.jpg",
       ],
     });
     return {

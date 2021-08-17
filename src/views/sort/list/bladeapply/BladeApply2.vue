@@ -125,11 +125,16 @@ export default {
       //提交表单
       onSubmit: (values) => {
         if (
-          user.value.userinfo.first_name == null ||
-          user.value.userinfo.last_name == null
+          user.value.userinfo.first_name == "" ||
+          user.value.userinfo.last_name == ""
         ) {
           Toast({
             message: "请实名，我的-用户编辑-填写姓名",
+            duration: 1000,
+          });
+        } else if (formData.MyLocation == "") {
+          Toast.fail({
+            message: "提交失败，请填写正确的工位以获取区域信息！",
             duration: 1000,
           });
         } else {
