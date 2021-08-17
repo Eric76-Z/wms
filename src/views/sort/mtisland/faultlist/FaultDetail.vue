@@ -63,9 +63,8 @@
             class-prefix="icon"
             name="tianjia"
             @click="collapsecfg.click.addSummary"
-            v-show="!collapsecfg.summary.isAdd"
             v-if="
-              collapsecfg.summary.experience_summary == null &&
+              maintenceItem.data.experience_summary == null &&
               collapsecfg.summary.isEdit == 0
             "
           ></van-icon>
@@ -108,8 +107,6 @@
           >{{ collapsecfg.click.btnVal }}</van-button
         >
       </van-collapse-item>
-
-      <!-- <van-collapse-item title="经验总结" name="4">内容</van-collapse-item> -->
     </van-collapse>
   </div>
 </template>
@@ -212,7 +209,10 @@ export default {
             maintenceItem.data.experience_summary == null ||
             maintenceItem.data.experience_summary == ""
           ) {
-            return null;
+            return {
+              body: "",
+              title: "",
+            };
           } else {
             return maintenceItem.data.experience_summary;
           }
