@@ -155,14 +155,6 @@ export default function axiosApi(type, params, method) {
           reject(err);
         });
     } else if (method == "patch") {
-      // console.log(params.repair_order_img);
-      // var formData = new FormData();
-      // formData.append(
-      //   "img",
-      //   params.repair_order_img.content.replace(/^data:image\/\w+;base64,/, "")
-      // );
-      // formData.append("img_name", "jjj");
-      console.log(params.id);
       let data = params;
       if (params.formData != undefined) {
         data = params.formData;
