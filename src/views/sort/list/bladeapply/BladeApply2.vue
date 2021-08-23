@@ -104,9 +104,10 @@ export default {
     const {
       getLocation: [getLocation],
     } = store._actions;
-    const bladeinfoCol = computed(() => {
-      return store.getters.bladeinfoCol;
+    const bladeDataCol = computed(() => {
+      return store.getters.bladeDataCol;
     });
+
     const user = toRef(store.state, "user");
     //route
     const route = reactive(useRoute());
@@ -174,7 +175,6 @@ export default {
       onConfirm: (value) => {
         // console.log(value);
         for (const iterator of bladeinfo.value) {
-          console.log(iterator.my_spec.indexOf(value));
           if (iterator.my_spec.indexOf(value) != -1) {
             formData.selectedBladeId = iterator.id;
           }
@@ -202,7 +202,7 @@ export default {
       // console.log(bladeinfo);
       setTimeout(() => {
         for (let i of bladeinfo.value) {
-          popupcfg.columns = bladeinfoCol.value;
+          popupcfg.columns = bladeDataCol.value.titleCol;
           if (i["id"] == route.params["bladeId"]) {
             popupcfg.state.value = i["my_spec"].split("|")[0];
           }

@@ -79,6 +79,9 @@ const routes = [
     name: "list",
     path: "/sort/list",
     component: List,
+    meta: {
+      realname: "realname",
+    },
   },
   {
     name: "detail",
@@ -131,6 +134,7 @@ const routes = [
     component: FaultRecord,
     meta: {
       type: "login",
+      realname: "realname",
     },
     children: [
       {

@@ -97,10 +97,26 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
   }
   const type = to.meta.type;
+  const realname = to.meta.realname;
   // 判断该路由是否需要登录权限
   if (type === "login") {
     if (store.state.user.userState !== 200) {
       next({ name: "login" });
+    } else {
+      next();
+    }
+  } else if (realname == "realname") {
+    if (
+      store.state.user.userinfo.last_name == "" ||
+      store.state.user.userinfo.last_name == ""
+    ) {
+      Toast.fail({
+        message: "未实名！跳转到个人信息页面实名！",
+        duration: 1000,
+        onClose: () => {
+          next({ name: "userinfo" });
+        },
+      });
     } else {
       next();
     }

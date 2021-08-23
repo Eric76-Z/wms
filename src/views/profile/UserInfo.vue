@@ -52,11 +52,12 @@
         @click-left="userinfocfg.popup.onClickLeft"
         @click-right="userinfocfg.popup.onClickRight"
       />
-      <van-cell-group inset>
+      <van-cell-group>
         <van-field
           v-model="userinfocfg.popup.value"
           :label="userinfocfg.popup.title"
           :focus="userinfocfg.popup.focus"
+          placeholder="点击输入..."
         />
       </van-cell-group>
     </van-popup>
@@ -64,7 +65,7 @@
 </template>
 
 <script>
-import { reactive, toRef, computed } from "vue";
+import { reactive, toRef, computed, onMounted } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 // import { partupUser } from "@/network/sort.js";
@@ -108,7 +109,6 @@ export default {
           return "";
         }
       }),
-
       changeUserName: () => {
         userinfocfg.popup.show = true;
         userinfocfg.popup.value = userinfocfg.data.userinfo.username;
@@ -203,6 +203,14 @@ export default {
         },
       },
     });
+    onMounted(() => {
+      if (user.userinfo.last_name == "" || user.userinfo.first_name == "") {
+        Toast.fail({
+          message: "请实名！",
+          duration: 1000,
+        });
+      }
+    });
     return {
       state,
       userinfocfg,
@@ -220,6 +228,9 @@ export default {
     .van-cell__value {
       flex: 3;
     }
+  }
+  .van-popup {
+    background-color: var(--van-gray-1);
   }
 }
 </style>

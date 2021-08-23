@@ -4,7 +4,7 @@ export default {
     return state.location;
   },
 
-  bladeDataCom(state) {
+  bladeDataCol(state) {
     const ret = {
       titleCol: [], //["鸿柏02G刀片", "鲁兹02G刀具", "鲁兹02G刀片", "邺格02G刀片", ......
       titleToId: {}, //key-鲁兹02G刀片， value-1922  映射列表
