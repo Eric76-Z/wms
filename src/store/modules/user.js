@@ -93,8 +93,65 @@ const actions = {
   Register(context, payload) {
     userRegister(payload)
       .then((res) => {
-        context.commit(USER_LOGIN, res);
-        router.push("/profile");
+        switch (res.code) {
+          case 10:
+            Toast.success({
+              message: "注册成功！自动登录...",
+              duration: 2000,
+              onClose: () => {
+                userLogin({
+                  username: payload.username,
+                  password: payload.password,
+                })
+                  .then((res) => {
+                    if (res.state == 200) {
+                      context.commit(USER_LOGIN, res);
+                      Toast({
+                        message: "登陆成功",
+                        duration: 1000,
+                        onClose: () => {
+                          router.push("/profile");
+                        },
+                      });
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              },
+            });
+            break;
+          case 11:
+            Toast.fail({
+              message: "检查密码输入是否正确！",
+              duration: 1000,
+            });
+            break;
+          case 12:
+            if (res.msg.username) {
+              Toast.fail({
+                message: "用户名已存在",
+                duration: 1000,
+              });
+            } else if (res.msg.phonenum) {
+              Toast.fail({
+                message: "手机号已被注册！",
+                duration: 1000,
+              });
+            } else {
+              Toast.fail({
+                message: "未知原因！",
+                duration: 1000,
+              });
+            }
+            return res;
+          default:
+            Toast.fail({
+              message: "未知原因！",
+              duration: 1000,
+            });
+            break;
+        }
       })
       .catch((err) => {
         console.log(err);

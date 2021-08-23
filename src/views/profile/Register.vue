@@ -111,7 +111,9 @@ export default {
     });
     const onSubmit = (values) => {
       console.log("submit", values);
-      Register(values);
+      Register(values).then((res) => {
+        console.log(res);
+      });
     };
     const form_reg = {
       username_reg1: /^.{2,10}$/,
