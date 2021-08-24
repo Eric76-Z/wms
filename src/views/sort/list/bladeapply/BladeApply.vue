@@ -1,7 +1,5 @@
 <template>
   <div id="bladeapply">
-    <main-nav-bar :navbarcfg="navbarcfg" />
-
     <router-view v-slot="{ Component }" :bladeinfo="bladeinfo">
       <keep-alive>
         <component :is="Component" />
@@ -14,20 +12,22 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import { computed, toRef } from "vue";
 import { useStore } from "vuex";
+import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
   name: "BladeApply",
-  data() {
-    return {};
-  },
   components: {
     MainNavBar,
   },
   setup() {
     const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "表单-刀片申请",
+      isShow: [true, true, true],
+    };
     const bladeinfo = computed(() => {
       return store.state.blade.bladeinfo;
     });
@@ -40,11 +40,6 @@ export default {
     // console.log(bladeinfo.value);
     // console.log(bladeinfolist);
     // console.log(weldinggunNum);
-
-    const navbarcfg = {
-      title: "表单-刀片申请",
-      isShow: [true, true, true],
-    };
 
     //判断store中有没有数据
     // console.log(bladeinfo);

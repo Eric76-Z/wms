@@ -1,6 +1,5 @@
 <template>
   <div id="login">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <van-image
       round
       width="8rem"
@@ -54,21 +53,16 @@
 import { reactive, toRef, computed } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 
 export default {
   name: "Login",
-  data() {
-    return {
-      navbarcfg: {
-        title: "用户登录",
-        isShow: [true, true, true],
-      },
-    };
-  },
   setup() {
     const store = useStore();
-    // const router = useRouter();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "用户登录",
+      isShow: [true, true, true],
+    };
     const userinfo = toRef(store.state.user, "userinfo").value;
     const {
       "user/userChangeState": [userChangeState],
@@ -99,9 +93,6 @@ export default {
       onSubmit,
       haveIcon,
     };
-  },
-  components: {
-    MainNavBar,
   },
 };
 </script>

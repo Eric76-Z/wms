@@ -1,30 +1,27 @@
 <template>
   <div id="sort">
     <router-view />
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <main-grid :gridcfg="gridcfg" />
   </div>
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainGrid from "@/components/content/maingrid/MainGrid";
-import { reactive } from "vue";
+import { reactive, toRef } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "Sort",
-  data() {
-    return {};
-  },
   components: {
-    MainNavBar,
     MainGrid,
   },
   setup() {
-    const navbarcfg = reactive({
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
       title: "分类",
       isShow: [false, true, false],
-    });
+    };
     const gridcfg = reactive({
       iconText: [
         ["机器人-未开放", "jiqiren", "/sort"],
@@ -40,7 +37,6 @@ export default {
       columnNum: 3,
     });
     return {
-      navbarcfg,
       gridcfg,
     };
   },

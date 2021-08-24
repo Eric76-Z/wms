@@ -1,6 +1,5 @@
 <template>
   <div id="list">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <main-side-bar :sidebarcfg="sidebarcfg" v-show="false" />
 
     <div class="list-card">
@@ -22,47 +21,54 @@
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import { toRef } from "vue";
+import { useStore } from "vuex";
 import MainSideBar from "@/components/content/mainsidebar/MainSideBar";
 import MainList from "@/components/content/mainlist/MainList";
 
 export default {
   name: "List",
-  data() {
-    return {
-      navbarcfg: {
-        title: "分类-列表明细",
-        isShow: [true, true, true],
-      },
-      sidebarcfg: {
-        titles: ["备件申领", "设备问题", "现场问题"],
-      },
-      listcfg: {
-        content: {
-          bladeapply: {
-            title: "刀片申请",
-            label: "填写表单申请领用刀片请点击这里......",
-            to: "/sort/list/bladeapply",
-            // url: "www.xiuxiu.work/mywork/bladeapply",
-          },
-          weldingguncls: {
-            title: "枪衣损坏申报",
-            label: "现场枪衣损坏，需要申报请点击这里......",
-          },
-          tcpmanage: {
-            title: "tcp照片上传",
-            label: "现场上传tcp照片请点击这里......",
-          },
-          maintenanceexp: {
-            title: "维修记录",
-            label: "现场维修故障记录，维修经验记录请点击这里......",
-          },
+  setup() {
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "分类-列表明细",
+      isShow: [true, true, true],
+    };
+    const sidebarcfg = {
+      titles: ["备件申领", "设备问题", "现场问题"],
+    };
+    const listcfg = {
+      content: {
+        bladeapply: {
+          title: "刀片申请",
+          label: "填写表单申请领用刀片请点击这里......",
+          to: "/sort/list/bladeapply",
+          // url: "www.xiuxiu.work/mywork/bladeapply",
+        },
+        weldingguncls: {
+          title: "枪衣损坏申报",
+          label: "现场枪衣损坏，需要申报请点击这里......",
+        },
+        tcpmanage: {
+          title: "tcp照片上传",
+          label: "现场上传tcp照片请点击这里......",
+        },
+        maintenanceexp: {
+          title: "维修记录",
+          label: "现场维修故障记录，维修经验记录请点击这里......",
         },
       },
     };
+    return {
+      sidebarcfg,
+      listcfg,
+    };
+  },
+  data() {
+    return {};
   },
   components: {
-    MainNavBar,
     MainSideBar,
     MainList,
   },

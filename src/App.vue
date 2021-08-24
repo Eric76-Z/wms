@@ -1,5 +1,5 @@
 <template>
-  <main-nav-bar :navbarcfg="navbarcfg" />
+  <main-nav-bar :navbarcfg="mainnavbarcfg" />
   <!-- vue3.0配置 -->
   <router-view v-slot="{ Component }">
     <keep-alive>
@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import { computed, getCurrentInstance, onMounted } from "vue";
+import { reactive, toRef } from "vue";
+import { useStore } from "vuex";
 import MainTabBar from "@/components/content/maintabbar/MainTabBar";
 import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 export default {
@@ -21,18 +22,9 @@ export default {
     MainNavBar,
   },
   setup() {
-    const {
-      appContext: {
-        config: { globalProperties },
-      },
-    } = getCurrentInstance();
-    globalProperties.$mainnavbar = {
-      title: " ",
-      isShow: [false, false, false],
-    };
-    const navbarcfg = computed(() => {
-      return globalProperties.$mainnavbar;
-    });
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    const mainnavbarcfg = reactive(navbarcfg.value.mainnavbarcfg);
     const tabbars = [
       {
         name: "home",
@@ -53,9 +45,8 @@ export default {
         path: "/profile",
       },
     ];
-    onMounted(() => {});
     return {
-      navbarcfg,
+      mainnavbarcfg,
       tabbars,
     };
   },

@@ -1,14 +1,13 @@
 <template>
   <div id="mtisland">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <main-grid :gridcfg="gridcfg" />
   </div>
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainGrid from "@/components/content/maingrid/MainGrid";
-import { reactive } from "vue";
+import { reactive, toRef } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "MtIsland",
@@ -16,14 +15,16 @@ export default {
     return {};
   },
   components: {
-    MainNavBar,
     MainGrid,
   },
   setup() {
-    const navbarcfg = reactive({
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
       title: "分类-维修岛",
       isShow: [true, true, true],
-    });
+    };
+
     const gridcfg = reactive({
       iconText: [
         ["故障申报", "jiqiren", "/sort/mtisland/faultrecord"],

@@ -1,6 +1,5 @@
 <template>
   <div id="userinfo">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <van-cell-group>
       <van-cell
         title="用户名"
@@ -69,21 +68,18 @@ import { reactive, toRef, computed, onMounted } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 // import { partupUser } from "@/network/sort.js";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import { Toast } from "vant";
 
 export default {
   name: "UserInfo",
-  data() {
-    return {
-      navbarcfg: {
-        title: "用户-信息编辑",
-        isShow: [true, true, true],
-      },
-    };
-  },
+
   setup() {
     const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "用户-信息编辑",
+      isShow: [true, true, true],
+    };
     const {
       "user/userChangeState": [userChangeState],
     } = store._actions;
@@ -215,9 +211,6 @@ export default {
       state,
       userinfocfg,
     };
-  },
-  components: {
-    MainNavBar,
   },
 };
 </script>

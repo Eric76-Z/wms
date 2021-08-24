@@ -25,6 +25,12 @@ const state = {
   listOffset: {
     bladedetail_scrollTop: 0,
   },
+  navbarcfg: {
+    mainnavbarcfg: {
+      title: "",
+      isShow: [false, false, false],
+    },
+  },
 };
 
 export default createStore({

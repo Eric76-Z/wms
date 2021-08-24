@@ -1,8 +1,6 @@
 <template>
   <div id="detail">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <main-side-bar :sidebarcfg="sidebarcfg" v-show="false" />
-
     <div class="list-card">
       <main-list :listcfg="listcfg">
         <slot>
@@ -22,48 +20,52 @@
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import { toRef } from "vue";
+import { useStore } from "vuex";
 import MainSideBar from "@/components/content/mainsidebar/MainSideBar";
 import MainList from "@/components/content/mainlist/MainList";
 
 export default {
   name: "Detail",
-  data() {
-    return {
-      navbarcfg: {
-        title: "分类-列表明细",
-        isShow: [true, true, true],
-      },
-      sidebarcfg: {
-        titles: ["备件申领", "设备问题", "现场问题"],
-      },
-      listcfg: {
-        content: {
-          bladedetail: {
-            title: "刀片登记详情",
-            label: "刀片申请了不知道什么状态，请点击这里......",
-            to: "/sort/detail/bladedetail",
-          },
-          weldingguncls: {
-            title: "枪衣状态详情",
-            label: "枪衣申报了不知道什么情况，请点击这里",
-          },
-          tcpmanage: {
-            title: "tcp照片查看",
-            label: "支持查看现场tcp照片......",
-          },
-          maintenanceexp: {
-            title: "维修记录查看",
-            label: "现场维修故障记录，维修经验记录这些都是在这里查看的......",
-          },
+  components: {
+    MainSideBar,
+    MainList,
+  },
+  setup() {
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "分类-列表明细",
+      isShow: [true, true, true],
+    };
+    const sidebarcfg = {
+      titles: ["备件申领", "设备问题", "现场问题"],
+    };
+    const listcfg = {
+      content: {
+        bladedetail: {
+          title: "刀片登记详情",
+          label: "刀片申请了不知道什么状态，请点击这里......",
+          to: "/sort/detail/bladedetail",
+        },
+        weldingguncls: {
+          title: "枪衣状态详情",
+          label: "枪衣申报了不知道什么情况，请点击这里",
+        },
+        tcpmanage: {
+          title: "tcp照片查看",
+          label: "支持查看现场tcp照片......",
+        },
+        maintenanceexp: {
+          title: "维修记录查看",
+          label: "现场维修故障记录，维修经验记录这些都是在这里查看的......",
         },
       },
     };
-  },
-  components: {
-    MainNavBar,
-    MainSideBar,
-    MainList,
+    return {
+      sidebarcfg,
+      listcfg,
+    };
   },
 };
 </script>

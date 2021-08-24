@@ -1,6 +1,5 @@
 <template>
   <div id="faultlist">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <!-- vue3.0配置 -->
     <router-view v-slot="{ Component }">
       <keep-alive>
@@ -12,14 +11,15 @@
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
+import { toRef } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "faultlist",
-  components: {
-    MainNavBar,
-  },
+
   setup() {
-    const navbarcfg = {
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
       title: "故障记录明细",
       isShow: [true, true, true],
     };

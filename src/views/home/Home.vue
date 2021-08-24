@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { reactive, getCurrentInstance } from "vue";
-
+import { reactive, toRef } from "vue";
+import { useStore } from "vuex";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
 
 import { NoticeBar } from "vant";
@@ -26,17 +26,12 @@ export default {
     [NoticeBar.name]: NoticeBar,
   },
   setup() {
-    const {
-      appContext: {
-        config: { globalProperties },
-      },
-    } = getCurrentInstance();
-    globalProperties.$mainnavbar = {
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
       title: "首页",
       isShow: [false, true, false],
     };
-    console.log(globalProperties);
-    // const navbarcfg = reactive({});
     const swipercfg = reactive({
       images: [
         "https://www.kuka.com/-/media/kuka-corporate/images/products/robots/kuka-industrieroboter-2020.jpg?rev=e171cda184c04682ac4afa44958bd6b7&w=767&hash=536DC432A7A64179E6A6A734D61B0728",

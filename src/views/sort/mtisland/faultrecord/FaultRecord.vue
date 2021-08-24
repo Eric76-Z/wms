@@ -1,24 +1,21 @@
 <template>
   <div id="faultrecord">
-    <main-nav-bar :navbarcfg="navbarcfg" />
-
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
-
+import { toRef } from "vue";
+import { useStore } from "vuex";
 export default {
   name: "faultrecord",
   data() {
     return {};
   },
-  components: {
-    MainNavBar,
-  },
   setup() {
-    const navbarcfg = {
+    const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
       title: "故障申报向导",
       isShow: [true, true, true],
     };

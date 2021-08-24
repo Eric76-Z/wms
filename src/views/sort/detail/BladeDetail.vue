@@ -1,6 +1,5 @@
 <template>
   <div id="bladedetail">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <van-search
       v-model="searchcfg.value"
       ref="search"
@@ -137,7 +136,6 @@
 import { reactive, computed, ref, toRef, nextTick, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import BladeCard from "@/components/content/cards/BladeCard";
@@ -149,16 +147,8 @@ import { debounce } from "@/common/utils.js";
 
 export default {
   name: "BladeDetail",
-  data() {
-    return {
-      navbarcfg: {
-        title: "刀片申请明细",
-        isShow: [true, true, true],
-      },
-    };
-  },
+
   components: {
-    MainNavBar,
     BladeCard,
     BackTop,
     MainFilter,
@@ -168,6 +158,11 @@ export default {
   setup() {
     //vuex数据
     const store = useStore();
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "刀片申请明细",
+      isShow: [true, true, true],
+    };
     const listOffset = toRef(store.state, "listOffset");
     const bladeinfo = computed(() => {
       return store.state.blade.bladeinfo;
