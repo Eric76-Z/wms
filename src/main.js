@@ -124,3 +124,8 @@ router.beforeEach((to, from, next) => {
     next(); // 确保一定要有next()被调用
   }
 });
+
+app.config.globalProperties.$mainnavbar = {
+  title: "",
+  isShow: [false, false, false],
+};

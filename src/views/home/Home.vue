@@ -1,6 +1,5 @@
 <template>
   <div id="home">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <van-notice-bar
       wrapable
       :scrollable="false"
@@ -11,9 +10,8 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, getCurrentInstance } from "vue";
 
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
 
 import { NoticeBar } from "vant";
@@ -24,15 +22,21 @@ export default {
     return {};
   },
   components: {
-    MainNavBar,
     MainSwiper,
     [NoticeBar.name]: NoticeBar,
   },
   setup() {
-    const navbarcfg = reactive({
+    const {
+      appContext: {
+        config: { globalProperties },
+      },
+    } = getCurrentInstance();
+    globalProperties.$mainnavbar = {
       title: "首页",
       isShow: [false, true, false],
-    });
+    };
+    console.log(globalProperties);
+    // const navbarcfg = reactive({});
     const swipercfg = reactive({
       images: [
         "https://www.kuka.com/-/media/kuka-corporate/images/products/robots/kuka-industrieroboter-2020.jpg?rev=e171cda184c04682ac4afa44958bd6b7&w=767&hash=536DC432A7A64179E6A6A734D61B0728",
@@ -41,7 +45,6 @@ export default {
       ],
     });
     return {
-      navbarcfg,
       swipercfg,
     };
   },

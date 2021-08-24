@@ -13,6 +13,7 @@
       <van-icon v-show="navbarcfg.isShow[2]" name="apps-o" size="20" />
     </template>
   </van-nav-bar>
+  <div>{{ navbarcfg }}</div>
 </template>
 
 <script>
