@@ -141,6 +141,7 @@ export default {
         } else {
           values.weldinggunnum = formData.weldinggunnum;
           values.bladetype_apply_id = formData.selectedBladeId;
+          values.applicant_id = user.value.userinfo.userId;
           values.order_status = 1;
           createBladeItemData(values)
             .then(() => {

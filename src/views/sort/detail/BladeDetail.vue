@@ -175,8 +175,8 @@ export default {
     const {
       "blade/getBladeInfo": [getBladeInfo],
     } = store._actions;
-    const bladeDataCom = computed(() => {
-      return store.getters.bladeDataCom;
+    const bladeDataCol = computed(() => {
+      return store.getters.bladeDataCol;
     });
     if (bladeinfo.value.length == 0) {
       //没有数据请求数据
@@ -364,7 +364,7 @@ export default {
       columns: [],
       click: {
         onConfirm: (val) => {
-          const recId = bladeDataCom.value.titleToId[val];
+          const recId = bladeDataCol.value.titleToId[val];
           receivepickercfg.show = false;
           Dialog.confirm({
             title: "确认领取",
@@ -413,8 +413,7 @@ export default {
           appealpopupcfg.show = true;
           break;
         case "receive":
-          console.log(data);
-          receivepickercfg.columns = bladeDataCom.value.titleCol;
+          receivepickercfg.columns = bladeDataCol.value.titleCol;
           receivepickercfg.itemid = data.id;
           receivepickercfg.show = true;
           break;
