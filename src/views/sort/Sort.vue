@@ -29,7 +29,7 @@ export default {
         ["其他设备-未开放", "shebei", "/sort"],
         ["申报列表", "shenqing", "/sort/list"],
         ["列表明细", "liebiao", "/sort/detail"],
-        ["备件查询-未开放", "kucunguanli", "/sort"],
+        ["备件查询-未开放", "kucunguanli", "/sort/parts"],
         ["资料查询-未开放", "ziliao", "/sort"],
         ["故障代码-未开放", "faultcode", "/sort"],
         ["维修专家", "weixiuqiye", "/sort/mtisland"],

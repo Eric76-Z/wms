@@ -27,8 +27,9 @@ const FaultList = () => import("@/views/sort/mtisland/faultlist/FaultList");
 const FaultList1 = () => import("@/views/sort/mtisland/faultlist/FaultList1");
 const FaultListSearch = () =>
   import("@/views/sort/mtisland/faultlist/FaultListSearch");
-
 const FaultDetail = () => import("@/views/sort/mtisland/faultlist/FaultDetail");
+
+const Parts = () => import("@/views/sort/parts/Parts");
 
 const routes = [
   {
@@ -180,6 +181,14 @@ const routes = [
         props: true,
       },
     ],
+  },
+  {
+    name: "parts",
+    path: "/sort/parts",
+    component: Parts,
+    // meta: {
+    //   type: "login",
+    // },
   },
 ];
 

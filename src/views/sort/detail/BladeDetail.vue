@@ -524,7 +524,7 @@ export default {
     line-height: 28px;
     background-color: --van-white;
     position: absolute;
-    top: 88px;
+    top: 44px;
     right: 0;
     align-items: center;
     justify-content: center;
@@ -532,7 +532,7 @@ export default {
     padding: 0 var(--van-padding-base);
     color: var(--van-tab-text-color);
     font-size: var(--van-tab-font-size);
-    font-weight: 500;
+    font-weight: 800;
     // line-height: var(--van-tab-line-height);
     cursor: pointer;
     z-index: 999px;

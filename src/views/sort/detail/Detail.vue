@@ -71,12 +71,7 @@ export default {
 </script>
 
 <style lang="scss">
-$navbar-height: 44px;
-$tabbar-height: 50px;
-$sidebar-width: 80px;
-#app {
-  height: 100vh;
-
+#detail {
   .van-sidebar {
     float: left;
   }

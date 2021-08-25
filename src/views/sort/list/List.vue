@@ -79,16 +79,13 @@ export default {
 $navbar-height: 44px;
 $tabbar-height: 50px;
 $sidebar-width: 80px;
-#app {
-  height: 100vh;
-
+#list {
   .van-sidebar {
     float: left;
   }
   .list-card {
     float: left;
     width: 100%;
-    // width: calc(100% - #{$sidebar-width});
     height: calc(100vh - #{$navbar-height + $tabbar-height});
     overflow: auto;
   }
