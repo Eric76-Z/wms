@@ -6,7 +6,55 @@
       placeholder="请输入搜索关键词"
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
+      @click-input="searchcfg.clickInput"
     />
+    <van-tabs v-model:active="tabscfg.active" animated>
+      <van-tab
+        v-for="(item, index) in tabscfg.title"
+        :title="item"
+        :key="index"
+      >
+        <div class="page-list" ref="scroll" v-if="index === 0">
+          <van-list
+            v-model:loading="listcfg.loading"
+            v-model:error="listcfg.error"
+            :finished="listcfg.finished"
+            finished-text="没有更多了"
+            @load="listcfg.onLoad"
+            @refresh="listcfg.onRefresh"
+            class="scroll"
+          >
+            <slot>
+              <maintenance-card
+                v-for="item in listcfg.list"
+                :key="item.id"
+                :listdata="item"
+                @selectedid="selectedid"
+                @faultdetail="item"
+              ></maintenance-card>
+            </slot>
+          </van-list>
+        </div>
+      </van-tab>
+    </van-tabs>
+    <!-- 筛选器 -->
+    <div class="filter" @click="itemFilter">
+      <div class="filter-content">
+        <span>筛选<van-icon name="filter-o" /> </span>
+      </div>
+    </div>
+    <!-- 过滤弹出层 -->
+    <van-popup
+      v-model:show="popupcfg.show"
+      position="right"
+      round
+      :style="{ height: '100%', width: '90%' }"
+    >
+      <template #default>
+        <main-filter ref="MainFilter" @queryData="queryData"></main-filter>
+      </template>
+    </van-popup>
+    <back-top v-show="showBackTop" @click="backtop"></back-top>
   </div>
 </template>
 
@@ -23,6 +71,11 @@ export default {
       isShow: [true, true, true],
     };
 
+    //组件配置
+    const tabscfg = reactive({
+      title: ["全部", "数据分析", "公告", ""],
+      active: 0,
+    });
     const searchcfg = reactive({
       value: "",
       onSearch: () => {
@@ -42,6 +95,9 @@ export default {
         listcfg.finished = false;
         listcfg.error = false;
         listcfg.onLoad();
+      },
+      clickInput: () => {
+        console.log("弹出");
       },
     });
     const listcfg = reactive({
@@ -69,12 +125,25 @@ export default {
       },
     });
 
+    //查询参数
     const queryParam = reactive({
       page: listcfg.currPage,
       pageSize: listcfg.pageSize,
     });
+    const popupcfg = reactive({
+      show: false,
+    });
+    const itemFilter = () => {
+      popupcfg.show = true;
+    };
+    const backtop = () => {
+      scroll.value.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    };
 
-    return { searchcfg, listcfg };
+    return { searchcfg, listcfg, tabscfg, popupcfg, itemFilter, backtop };
   },
 };
 </script>
@@ -86,6 +155,68 @@ export default {
     // --van-search-input-height: 20px;
     .van-field__control {
       line-height: 22px;
+    }
+  }
+  .van-tabs {
+    --van-tabs-line-height: 28px;
+    .van-tab__pane {
+      .page-list {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px - 44px);
+        overflow: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* ios5+ */
+        .scroll {
+          // scroll-behavior: smooth;
+          .van-card {
+            .van-card__content {
+              min-height: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .filter {
+    display: flex;
+    width: 25%;
+    line-height: 28px;
+    background-color: --van-white;
+    position: absolute;
+    top: 88px;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 var(--van-padding-base);
+    color: var(--van-tab-text-color);
+    font-size: var(--van-tab-font-size);
+    font-weight: 800;
+    // line-height: var(--van-tab-line-height);
+    cursor: pointer;
+    z-index: 999px;
+    .filter-content {
+      span {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+      }
+    }
+  }
+
+  .back-top {
+    position: absolute;
+    right: 22px;
+    bottom: 40px;
+  }
+  .appeal-popup {
+    padding-top: 20px;
+    background-color: var(--van-gray-1);
+    .van-button {
+      margin-top: 20px;
     }
   }
 }

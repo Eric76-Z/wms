@@ -56,6 +56,9 @@
             </slot>
           </van-list>
         </div>
+        <div class="analyse" v-if="index === 1">
+          <blade-analyse> </blade-analyse>
+        </div>
       </van-tab>
     </van-tabs>
     <!-- 筛选器 -->
@@ -139,6 +142,7 @@ import { useRouter } from "vue-router";
 import MainFilter from "@/components/common/mainfilter/MainFilter";
 import BackTop from "@/components/common/BackTop";
 import BladeCard from "@/components/content/cards/BladeCard";
+import BladeAnalyse from "@/components/content/analyse/BladeAnalyse";
 import { Dialog, Toast, Picker } from "vant";
 import { reqBladeItemData, partupBladeItemData } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
@@ -153,6 +157,7 @@ export default {
     BackTop,
     MainFilter,
     [Picker.name]: Picker,
+    BladeAnalyse,
   },
 
   setup() {
