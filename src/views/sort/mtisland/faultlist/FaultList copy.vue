@@ -1,7 +1,6 @@
 <template>
   <div id="faultlist">
     <main-nav-bar :navbarcfg="navbarcfg" />
-
     <router-view />
   </div>
 </template>

@@ -47,11 +47,11 @@ export default {
   },
   setup(props) {
     const bladeinfo = toRef(props, "bladeinfo");
-    // console.log(bladeinfo);
     const listcfg = reactive([]);
     setTimeout(() => {
-      for (const iterator of bladeinfo.value) {
-        // console.log(iterator);
+      console.log(bladeinfo.value.results);
+      for (const iterator of bladeinfo.value.results) {
+        console.log(iterator);
         const list = reactive({
           id: iterator.id,
           tag: computed(() => {

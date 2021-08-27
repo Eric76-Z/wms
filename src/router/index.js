@@ -30,6 +30,8 @@ const FaultListSearch = () =>
 const FaultDetail = () => import("@/views/sort/mtisland/faultlist/FaultDetail");
 
 const Parts = () => import("@/views/sort/parts/Parts");
+const PartsList = () => import("@/views/sort/parts/PartsList");
+const PartDetail = () => import("@/views/sort/parts/PartsList");
 
 const routes = [
   {
@@ -189,6 +191,22 @@ const routes = [
     // meta: {
     //   type: "login",
     // },
+  },
+  {
+    name: "partslist",
+    path: "/sort/parts/partslist/:type",
+    component: PartsList,
+    meta: {
+      type: "login",
+    },
+  },
+  {
+    name: "partdetail",
+    path: "/sort/parts/partdetail/:partId",
+    component: PartDetail,
+    meta: {
+      type: "login",
+    },
   },
 ];
 

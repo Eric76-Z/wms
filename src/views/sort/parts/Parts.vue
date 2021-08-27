@@ -3,66 +3,30 @@
     <van-search
       v-model="searchcfg.value"
       ref="search"
+      show-action
       placeholder="请输入搜索关键词"
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
       @click-input="searchcfg.clickInput"
-    />
-    <van-tabs v-model:active="tabscfg.active" animated>
-      <van-tab
-        v-for="(item, index) in tabscfg.title"
-        :title="item"
-        :key="index"
-      >
-        <div class="page-list" ref="scroll" v-if="index === 0">
-          <van-list
-            v-model:loading="listcfg.loading"
-            v-model:error="listcfg.error"
-            :finished="listcfg.finished"
-            finished-text="没有更多了"
-            @load="listcfg.onLoad"
-            @refresh="listcfg.onRefresh"
-            class="scroll"
-          >
-            <slot>
-              <maintenance-card
-                v-for="item in listcfg.list"
-                :key="item.id"
-                :listdata="item"
-                @selectedid="selectedid"
-                @faultdetail="item"
-              ></maintenance-card>
-            </slot>
-          </van-list>
-        </div>
-      </van-tab>
-    </van-tabs>
-    <!-- 筛选器 -->
-    <div class="filter" @click="itemFilter">
-      <div class="filter-content">
-        <span>筛选<van-icon name="filter-o" /> </span>
-      </div>
-    </div>
-    <!-- 过滤弹出层 -->
-    <van-popup
-      v-model:show="popupcfg.show"
-      position="right"
-      round
-      :style="{ height: '100%', width: '90%' }"
     >
-      <template #default>
-        <main-filter ref="MainFilter" @queryData="queryData"></main-filter>
+      <template #action>
+        <div @click="searchcfg.onSearch">搜索</div>
       </template>
-    </van-popup>
-    <back-top v-show="showBackTop" @click="backtop"></back-top>
+    </van-search>
+    <main-grid :gridcfg="gridcfg" />
   </div>
 </template>
 
 <script>
 import { toRef, reactive } from "vue";
 import { useStore } from "vuex";
+import MainGrid from "@/components/content/maingrid/MainGrid";
+
 export default {
   name: "Parts",
+  components: {
+    MainGrid,
+  },
   setup() {
     const store = useStore();
     const navbarcfg = toRef(store.state, "navbarcfg");
@@ -73,77 +37,41 @@ export default {
 
     //组件配置
     const tabscfg = reactive({
-      title: ["全部", "数据分析", "公告", ""],
+      title: ["全部", "与我相关", "我的收藏", ""],
       active: 0,
     });
     const searchcfg = reactive({
       value: "",
-      onSearch: () => {
-        queryParam.search = searchcfg.value;
-        listcfg.list = [];
-        listcfg.currPage = 1;
-        listcfg.pageSize = 10;
-        listcfg.finished = false;
-        listcfg.error = false;
-        listcfg.onLoad();
-      },
-      onClear: () => {
-        delete queryParam.search;
-        listcfg.list = [];
-        listcfg.currPage = 1;
-        listcfg.pageSize = 10;
-        listcfg.finished = false;
-        listcfg.error = false;
-        listcfg.onLoad();
-      },
+      showAction: false,
+      onSearch: () => {},
+      onClear: () => {},
       clickInput: () => {
         console.log("弹出");
+        searchcfg.showAction = true;
       },
     });
-    const listcfg = reactive({
-      loading: false, // 是否处在加载状态
-      finished: false, // 是否已加
-      error: false, // 是否加载失败
-      list: [], // 列表
-      // totalPage: 1, // 分页
-      pageSize: 10, // 每页条数
-      // totalSize: 0, // 数据总条数
-      currPage: 1, //从1开始
-      onLoad: () => {
-        listcfg.loading = true;
-        queryParam.page = listcfg.currPage;
-        queryParam.pageSize = listcfg.pageSize;
-      },
-      onRefresh: () => {
-        console.log("刷新");
-        // 清空列表数据
-        listcfg.finished = false;
-        // 重新加载数据
-        // 将 loading 设置为 true，表示处于加载状态
-        listcfg.loading = true;
-        listcfg.onLoad();
-      },
+    const gridcfg = reactive({
+      iconText: [
+        [
+          "我的备件",
+          "jiqiren",
+          {
+            name: "partslist",
+            params: { type: "myparts" },
+          },
+        ],
+        ["机器人备件", "hanzhuang", "/sort"],
+        ["焊枪备件", "shebei", "/sort"],
+        ["修模器", "shenqing", "/sort/list"],
+        ["待补库", "liebiao", "/sort/detail"],
+        ["备件查询", "kucunguanli", "/sort/parts"],
+        ["资料查询", "ziliao", "/sort"],
+        ["故障代码", "faultcode", "/sort"],
+        ["维修专家", "weixiuqiye", "/sort/mtisland"],
+      ],
+      columnNum: 4,
     });
-
-    //查询参数
-    const queryParam = reactive({
-      page: listcfg.currPage,
-      pageSize: listcfg.pageSize,
-    });
-    const popupcfg = reactive({
-      show: false,
-    });
-    const itemFilter = () => {
-      popupcfg.show = true;
-    };
-    const backtop = () => {
-      scroll.value.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    };
-
-    return { searchcfg, listcfg, tabscfg, popupcfg, itemFilter, backtop };
+    return { searchcfg, tabscfg, gridcfg };
   },
 };
 </script>

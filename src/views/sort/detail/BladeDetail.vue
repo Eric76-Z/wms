@@ -24,28 +24,6 @@
             class="scroll"
           >
             <slot>
-              <!-- <van-card
-              v-for="item in listcfg.list"
-              :key="item"
-              :tag="item.tag"
-              :title="item.weldinggun_num"
-              :price="item.price"
-              :desc="item.desc"
-              thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
-            >
-              <template #footer>
-                <van-button
-                  :to="{
-                    name: 'bladeapply2',
-                    params: { bladeId: index },
-                  }"
-                  type="success"
-                  size="mini"
-                  round
-                  >点击领用</van-button
-                >
-              </template>
-            </van-card> -->
               <blade-card
                 v-for="item in listcfg.list"
                 :key="item.id"
@@ -195,6 +173,7 @@ export default {
 
     let scroll = ref(null);
     let showBackTop = ref(false);
+    console.log(scroll);
 
     //组件配置
     const tabscfg = reactive({
@@ -238,7 +217,6 @@ export default {
         const p = scroll.value.scrollTop;
         reqBladeItemData(queryParam)
           .then((res) => {
-            console.log(res);
             listcfg.list.push.apply(listcfg.list, res.results);
             const finishFlag = computed(() => {
               if (res.next == null) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="bladeanalyse">
+  <div id="bladeanalyse" v-show="false">
     <van-tabs v-model:active="tabscfg.active" scrollspy sticky>
       <van-tab
         v-for="(item, index) in tabscfg.title"

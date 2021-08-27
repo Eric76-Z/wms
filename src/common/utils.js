@@ -165,3 +165,16 @@ export const innerArry = (arry1, arry2) => {
   }
   return true;
 };
+
+export const filters = {
+  numFilter(value) {
+    let realVal = "";
+    if (!isNaN(value) && value !== "") {
+      // 截取当前数据到小数点后两位
+      realVal = parseFloat(value).toFixed(1);
+    } else {
+      realVal = "--";
+    }
+    return realVal;
+  },
+};

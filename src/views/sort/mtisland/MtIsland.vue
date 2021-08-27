@@ -11,9 +11,6 @@ import { useStore } from "vuex";
 
 export default {
   name: "MtIsland",
-  data() {
-    return {};
-  },
   components: {
     MainGrid,
   },
