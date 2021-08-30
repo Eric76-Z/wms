@@ -51,9 +51,20 @@
         <van-field
           v-model="state.password"
           name="password"
+          type="password"
           label="新密码"
           placeholder="新密码"
-          :rules="[{ required: true, message: '请填写新密码' }]"
+          :rules="[
+            { required: true, message: '请填写新密码' },
+            {
+              pattern: form_reg.password_reg1,
+              message: '密码长度在6-12位之间',
+            },
+            {
+              pattern: form_reg.password_reg2,
+              message: '密码不能包含中文与空白字符',
+            },
+          ]"
         />
         <van-field
           v-model="state.password1"
@@ -61,7 +72,13 @@
           name="password1"
           label="确认密码"
           placeholder="确认密码"
-          :rules="[{ required: true, message: '确认密码' }]"
+          :rules="[
+            { required: true, message: '确认密码' },
+            {
+              validator: form_reg.recheck_psw,
+              message: '两次密码不一致',
+            },
+          ]"
         />
       </van-cell-group>
       <div style="margin: 16px">
@@ -78,7 +95,7 @@ import { reactive, toRef, computed } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useCountDown } from "@vant/use";
-import { getCode } from "@/network/sort.js";
+import { getCode, resetPwd } from "@/network/sort.js";
 
 export default {
   name: "Login",
@@ -91,14 +108,11 @@ export default {
       isShow: [true, true, true],
     };
     const userinfo = toRef(store.state.user, "userinfo").value;
-    const {
-      "user/userChangeState": [userChangeState],
-    } = store._actions;
 
     //倒计时
     const countDown = useCountDown({
       // 倒计时 60 S
-      time: 5 * 1000,
+      time: 59 * 1000,
       onFinish: () => {
         countDown.reset();
         state.code.countDownState = "origin";
@@ -125,30 +139,32 @@ export default {
           }
         }),
         sendCode: () => {
-          getCode({
-            userId: user.value.userinfo.userId,
-            email: state.email,
-          });
           countDown.start();
           state.code.countDownState = "start";
           state.code.btnDisabled = true;
+          getCode({
+            email: state.email,
+          });
         },
       },
       password: "",
       password1: "",
     });
+    const form_reg = {
+      password_reg1: /^.{6,12}$/,
+      password_reg2: /^[^\u4e00-\u9fa5 ]{6,12}$/,
+      recheck_psw: (val) => {
+        return state.password === val;
+      },
+      phonenum_reg1: /^[1][3,4,5,7,8][0-9]{9}$/,
+    };
     if (store.state.user.userState == 200) {
       return user.value.userinfo.email;
     }
     const onSubmit = (values) => {
-      values.action = "login";
-      userChangeState(values);
-      // .then(() => {
-
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });
+      resetPwd(values).then((res) => {
+        console.log(res);
+      });
     };
     const haveIcon = computed(() => {
       if (userinfo.userIcon === "") {
@@ -161,6 +177,7 @@ export default {
       state,
       onSubmit,
       haveIcon,
+      form_reg,
     };
   },
 };

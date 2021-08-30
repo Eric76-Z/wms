@@ -42,7 +42,7 @@
         </van-button>
         <div class="halfbtn">
           <van-button type="success" to="/register">注册</van-button>
-          <van-button type="warning" to="/resetpwd">忘记密码</van-button>
+          <van-button type="warning" to="/resetpwd">重置密码</van-button>
         </div>
       </div>
     </van-form>

@@ -123,7 +123,7 @@ export function partupUser(query) {
 export function getCode(query) {
   return axiosApi("api/myuser/getcode/", query, "get");
 }
-//用户信息更新
+//用户重置密码
 export function resetPwd(query) {
-  return axiosApi("api/myuser/resetpwd/", query, "get");
+  return axiosApi("api/myuser/resetpwd/", query, "post");
 }

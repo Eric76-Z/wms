@@ -22,11 +22,11 @@ const Axios = axios.create(config);
 Axios.interceptors.request.use(
   (config) => {
     // Do something before request is sent
-    Toast.loading({
-      duration: 0,
-      message: "加载中...",
-      forbidClick: true,
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   message: "加载中...",
+    //   forbidClick: true,
+    // });
     // if (config.method == "post") {
     //   config.headers = Object.assign(config.headers, {
     //     "Content-Type": "application/x-www-form-urlencoded",
