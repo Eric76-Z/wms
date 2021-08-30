@@ -1,6 +1,5 @@
 <template>
   <div id="register">
-    <main-nav-bar :navbarcfg="navbarcfg" />
     <van-form @submit="onSubmit">
       <van-cell-group>
         <van-field
@@ -86,25 +85,20 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, toRef } from "vue";
 import { useStore } from "vuex";
-import MainNavBar from "@/components/content/mainnavbar/MainNavBar";
-
 export default {
   name: "Login",
-  data() {
-    return {
-      navbarcfg: {
-        title: "用户注册",
-        isShow: [true, true, true],
-      },
-    };
-  },
   setup() {
     const store = useStore();
     const {
       "user/Register": [Register],
     } = store._actions;
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "备件-详情",
+      isShow: [true, true, true],
+    };
     const state = reactive({
       username: "",
       password: "",
@@ -131,9 +125,6 @@ export default {
       onSubmit,
       form_reg,
     };
-  },
-  components: {
-    MainNavBar,
   },
 };
 </script>

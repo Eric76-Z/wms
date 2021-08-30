@@ -129,7 +129,6 @@ import { debounce } from "@/common/utils.js";
 
 export default {
   name: "BladeDetail",
-
   components: {
     BladeCard,
     BackTop,

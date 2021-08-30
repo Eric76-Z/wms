@@ -5,6 +5,7 @@ const Sort = () => import("@/views/sort/Sort");
 const Profile = () => import("@/views/profile/Profile");
 const Login = () => import("@/views/profile/Login");
 const Register = () => import("@/views/profile/Register");
+const ResetPwd = () => import("@/views/profile/ResetPwd");
 const UserInfo = () => import("@/views/profile/UserInfo");
 
 const List = () => import("@/views/sort/list/List");
@@ -31,7 +32,7 @@ const FaultDetail = () => import("@/views/sort/mtisland/faultlist/FaultDetail");
 
 const Parts = () => import("@/views/sort/parts/Parts");
 const PartsList = () => import("@/views/sort/parts/PartsList");
-const PartDetail = () => import("@/views/sort/parts/PartsList");
+const PartDetail = () => import("@/views/sort/parts/PartDetail");
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     name: "register",
     path: "/register",
     component: Register,
+  },
+  {
+    name: "resetpwd",
+    path: "/resetpwd",
+    component: ResetPwd,
   },
   {
     name: "userinfo",

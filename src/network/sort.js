@@ -77,6 +77,10 @@ export function partupMaintenanceRecords(params) {
 export function listParts(params) {
   return axiosApi("api/workstation/parts/", params, "get");
 }
+//更新备件信息
+export function partupParts(params) {
+  return axiosApi("api/workstation/parts/", params, "patch");
+}
 
 // //获取刀片申请订单数据
 // export function reqBladeItemData(params) {
@@ -92,6 +96,9 @@ export function listParts(params) {
 // export function reqBladeData(params) {
 //   return axiosApi("workstation/maintenance/", params, "get");
 // }
+/*
+=======================用户模块相关接口=======================
+*/
 //用户登陆
 export function userLogin(query) {
   return axiosApi("api/myuser/login/", query, "post");
@@ -110,4 +117,13 @@ export function userLogout(query) {
 //用户信息更新
 export function partupUser(query) {
   return axiosApi("api/myuser/user/", query, "patch");
+}
+
+//获取验证码
+export function getCode(query) {
+  return axiosApi("api/myuser/getcode/", query, "get");
+}
+//用户信息更新
+export function resetPwd(query) {
+  return axiosApi("api/myuser/resetpwd/", query, "get");
 }

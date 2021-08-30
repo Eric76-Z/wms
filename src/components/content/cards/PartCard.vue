@@ -93,8 +93,8 @@ export default {
     const user = toRef(store.state, "user").value;
     //router
     const router = reactive(useRouter());
+
     const listData = reactive(props.listdata);
-    console.log(listData);
     const descTag = ref();
     const partcardcfg = reactive({
       isShow: true,
@@ -187,15 +187,19 @@ export default {
       btn: {},
     });
     const clickCard = () => {
-      console.log("wwwwwwww");
+      const payload = {
+        target: "partdetail",
+        data: listData,
+      };
+      store.commit("change_temp", payload);
       router.push({
         name: "partdetail",
         params: {
           partId: listData.id,
+          listData: listData,
         },
       });
     };
-
     return { listData, partcardcfg, descTag, user, clickCard };
   },
 };

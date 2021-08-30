@@ -13,7 +13,6 @@
 import { reactive, toRef } from "vue";
 import { useStore } from "vuex";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
-
 import { NoticeBar } from "vant";
 
 export default {

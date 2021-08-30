@@ -1,4 +1,4 @@
-import { ADD_TO_LOCATION, CHANGE_OFFSET } from "./mutation-types";
+import { ADD_TO_LOCATION, CHANGE_OFFSET, CHANGE_TEMP } from "./mutation-types";
 export default {
   [ADD_TO_LOCATION](state, payload) {
     // payload.checked = true;
@@ -34,5 +34,14 @@ export default {
     // }
     console.log(payload.data);
     state.listOffset = payload.data;
+  },
+  [CHANGE_TEMP](state, payload) {
+    switch (payload.target) {
+      case "partdetail":
+        state.temp.partdetail = payload.data;
+        break;
+      default:
+        break;
+    }
   },
 };

@@ -31,6 +31,9 @@ const state = {
       isShow: [false, false, false],
     },
   },
+  temp: {
+    partdetail: {},
+  },
 };
 
 export default createStore({
@@ -54,6 +57,7 @@ export default createStore({
           bladeinfo: val.blade.bladeinfo,
           bladeitemdata: val.blade.bladeitemdata,
           listOffset: val.listOffset,
+          temp: val.temp,
         };
       },
     }),
