@@ -15,9 +15,24 @@
           <p>收藏</p>
         </div>
       </div>
-      <van-cell title="详细信息" :value="partdetailcfg.part_num" is-link />
+      <van-cell
+        title="详细信息"
+        :value="partdetailcfg.part_num"
+        is-link
+        @click="partdetailcfg.click.showpopup"
+      />
       <van-cell title="单元格" value="内容" label="描述信息" />
     </van-cell-group>
+    <van-popup
+      v-model:show="popupcfg.show"
+      round
+      position="bottom"
+      :style="{ height: '80%' }"
+    >
+      <template #default>
+        <div class="title">备件详情</div>
+      </template>
+    </van-popup>
   </div>
 </template>
 
@@ -117,9 +132,15 @@ export default {
             partdetail.users = res.users;
           });
         },
+        showpopup: () => {
+          popupcfg.show = true;
+        },
       },
     });
-    return { swipercfg, partdetailcfg };
+    const popupcfg = reactive({
+      show: false,
+    });
+    return { swipercfg, partdetailcfg, popupcfg };
   },
 };
 </script>

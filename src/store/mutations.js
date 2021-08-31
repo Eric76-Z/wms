@@ -1,4 +1,9 @@
-import { ADD_TO_LOCATION, CHANGE_OFFSET, CHANGE_TEMP } from "./mutation-types";
+import {
+  ADD_TO_LOCATION,
+  CHANGE_OFFSET,
+  CHANGE_TEMP,
+  SET_TOKEN,
+} from "./mutation-types";
 export default {
   [ADD_TO_LOCATION](state, payload) {
     // payload.checked = true;
@@ -42,6 +47,12 @@ export default {
         break;
       default:
         break;
+    }
+  },
+  [SET_TOKEN](state, payload) {
+    if (payload == "logout") {
+      state.user.userinfo.token = "";
+      state.user.unserState = 400;
     }
   },
 };

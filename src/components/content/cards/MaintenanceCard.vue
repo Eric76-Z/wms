@@ -266,13 +266,12 @@ export default {
                 });
                 break;
               case "维修经验":
-                console.log(innerArry([1, 18, 4, 5], user.userinfo.groups));
+                // console.log(innerArry([1, 18, 4, 5], user.userinfo.groups));
                 partupMaintenanceRecords({
                   id: listData.id,
                   order_status: 3,
                   need_summary: !maintenancecardcfg.data.needSummary,
                 }).then((res) => {
-                  console.log(res);
                   listData.order_status = res.order_status;
                   listData.need_summary = res.need_summary;
                 });

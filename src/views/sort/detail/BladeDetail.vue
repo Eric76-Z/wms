@@ -305,6 +305,11 @@ export default {
           message: "确认提交申诉信息？",
         })
           .then(() => {
+            Toast.loading({
+              duration: 0,
+              message: "加载中...",
+              forbidClick: true,
+            });
             partupBladeItemData({
               id: appealpopupcfg.itemid,
               order_status: 1,
@@ -348,6 +353,11 @@ export default {
             message: "确认领取" + val,
           })
             .then(() => {
+              Toast.loading({
+                duration: 0,
+                message: "加载中...",
+                forbidClick: true,
+              });
               partupBladeItemData({
                 id: receivepickercfg.itemid,
                 order_status: 4,

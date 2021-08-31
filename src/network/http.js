@@ -2,6 +2,7 @@ import axios from "axios";
 import qs from "qs";
 import { Dialog, Toast } from "vant";
 import store from "../store";
+import router from "../router";
 
 // let getCookie = function (cookie) {
 //   let reg = /csrftoken=([\w]+)[;]?/g;
@@ -11,13 +12,23 @@ import store from "../store";
 let config = {
   // baseURL: "https://www.xiuxiu.work/",
   baseURL: "http://127.0.0.1:8000",
-  timeout: 5000, // Timeout
+  timeout: 10000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 
+// 环境的切换
+if (process.env.NODE_ENV == "development") {
+  config.baseURL = "http://127.0.0.1:8000";
+} else if (process.env.NODE_ENV == "debug") {
+  config.baseURL = "";
+} else if (process.env.NODE_ENV == "production") {
+  config.baseURL = "https://www.xiuxiu.work/";
+}
+
 // 创建Axios对象
 const Axios = axios.create(config);
-
+Axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded;charset=UTF-8";
 // 请求拦截
 Axios.interceptors.request.use(
   (config) => {
@@ -32,6 +43,9 @@ Axios.interceptors.request.use(
     //     "Content-Type": "application/x-www-form-urlencoded",
     //   });
     // }
+    if (config.url == "api/myuser/getcode/") {
+      config.timeout = 59 * 1000;
+    }
     if (store.state.user.token !== "") {
       // 判断是否存在token，如果存在的话，则每个http header都加上token
       config.headers.Authorization = "Bearer " + store.state.user.token;
@@ -54,61 +68,77 @@ Axios.interceptors.response.use(
   },
   (error) => {
     // Do something with response error
-    console.log(error.response);
     Toast.clear();
-    switch (error.response.status) {
-      case 401:
-        Dialog.alert({
-          title: "认证失败",
-          message: "请检查用户名密码或重新登录  ！",
-        });
-        break;
-      default:
-        Dialog.alert({
-          title: "提示",
-          message: "网络请求失败，反馈给客服",
-        });
-        break;
-    }
+    /***** 接收到异常响应的处理开始 *****/
 
+    if (error && error.response) {
+      // 1.公共错误处理
+      // 2.根据响应码具体处理
+      switch (error.response.status) {
+        case 400:
+          error.message = "错误请求";
+          break;
+        // 401: 未登录
+        // 未登录则跳转登录页面，并携带当前页面的路径
+        // 在登录成功后返回当前页面，这一步需要在登录页操作。
+        case 401:
+          Dialog.alert({
+            title: "认证失败",
+            message: "未授权，请重新登录！",
+            onClose: () => {
+              router.replace({
+                path: "/login",
+                query: { redirect: router.currentRoute.fullPath },
+              });
+            },
+          });
+          break;
+        // 403 token过期
+        // 登录过期对用户进行提示
+        // 清除本地token和清空vuex中token对象
+        // 跳转登录页面
+        case 403:
+          Toast({
+            message: "登录过期，请重新登录",
+            duration: 1000,
+            forbidClick: true,
+          });
+          // 清除token
+          store.commit("set_token", "logout");
+          // 跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面
+          setTimeout(() => {
+            router.replace({
+              path: "/login",
+              query: {
+                redirect: router.currentRoute.fullPath,
+              },
+            });
+          }, 1000);
+          break;
+        default:
+          Dialog.alert({
+            title: "提示",
+            message: error.response.data.message,
+          });
+          break;
+      }
+    }
+    console.log(error.response);
+    console.log(error.message);
     return Promise.reject(error);
   }
 );
 
 export default function axiosApi(type, params, method) {
-  // let sign = process.env.VUE_APP_SIGN;
-  // if (process.env.NODE_ENV === "production") {
-  //   sign = localStorage.getItem("wx_sign");
-  // } else {
-  //   sign = "crm:user:sign:f0c8cbe468f6a34463d198268290903f";
-  // }
-  // var value = {
-  //   sign: sign,
-  // };
-  // console.log(params);
-  // var data = method == "post" ? qs.stringify(params) : params;
   return new Promise((resolve, reject) => {
     if (method == "post") {
-      // console.log(params);
       Axios({
         method: method,
         url: type,
         data: qs.stringify(params),
       })
         .then((res) => {
-          switch (res.status) {
-            case 200:
-              res.data.state = 200;
-              resolve(res.data);
-              break;
-            case 201:
-              resolve(res.data);
-              break;
-            default:
-              // 接口错误提示
-              Toast.fail(res.statusText);
-              break;
-          }
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);
@@ -120,16 +150,7 @@ export default function axiosApi(type, params, method) {
         params: params,
       })
         .then((res) => {
-          // console.log(res);
-          switch (res.status) {
-            case 200:
-              resolve(res.data);
-              break;
-            default:
-              // 接口错误提示
-              Toast.fail(res.statusText);
-              break;
-          }
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);
@@ -141,15 +162,7 @@ export default function axiosApi(type, params, method) {
         url: type + params.id,
       })
         .then((res) => {
-          switch (res.status) {
-            case 204:
-              resolve(res.status);
-              break;
-            default:
-              // 接口错误提示
-              Toast.fail(res.statusText);
-              break;
-          }
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);
@@ -165,16 +178,7 @@ export default function axiosApi(type, params, method) {
         data: data,
       })
         .then((res) => {
-          console.log(res);
-          switch (res.status) {
-            case 200:
-              resolve(res.data);
-              break;
-            default:
-              // 接口错误提示
-              Toast.fail(res.statusText);
-              break;
-          }
+          resolve(res.data);
         })
         .catch((err) => {
           reject(err);

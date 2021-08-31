@@ -277,6 +277,11 @@ export default {
           values.duration = parseInt(values.duration);
           values.applicant_id = user.value.userinfo.userId;
           values.order_status = 1;
+          Toast.loading({
+            duration: 0,
+            message: "加载中...",
+            forbidClick: true,
+          });
           createMaintenanceRecords(values)
             .then(() => {
               // console.log(res);

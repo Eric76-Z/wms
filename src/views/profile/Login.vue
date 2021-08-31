@@ -74,12 +74,6 @@ export default {
     const onSubmit = (values) => {
       values.action = "login";
       userChangeState(values);
-      // .then(() => {
-
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });
     };
     const haveIcon = computed(() => {
       if (userinfo.userIcon === "") {

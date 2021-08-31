@@ -92,9 +92,10 @@
 
 <script>
 import { reactive, toRef, computed } from "vue";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useCountDown } from "@vant/use";
+import { Toast } from "vant";
 import { getCode, resetPwd } from "@/network/sort.js";
 
 export default {
@@ -109,6 +110,7 @@ export default {
     };
     const userinfo = toRef(store.state.user, "userinfo").value;
 
+    const router = useRouter();
     //倒计时
     const countDown = useCountDown({
       // 倒计时 60 S
@@ -162,9 +164,27 @@ export default {
       return user.value.userinfo.email;
     }
     const onSubmit = (values) => {
-      resetPwd(values).then((res) => {
-        console.log(res);
+      Toast.loading({
+        duration: 0,
+        message: "加载中...",
+        forbidClick: true,
       });
+      resetPwd(values)
+        .then((res) => {
+          console.log(res);
+          Toast.success({
+            duration: 1000,
+            message: "重置成功！",
+            onClose: () => {
+              router.push({
+                name: "login",
+              });
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
     const haveIcon = computed(() => {
       if (userinfo.userIcon === "") {

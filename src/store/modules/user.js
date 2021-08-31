@@ -64,19 +64,23 @@ const actions = {
         username: payload.username,
         password: payload.password,
       };
+      Toast.loading({
+        duration: 0,
+        message: "加载中...",
+        forbidClick: true,
+      });
       userLogin(data)
         .then((res) => {
           console.log(res);
-          if (res.state == 200) {
-            context.commit(USER_LOGIN, res);
-            Toast({
-              message: "登陆成功",
-              duration: 1000,
-              onClose: () => {
-                router.push("/profile");
-              },
-            });
-          }
+          Toast.clear();
+          context.commit(USER_LOGIN, res);
+          Toast({
+            message: "登陆成功",
+            duration: 1000,
+            onClose: () => {
+              router.push("/profile");
+            },
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -84,10 +88,16 @@ const actions = {
     } else if (payload.action === "logout") {
       context.commit(USER_LOGOUT);
     } else if (payload.action === "partup") {
-      partupUser(payload).then((res) => {
-        console.log(res);
-        context.commit(USER_LOGIN, res);
-      });
+      partupUser(payload)
+        .then((res) => {
+          context.commit(USER_LOGIN, res);
+        })
+        .catch(() => {
+          Toast.fail({
+            message: "输入有误！",
+            duration: 1000,
+          });
+        });
     }
   },
   Register(context, payload) {
@@ -116,7 +126,7 @@ const actions = {
                     }
                   })
                   .catch((err) => {
-                    console.log(err);
+                    console.log(err.message);
                   });
               },
             });

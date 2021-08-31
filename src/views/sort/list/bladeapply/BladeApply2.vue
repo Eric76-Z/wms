@@ -97,7 +97,7 @@ export default {
       type: Object,
     },
   },
-  setup(props) {
+  setup() {
     //vuex数据
     const store = useStore();
     const location = toRef(store.state, "location");
@@ -107,13 +107,11 @@ export default {
     const bladeDataCol = computed(() => {
       return store.getters.bladeDataCol;
     });
-
+    console.log(bladeDataCol);
     const user = toRef(store.state, "user");
     //route
     const route = reactive(useRoute());
     const router = reactive(useRouter());
-    //props
-    const bladeinfo = toRef(props, "bladeinfo");
     //表单相关数据
     const formData = reactive({
       weldinggunnum: "",
@@ -143,9 +141,13 @@ export default {
           values.bladetype_apply_id = formData.selectedBladeId;
           values.applicant_id = user.value.userinfo.userId;
           values.order_status = 1;
+          Toast.loading({
+            duration: 0,
+            message: "加载中...",
+            forbidClick: true,
+          });
           createBladeItemData(values)
             .then(() => {
-              // console.log(res);
               Toast.success({
                 message: "提交成功",
                 duration: 1000,
@@ -174,12 +176,7 @@ export default {
       },
       //点击确定按钮触发
       onConfirm: (value) => {
-        // console.log(value);
-        for (const iterator of bladeinfo.value) {
-          if (iterator.my_spec.indexOf(value) != -1) {
-            formData.selectedBladeId = iterator.id;
-          }
-        }
+        console.log(value);
         popupcfg.state.value = value;
         popupcfg.state.showPicker = false;
       },
@@ -200,12 +197,11 @@ export default {
     };
 
     onActivated(() => {
-      // console.log(bladeinfo);
       setTimeout(() => {
-        for (let i of bladeinfo.value) {
-          popupcfg.columns = bladeDataCol.value.titleCol;
-          if (i["id"] == route.params["bladeId"]) {
-            popupcfg.state.value = i["my_spec"].split("|")[0];
+        popupcfg.columns = bladeDataCol.value.titleCol;
+        for (let i of bladeDataCol.value.titleCol) {
+          if (bladeDataCol.value.titleToId[i] == route.params["bladeId"]) {
+            popupcfg.state.value = i;
           }
         }
       }, 300);

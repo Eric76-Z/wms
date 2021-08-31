@@ -8,3 +8,4 @@ export const ADD_TO_BLADEITEMDATA = "add_to_bladeITEMdata";
 export const ADD_TO_LOCATION = "add_to_location";
 export const CHANGE_OFFSET = "change_offset";
 export const CHANGE_TEMP = "change_temp";
+export const SET_TOKEN = "set_token";
