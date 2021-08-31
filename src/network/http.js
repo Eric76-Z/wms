@@ -19,6 +19,7 @@ let config = {
 // 环境的切换
 if (process.env.NODE_ENV == "development") {
   config.baseURL = "http://127.0.0.1:8000";
+  // config.baseURL = "https://www.xiuxiu.work/";
 } else if (process.env.NODE_ENV == "debug") {
   config.baseURL = "";
 } else if (process.env.NODE_ENV == "production") {

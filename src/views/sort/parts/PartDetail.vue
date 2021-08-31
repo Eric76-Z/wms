@@ -31,6 +31,16 @@
     >
       <template #default>
         <div class="title">备件详情</div>
+        <van-cell title="物料号" :value="partdetailcfg.part_num" />
+        <van-cell title="型号" :value="partdetail.my_spec" />
+        <van-cell title="东仓型号" :value="partdetail.setech_spec" />
+        <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
+        <van-cell title="订货号" :value="partdetail.order_num" />
+        <van-cell title="描述" :value="partdetail.desc" />
+        <van-cell title="所属设备" :value="partdetailcfg.device_type" />
+        <van-cell title="分类" :value="partdetailcfg.sort" />
+        <van-cell title="标签" :value="partdetailcfg.tag" />
+        <van-cell title="备注" :value="partdetail.mark" />
       </template>
     </van-popup>
   </div>
@@ -89,6 +99,31 @@ export default {
         }
         return part_num;
       }),
+      device_type: computed(() => {
+        let ret = [];
+        partdetail.sort.forEach((e) => {
+          if (e.f_type_id == 11) {
+            ret.push(e.type_name);
+          }
+        });
+        return ret.join("；");
+      }),
+      sort: computed(() => {
+        let ret = [];
+        partdetail.sort.forEach((e) => {
+          if (e.f_type_id != 11) {
+            ret.push(e.type_name);
+          }
+        });
+        return ret.join("；");
+      }),
+      tag: computed(() => {
+        let ret = [];
+        partdetail.tag.forEach((e) => {
+          ret.push(e.tag_name);
+        });
+        return ret.join("；");
+      }),
       icon: {
         store: {
           name: computed(() => {
@@ -140,7 +175,7 @@ export default {
     const popupcfg = reactive({
       show: false,
     });
-    return { swipercfg, partdetailcfg, popupcfg };
+    return { swipercfg, partdetailcfg, popupcfg, partdetail };
   },
 };
 </script>
@@ -171,6 +206,25 @@ export default {
         p {
           padding-left: 9px;
         }
+      }
+    }
+  }
+  .van-popup {
+    .title {
+      padding: 5px 5px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--van-gray-7);
+    }
+    .van-cell {
+      .van-cell__title {
+        flex: 1;
+        font-size: 12px;
+      }
+      .van-cell__value {
+        flex: 3;
+        text-align: left;
       }
     }
   }
