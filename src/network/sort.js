@@ -127,3 +127,8 @@ export function getCode(query) {
 export function resetPwd(query) {
   return axiosApi("api/myuser/resetpwd/", query, "post");
 }
+
+//=======================管理模块相关接口=======================
+export function listSort(query) {
+  return axiosApi("api/workstation/sort/", query, "get");
+}

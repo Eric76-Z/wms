@@ -60,12 +60,25 @@ export default {
             params: { type: "myparts" },
           },
         ],
-        ["机器人备件", "hanzhuang", "/sort"],
+        [
+          "机器人备件",
+          "hanzhuang",
+          {
+            name: "partslist",
+            params: { type: "robot" },
+          },
+        ],
         ["焊枪备件", "shebei", "/sort"],
         ["修模器", "shenqing", "/sort/list"],
         ["待补库", "liebiao", "/sort/detail"],
         ["备件查询", "kucunguanli", "/sort/parts"],
-        ["资料查询", "ziliao", "/sort"],
+        [
+          "分类模块",
+          "ziliao",
+          {
+            name: "sortmodel",
+          },
+        ],
         ["故障代码", "faultcode", "/sort"],
         ["维修专家", "weixiuqiye", "/sort/mtisland"],
       ],

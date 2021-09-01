@@ -33,6 +33,9 @@ export const deviceType = [
 
 export const maintenanceFlow = [];
 
+export const sortModel = {
+  type_layer_robot: "020100",
+};
 /*
 maintenanceFlow:
 status：

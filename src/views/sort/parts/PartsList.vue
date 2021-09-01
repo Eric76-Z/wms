@@ -64,6 +64,7 @@ import BackTop from "@/components/common/BackTop";
 import PartCard from "@/components/content/cards/PartCard";
 import { listParts } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
+import { sortModel } from "@/common/constant.js";
 export default {
   name: "PartsList",
   components: {
@@ -83,14 +84,17 @@ export default {
 
     let scroll = ref(null);
     let showBackTop = ref(false);
-    console.log(scroll);
+    // console.log(scroll);
     //组件配置
     const tabscfg = reactive({
       title: computed(() => {
         let title = [];
         switch (route.params["type"]) {
           case "myparts":
-            title = ["全部", "与我相关", "我的收藏", ""];
+            title = ["全部", "常用", "我的分组", ""];
+            break;
+          case "robot":
+            title = ["全部", "柜箱及组件", "本体", ""];
             break;
           default:
             break;
@@ -99,6 +103,7 @@ export default {
       }),
       active: 0,
     });
+
     const searchcfg = reactive({
       value: "",
       onSearch: () => {
@@ -133,6 +138,17 @@ export default {
       // totalSize: 0, // 数据总条数
       currPage: 1, //从1开始
       onLoad: () => {
+        switch (route.params.type) {
+          case "myparts":
+            queryParam.users = user.value.userinfo.userId;
+            break;
+          case "robot":
+            queryParam.sort__type_layer = sortModel.type_layer_robot;
+            break;
+          default:
+            break;
+        }
+        console.log(queryParam);
         listcfg.loading = true;
         queryParam.page = listcfg.currPage;
         queryParam.pageSize = listcfg.pageSize;
@@ -161,13 +177,13 @@ export default {
         listcfg.onLoad();
       },
     });
-
     //查询参数
     const queryParam = reactive({
       page: listcfg.currPage,
       pageSize: listcfg.pageSize,
-      user: user.value.userinfo.userId,
+      // user: user.value.userinfo.userId,
     });
+
     const popupcfg = reactive({
       show: false,
     });

@@ -34,6 +34,8 @@ const Parts = () => import("@/views/sort/parts/Parts");
 const PartsList = () => import("@/views/sort/parts/PartsList");
 const PartDetail = () => import("@/views/sort/parts/PartDetail");
 
+const SortModel = () => import("@/views/SortModel");
+
 const routes = [
   {
     name: "notFound",
@@ -210,6 +212,14 @@ const routes = [
     name: "partdetail",
     path: "/sort/parts/partdetail/:partId",
     component: PartDetail,
+    meta: {
+      type: "login",
+    },
+  },
+  {
+    name: "sortmodel",
+    path: "/sortmodel",
+    component: SortModel,
     meta: {
       type: "login",
     },

@@ -15,13 +15,16 @@
           <p>收藏</p>
         </div>
       </div>
+      <div class="price">
+        <van-cell :title="partdetailcfg.price" />
+      </div>
       <van-cell
         title="详细信息"
         :value="partdetailcfg.part_num"
         is-link
         @click="partdetailcfg.click.showpopup"
       />
-      <van-cell title="单元格" value="内容" label="描述信息" />
+      <!-- <van-cell title="单元格" value="内容" label="描述信息" /> -->
     </van-cell-group>
     <van-popup
       v-model:show="popupcfg.show"
@@ -31,16 +34,25 @@
     >
       <template #default>
         <div class="title">备件详情</div>
-        <van-cell title="物料号" :value="partdetailcfg.part_num" />
-        <van-cell title="型号" :value="partdetail.my_spec" />
-        <van-cell title="东仓型号" :value="partdetail.setech_spec" />
-        <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
-        <van-cell title="订货号" :value="partdetail.order_num" />
-        <van-cell title="描述" :value="partdetail.desc" />
-        <van-cell title="所属设备" :value="partdetailcfg.device_type" />
-        <van-cell title="分类" :value="partdetailcfg.sort" />
-        <van-cell title="标签" :value="partdetailcfg.tag" />
-        <van-cell title="备注" :value="partdetail.mark" />
+        <div class="content">
+          <van-cell title="物料号" :value="partdetailcfg.part_num" />
+          <van-cell title="型号" :value="partdetail.my_spec" />
+          <van-cell title="东仓型号" :value="partdetail.setech_spec" />
+          <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
+          <van-cell title="订货号" :value="partdetail.order_num" />
+          <van-cell title="描述" :value="partdetail.desc" />
+          <van-cell title="所属设备" :value="partdetailcfg.device_type" />
+          <van-cell title="父备件" :value="partdetail.f_part_id" />
+          <van-cell title="分类" :value="partdetailcfg.sort" />
+          <van-cell title="标签" :value="partdetailcfg.tag" />
+          <van-cell title="备注" :value="partdetail.mark" />
+          <van-cell title="描述" :value="partdetail.desc" />
+          <van-cell title="所属设备" :value="partdetailcfg.device_type" />
+          <van-cell title="父备件" :value="partdetail.f_part_id" />
+          <van-cell title="分类" :value="partdetailcfg.sort" />
+          <van-cell title="标签" :value="partdetailcfg.tag" />
+          <van-cell title="备注" :value="partdetail.mark" />
+        </div>
       </template>
     </van-popup>
   </div>
@@ -123,6 +135,18 @@ export default {
           ret.push(e.tag_name);
         });
         return ret.join("；");
+      }),
+      price: computed(() => {
+        let ret = "";
+        if (partdetail.price == null) {
+          ret = "";
+        } else {
+          ret = "￥ " + partdetail.price;
+        }
+        if (partdetail.unit != null) {
+          ret = "￥ " + partdetail.price + "/" + partdetail.unit;
+        }
+        return ret;
       }),
       icon: {
         store: {
@@ -208,6 +232,13 @@ export default {
         }
       }
     }
+    .price {
+      .van-cell {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--van-red);
+      }
+    }
   }
   .van-popup {
     .title {
@@ -217,14 +248,20 @@ export default {
       font-weight: 500;
       color: var(--van-gray-7);
     }
-    .van-cell {
-      .van-cell__title {
-        flex: 1;
-        font-size: 12px;
-      }
-      .van-cell__value {
-        flex: 3;
-        text-align: left;
+    .content {
+      height: calc(100% - 54px);
+      overflow: auto;
+      padding: 10px 0;
+
+      .van-cell {
+        .van-cell__title {
+          flex: 1;
+          font-size: 12px;
+        }
+        .van-cell__value {
+          flex: 4;
+          text-align: left;
+        }
       }
     }
   }
