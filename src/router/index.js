@@ -35,6 +35,7 @@ const PartsList = () => import("@/views/sort/parts/PartsList");
 const PartDetail = () => import("@/views/sort/parts/PartDetail");
 
 const SortModel = () => import("@/views/SortModel");
+const SortWeb = () => import("@/views/SortWeb");
 
 const routes = [
   {
@@ -220,6 +221,14 @@ const routes = [
     name: "sortmodel",
     path: "/sortmodel",
     component: SortModel,
+    meta: {
+      type: "login",
+    },
+  },
+  {
+    name: "sortweb",
+    path: "/sortweb",
+    component: SortWeb,
     meta: {
       type: "login",
     },

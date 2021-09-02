@@ -43,8 +43,8 @@ export default {
     const searchcfg = reactive({
       value: "",
       showAction: false,
-      onSearch: () => {},
-      onClear: () => {},
+      onSearch: () => { },
+      onClear: () => { },
       clickInput: () => {
         console.log("弹出");
         searchcfg.showAction = true;
@@ -76,7 +76,7 @@ export default {
           "分类模块",
           "ziliao",
           {
-            name: "sortmodel",
+            name: "sortweb",
           },
         ],
         ["故障代码", "faultcode", "/sort"],
