@@ -12,23 +12,21 @@
       node-key="treeNodeKey"
       :auto-expand-parent="false"
       :expand-on-click-node="false"
+      icon-class="icon icon-arrow-right iconfont"
     >
       <template #default="{ node, data }">
         <span class="custom-tree-node">
           <span class="tooltip">
-            <span class="add-f-s-14">{{ data.name }}</span>
+            <span class="add-f-s-14"
+              >{{ data.label }} - {{ data.type_layer }}</span
+            >
           </span>
           <div v-if="node.isCurrent == true" class="operation-view">
-            <i
-              class="small-operation-btn el-icon-plus"
-              @click.stop="handleAdd(data)"
-            />
-            <i
-              class="small-operation-btn el-icon-edit"
-              @click.stop="handleEdit(data)"
-            />
-            <i
-              class="small-operation-btn el-icon-delete"
+            <van-icon name="plus" size="18px" @click.stop="handleAdd(data)" />
+            <van-icon name="edit" size="18px" @click.stop="handleEdit(data)" />
+            <van-icon
+              name="delete-o"
+              size="18px"
               @click.stop="handleDelete(data)"
             />
           </div>
@@ -84,7 +82,7 @@ export default {
     },
 
     // 点击删除按钮
-    handleDelete(node, data) {
+    handleDelete(data) {
       this.$emit("deleteItem", data);
     },
 
@@ -129,6 +127,17 @@ export default {
   }
   .el-tree-node__content {
     margin-bottom: 10px;
+    .custom-tree-node {
+      .operation-view {
+        display: inline-block;
+        padding: 0px 5px;
+        margin-left: 20px;
+        color: #777777;
+        .van-icon {
+          margin: 0, 5px;
+        }
+      }
+    }
   }
   .tooltip {
     margin-right: 5px;
@@ -138,12 +147,7 @@ export default {
     white-space: nowrap;
     padding: 4px;
   }
-  .operation-view {
-    display: inline-block;
-    padding: 0px 5px;
-    margin-left: 5px;
-    color: #777777;
-  }
+
   .small-operation-btn {
     margin: 0px 3px;
   }

@@ -43,8 +43,8 @@ export default {
     const searchcfg = reactive({
       value: "",
       showAction: false,
-      onSearch: () => { },
-      onClear: () => { },
+      onSearch: () => {},
+      onClear: () => {},
       clickInput: () => {
         console.log("弹出");
         searchcfg.showAction = true;

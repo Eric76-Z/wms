@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="title" v-model:visible="dialogVisible" width="50%">
+    <el-dialog :title="title" v-model="dialogVisible" width="50%">
       <el-form
         ref="form"
         :model="form"
@@ -9,10 +9,10 @@
         class="demo-form"
       >
         <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" />
+          <el-input v-model="form.type_name" />
         </el-form-item>
-        <el-form-item label="描述" prop="desc">
-          <el-input v-model="form.desc" resize="none" type="textarea" />
+        <el-form-item label="层级" prop="desc">
+          <el-input v-model="form.type_layer" resize="none" type="textarea" />
         </el-form-item>
         <el-form-item>
           <el-button class="pull-right" type="primary" @click="submitForm()"
@@ -31,8 +31,8 @@ export default {
       dialogVisible: false,
       title: "",
       form: {
-        name: "",
-        desc: "",
+        type_name: "",
+        type_layer: "",
       },
       rules: {
         name: [{ required: true, message: "请输入名称", trigger: "blur" }],

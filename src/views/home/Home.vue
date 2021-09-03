@@ -1,9 +1,14 @@
 <template>
   <div id="home">
     <van-notice-bar
-      wrapable
-      :scrollable="false"
+      left-icon="volume-o"
       text="21/08/17: 版本更迭快速，遇到问题可以试试清除浏览器数据，重新加载！。"
+    />
+    <van-notice-bar
+      color="#1989fa"
+      left-icon="volume-o"
+      scrollable="false"
+      text="21/09/03: 重置密码功能已完善，忘记密码请重置密码！。"
     />
     <main-swiper :swipercfg="swipercfg" />
   </div>
