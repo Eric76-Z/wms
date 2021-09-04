@@ -132,3 +132,15 @@ export function resetPwd(query) {
 export function listSort(query) {
   return axiosApi("api/workstation/sort/", query, "get");
 }
+
+export function createSort(query) {
+  return axiosApi("api/workstation/sort/", query, "post");
+}
+
+export function partupSort(query) {
+  return axiosApi("api/workstation/sort/", query, "patch");
+}
+
+export function deleteSort(query) {
+  return axiosApi("api/workstation/sort/", query, "delete");
+}

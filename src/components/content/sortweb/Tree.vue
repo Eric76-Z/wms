@@ -9,7 +9,7 @@
       :default-expand-all="treeExpandAll"
       :props="defaultProps"
       check-strictly
-      node-key="treeNodeKey"
+      :node-key="treeNodeKey"
       :auto-expand-parent="false"
       :expand-on-click-node="false"
       icon-class="icon icon-arrow-right iconfont"
