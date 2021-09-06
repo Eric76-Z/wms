@@ -68,9 +68,9 @@ export default {
             params: { type: "robot" },
           },
         ],
-        ["焊枪备件", "shebei", "/sort"],
-        ["修模器", "shenqing", "/sort/list"],
-        ["待补库", "liebiao", "/sort/detail"],
+        ["焊枪备件", "shebei", "/sort/parts"],
+        ["修模器", "shenqing", "/sort/parts"],
+        ["待补库", "liebiao", "/sort/parts"],
         ["备件查询", "kucunguanli", "/sort/parts"],
         [
           "分类模块",

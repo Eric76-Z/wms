@@ -144,3 +144,7 @@ export function partupSort(query) {
 export function deleteSort(query) {
   return axiosApi("api/workstation/sort/", query, "delete");
 }
+
+export function listSortDevice(query) {
+  return axiosApi("api/workstation/sort/listsort_device", query, "get");
+}

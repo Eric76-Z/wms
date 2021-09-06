@@ -19,6 +19,12 @@
         <van-cell :title="partdetailcfg.price" />
       </div>
       <van-cell
+        title="所属设备"
+        :value="partdetailcfg.device_type"
+        is-link
+        @click="partdetailcfg.click.pickDevice"
+      />
+      <van-cell
         title="详细信息"
         :value="partdetailcfg.part_num"
         is-link
@@ -41,19 +47,33 @@
           <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
           <van-cell title="订货号" :value="partdetail.order_num" />
           <van-cell title="描述" :value="partdetail.desc" />
-          <van-cell title="所属设备" :value="partdetailcfg.device_type" />
-          <van-cell title="父备件" :value="partdetail.f_part_id" />
-          <van-cell title="分类" :value="partdetailcfg.sort" />
-          <van-cell title="标签" :value="partdetailcfg.tag" />
+
+          <van-cell title="父备件" :value="partdetail.f_part_id" is-link />
+          <van-cell title="分类" :value="partdetailcfg.sort" is-link />
+          <van-cell title="标签" :value="partdetailcfg.tag" is-link />
           <van-cell title="备注" :value="partdetail.mark" />
           <van-cell title="描述" :value="partdetail.desc" />
-          <van-cell title="所属设备" :value="partdetailcfg.device_type" />
+          <!-- <van-cell title="所属设备" :value="partdetailcfg.device_type" />
           <van-cell title="父备件" :value="partdetail.f_part_id" />
           <van-cell title="分类" :value="partdetailcfg.sort" />
           <van-cell title="标签" :value="partdetailcfg.tag" />
-          <van-cell title="备注" :value="partdetail.mark" />
+          <van-cell title="备注" :value="partdetail.mark" /> -->
         </div>
       </template>
+    </van-popup>
+    <van-popup
+      v-model:show="pickercfg.show"
+      round
+      position="bottom"
+      :style="{ height: '40%' }"
+    >
+      <van-picker
+        :title="pickercfg.title"
+        :columns="pickercfg.columns"
+        @confirm="pickercfg.onConfirm"
+        @cancel="pickercfg.onCancel"
+        @change="pickercfg.onChange"
+      />
     </van-popup>
   </div>
 </template>
@@ -62,7 +82,7 @@
 import { toRef, reactive, computed } from "vue";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
 import { useStore } from "vuex";
-import { partupParts } from "@/network/sort.js";
+import { partupParts, listSortDevice } from "@/network/sort.js";
 
 export default {
   name: "PartDetail",
@@ -74,8 +94,8 @@ export default {
     const navbarcfg = toRef(store.state, "navbarcfg");
     const user = toRef(store.state, "user");
     const partdetail = toRef(store.state, "temp").value.partdetail;
-    console.log(user);
-    console.log(partdetail);
+    // console.log(user);
+    // console.log(partdetail);
     navbarcfg.value.mainnavbarcfg = {
       title: "备件-详情",
       isShow: [true, true, true],
@@ -87,6 +107,11 @@ export default {
         "https://www.kuka.com/-/media/kuka-corporate/images/products/robots/kr-delta/kr-delta_kv.jpg?rev=-1&w=767&hash=484B82F1CE4C775E6B692F901FEB2BC2",
         "http://nimak.cn/static/kindeditor/attached/image/20180827/20180827161937_78354.jpg",
       ],
+    });
+
+    listSortDevice().then((res) => {
+      console.log(res);
+      pickercfg.originData = res.results;
     });
 
     const partdetailcfg = reactive({
@@ -180,6 +205,7 @@ export default {
           }
           partupParts({
             id: partdetail.id,
+            action: "users",
             users: partdetailcfg.userIdList,
           }).then((res) => {
             console.log(res);
@@ -194,12 +220,54 @@ export default {
         showpopup: () => {
           popupcfg.show = true;
         },
+        pickDevice: () => {
+          pickercfg.show = true;
+        },
       },
     });
     const popupcfg = reactive({
       show: false,
     });
-    return { swipercfg, partdetailcfg, popupcfg, partdetail };
+    const pickercfg = reactive({
+      title: "",
+      columns: computed(() => {
+        let ret = [];
+        for (const i of pickercfg.originData) {
+          if (i.type_layer != "020000") {
+            ret.push(i.type_name + "-" + i.type_layer);
+          }
+        }
+        return ret;
+      }),
+
+      originData: [],
+      show: false,
+      onConfirm: (val) => {
+        let t = val.split("-");
+        let sort_id = 0;
+        for (const i of pickercfg.originData) {
+          console.log(i);
+          if (i.type_layer == t[1]) {
+            sort_id = i.id;
+          }
+        }
+        partupParts({
+          id: partdetail.id,
+          action: "sorts",
+          sort_id: sort_id,
+        }).then((res) => {
+          console.log(res);
+          partdetail.sort = res.sort;
+          pickercfg.show = false;
+        });
+      },
+      onCancel: () => {
+        pickercfg.show = false;
+      },
+      onChange: () => {},
+    });
+
+    return { swipercfg, partdetailcfg, popupcfg, partdetail, pickercfg };
   },
 };
 </script>
