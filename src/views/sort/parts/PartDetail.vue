@@ -253,7 +253,7 @@ export default {
         }
         partupParts({
           id: partdetail.id,
-          action: "sorts",
+          action: "sorts_device",
           sort_id: sort_id,
         }).then((res) => {
           console.log(res);
