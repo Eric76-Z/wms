@@ -3,17 +3,21 @@
     <van-search
       v-model="searchcfg.value"
       ref="search"
-      show-action
       placeholder="请输入搜索关键词"
-      @search="searchcfg.onSearch"
-      @clear="searchcfg.onClear"
+      autofocus
       @click-input="searchcfg.clickInput"
     >
-      <template #action>
-        <div @click="searchcfg.onSearch">搜索</div>
-      </template>
     </van-search>
     <main-grid :gridcfg="gridcfg" />
+    <van-popup
+      v-model:show="popupcfg.show"
+      position="right"
+      :style="{ width: '100%', height: '100%' }"
+    >
+      <template #default>
+        <part-search @onClickLeft="popupcfg.onClickLeft"></part-search>
+      </template>
+    </van-popup>
   </div>
 </template>
 
@@ -21,11 +25,13 @@
 import { toRef, reactive } from "vue";
 import { useStore } from "vuex";
 import MainGrid from "@/components/content/maingrid/MainGrid";
+import PartSearch from "@/components/content/search/PartSearch";
 
 export default {
   name: "Parts",
   components: {
     MainGrid,
+    PartSearch,
   },
   setup() {
     const store = useStore();
@@ -43,11 +49,9 @@ export default {
     const searchcfg = reactive({
       value: "",
       showAction: false,
-      onSearch: () => {},
-      onClear: () => {},
       clickInput: () => {
         console.log("弹出");
-        searchcfg.showAction = true;
+        popupcfg.show = true;
       },
     });
     const gridcfg = reactive({
@@ -84,7 +88,13 @@ export default {
       ],
       columnNum: 4,
     });
-    return { searchcfg, tabscfg, gridcfg };
+    const popupcfg = reactive({
+      show: false,
+      onClickLeft: () => {
+        popupcfg.show = false;
+      },
+    });
+    return { searchcfg, tabscfg, gridcfg, popupcfg };
   },
 };
 </script>

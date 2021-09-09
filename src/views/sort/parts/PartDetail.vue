@@ -139,7 +139,7 @@ export default {
       device_type: computed(() => {
         let ret = [];
         partdetail.sort.forEach((e) => {
-          if (e.f_type_id == 11) {
+          if (e.type_layer.substring(0, 2) == "02") {
             ret.push(e.type_name);
           }
         });
@@ -148,7 +148,7 @@ export default {
       sort: computed(() => {
         let ret = [];
         partdetail.sort.forEach((e) => {
-          if (e.f_type_id != 11) {
+          if (e.type_layer.substring(0, 2) == "02") {
             ret.push(e.type_name);
           }
         });

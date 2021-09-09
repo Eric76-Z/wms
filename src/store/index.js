@@ -30,6 +30,10 @@ const state = {
       title: "",
       isShow: [false, false, false],
     },
+    popnavbarcfg: {
+      title: "",
+      isShow: [false, false, false],
+    },
   },
   temp: {
     partdetail: {},
