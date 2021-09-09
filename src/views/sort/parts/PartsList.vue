@@ -81,6 +81,7 @@ export default {
     };
     //route
     const route = reactive(useRoute());
+    console.log(route.params);
 
     let scroll = ref(null);
     let showBackTop = ref(false);
@@ -95,6 +96,9 @@ export default {
             break;
           case "robot":
             title = ["全部", "柜箱及组件", "本体", ""];
+            break;
+          case "search":
+            title = ["全部", "常用", "我的分组", ""];
             break;
           default:
             break;
@@ -145,13 +149,16 @@ export default {
           case "robot":
             queryParam.sort__type_layer = sortModel.type_layer_robot;
             break;
+          case "search":
+            console.log("wwwwwwwwwww");
+            queryParam.search = route.params.search;
+            break;
           default:
             break;
         }
-        console.log(queryParam);
         listcfg.loading = true;
-        queryParam.page = listcfg.currPage;
-        queryParam.pageSize = listcfg.pageSize;
+        // queryParam.page = listcfg.currPage;
+        // queryParam.pageSize = listcfg.pageSize;
         const p = scroll.value.scrollTop;
         listParts(queryParam).then((res) => {
           listcfg.list.push.apply(listcfg.list, res.results);

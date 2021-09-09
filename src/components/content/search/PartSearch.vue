@@ -23,7 +23,7 @@
 <script>
 import { toRef, reactive } from "vue";
 import { useStore } from "vuex";
-import { listParts } from "@/network/sort.js";
+import { useRouter } from "vue-router";
 import PopNavBar from "@/components/content/mainnavbar/PopNavBar";
 
 export default {
@@ -32,6 +32,7 @@ export default {
     PopNavBar,
   },
   setup(props, context) {
+    //vuex
     const store = useStore();
     const navbarcfg = toRef(store.state, "navbarcfg");
     navbarcfg.value.popnavbarcfg = {
@@ -39,14 +40,22 @@ export default {
       isShow: [true, true, true],
     };
 
+    // router
+    const router = useRouter();
     //组件配置
     const searchcfg = reactive({
       value: "",
       showAction: false,
       onSearch: () => {
-        listParts();
+        router.push({
+          name: "partslist",
+          params: {
+            type: "search",
+            search: searchcfg.value,
+          },
+        });
       },
-      onClear: () => {},
+      onClear: () => { },
       clickInput: () => {
         console.log("弹出");
         searchcfg.showAction = true;

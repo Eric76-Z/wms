@@ -110,7 +110,6 @@ export default {
     });
 
     listSortDevice().then((res) => {
-      console.log(res);
       pickercfg.originData = res.results;
     });
 
@@ -264,7 +263,7 @@ export default {
       onCancel: () => {
         pickercfg.show = false;
       },
-      onChange: () => {},
+      onChange: () => { },
     });
 
     return { swipercfg, partdetailcfg, popupcfg, partdetail, pickercfg };
