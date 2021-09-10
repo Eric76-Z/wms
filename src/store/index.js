@@ -15,7 +15,7 @@ import blade from "./modules/blade/blade";
 //   return modules;
 // }, {});
 
-const PERSIST_PATHS = ["location", "user"];
+const PERSIST_PATHS = ["location", "user", "search"];
 const state = {
   location: {
     local: [],
@@ -37,6 +37,11 @@ const state = {
   },
   temp: {
     partdetail: {},
+  },
+  search: {
+    partsearch: {
+      history: [],
+    },
   },
 };
 

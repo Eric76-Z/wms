@@ -23,13 +23,64 @@ export default {
     };
 
     const gridcfg = reactive({
-      iconText: [
-        ["故障申报", "jiqiren", "/sort/mtisland/faultrecord"],
-        ["故障记录", "hanzhuang", "/sort/mtisland/faultlist"],
-        ["交接白板-未开放", "shebei", "/sort/mtisland"],
-        ["维修经验-未开放", "shenqing", "/sort/mtisland"],
-        ["项目问题-未开放", "liebiao", "/sort/mtisland"],
+      grid: [
+        {
+          text: "故障申报",
+          iconText: "jiqiren",
+          route: "/sort/mtisland/faultrecord",
+          tag: {
+            text: "",
+            textColor: "",
+            color: "",
+            show: "",
+          },
+        },
+        {
+          text: "故障记录",
+          iconText: "hanzhuang",
+          route: "/sort/mtisland/faultlist",
+          tag: {
+            text: "",
+            textColor: "",
+            color: "",
+            show: "",
+          },
+        },
+        {
+          text: "交接白板",
+          iconText: "shebei",
+          route: "",
+          tag: {
+            text: "未开发",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+        {
+          text: "维修经验",
+          iconText: "shenqing",
+          route: "",
+          tag: {
+            text: "未开发",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+        {
+          text: "项目问题",
+          iconText: "liebiao",
+          route: "",
+          tag: {
+            text: "未开发",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
       ],
+
       columnNum: 4,
     });
     return {

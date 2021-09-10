@@ -3,6 +3,8 @@ import {
   CHANGE_OFFSET,
   CHANGE_TEMP,
   SET_TOKEN,
+  SET_HISTORY,
+  DELETE_HISTORY,
 } from "./mutation-types";
 export default {
   [ADD_TO_LOCATION](state, payload) {
@@ -53,6 +55,28 @@ export default {
     if (payload == "logout") {
       state.user.userinfo.token = "";
       state.user.unserState = 400;
+    }
+  },
+
+  [SET_HISTORY](state, payload) {
+    switch (payload.target) {
+      case "part":
+        if (state.search.partsearch.history.length >= 20) {
+          state.search.partsearch.history.pop();
+        }
+        state.search.partsearch.history.unshift(payload.data);
+        break;
+      default:
+        break;
+    }
+  },
+  [DELETE_HISTORY](state, payload) {
+    switch (payload.target) {
+      case "part":
+        state.search.partsearch.history.length = 0;
+        break;
+      default:
+        break;
     }
   },
 };

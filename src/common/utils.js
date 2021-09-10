@@ -178,3 +178,7 @@ export const filters = {
     return realVal;
   },
 };
+
+// export const partsSearchHistory = (val) => {
+//   console.log(val);
+// };

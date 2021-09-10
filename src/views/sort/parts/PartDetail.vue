@@ -263,7 +263,7 @@ export default {
       onCancel: () => {
         pickercfg.show = false;
       },
-      onChange: () => { },
+      onChange: () => {},
     });
 
     return { swipercfg, partdetailcfg, popupcfg, partdetail, pickercfg };

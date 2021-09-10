@@ -55,36 +55,95 @@ export default {
       },
     });
     const gridcfg = reactive({
-      iconText: [
-        [
-          "我的备件",
-          "jiqiren",
-          {
+      grid: [
+        {
+          text: "我的备件",
+          iconText: "jiqiren",
+          route: {
             name: "partslist",
             params: { type: "myparts" },
           },
-        ],
-        [
-          "机器人备件",
-          "hanzhuang",
-          {
+          tag: {
+            text: "新",
+            textColor: "",
+            color: "var(--van-green)  ",
+            show: "true",
+          },
+        },
+        {
+          text: "机器人备件",
+          iconText: "hanzhuang",
+          route: {
             name: "partslist",
             params: { type: "robot" },
           },
-        ],
-        ["焊枪备件", "shebei", "/sort/parts"],
-        ["修模器", "shenqing", "/sort/parts"],
-        ["待补库", "liebiao", "/sort/parts"],
-        ["备件查询", "kucunguanli", "/sort/parts"],
-        [
-          "分类模块",
-          "ziliao",
-          {
+          tag: {
+            text: "新",
+            textColor: "",
+            color: "var(--van-green)  ",
+            show: "true",
+          },
+        },
+        {
+          text: "焊枪备件",
+          iconText: "shebei",
+          route: "/sort/parts",
+          tag: {
+            text: "新",
+            textColor: "",
+            color: "var(--van-green)  ",
+            show: "true",
+          },
+        },
+        {
+          text: "修模器",
+          iconText: "shenqing",
+          route: "/sort/parts",
+          tag: {
+            text: "新",
+            textColor: "",
+            color: "var(--van-green)  ",
+            show: "true",
+          },
+        },
+        {
+          text: "待补库",
+          iconText: "liebiao",
+          route: "/sort/parts",
+          tag: {
+            text: "未开发",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+        {
+          text: "备件查询",
+          iconText: "kucunguanli",
+          route: "/sort/parts",
+          tag: {
+            text: "未开发",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+        {
+          text: "分类模块",
+          iconText: "ziliao",
+          route: {
             name: "sortweb",
           },
-        ],
-        ["故障代码", "faultcode", "/sort"],
-        ["维修专家", "weixiuqiye", "/sort/mtisland"],
+          tag: {
+            text: "新",
+            textColor: "",
+            color: "var(--van-green)  ",
+            show: "true",
+          },
+          auth: "super",
+        },
+        // ["故障代码", "faultcode", "/sort"],
+        // ["维修专家", "weixiuqiye", "/sort/mtisland"],
       ],
       columnNum: 4,
     });

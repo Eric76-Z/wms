@@ -9,3 +9,5 @@ export const ADD_TO_LOCATION = "add_to_location";
 export const CHANGE_OFFSET = "change_offset";
 export const CHANGE_TEMP = "change_temp";
 export const SET_TOKEN = "set_token";
+export const SET_HISTORY = "set_history";
+export const DELETE_HISTORY = "delete_history";

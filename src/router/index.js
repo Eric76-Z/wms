@@ -7,6 +7,7 @@ const Login = () => import("@/views/profile/Login");
 const Register = () => import("@/views/profile/Register");
 const ResetPwd = () => import("@/views/profile/ResetPwd");
 const UserInfo = () => import("@/views/profile/UserInfo");
+const FindZjp = () => import("@/views/profile/FindZjp");
 
 const List = () => import("@/views/sort/list/List");
 
@@ -80,6 +81,11 @@ const routes = [
     name: "userinfo",
     path: "/profile/userinfo",
     component: UserInfo,
+  },
+  {
+    name: "findzjp",
+    path: "/profile/findzjp",
+    component: FindZjp,
   },
   // sort下相关模块
   {
