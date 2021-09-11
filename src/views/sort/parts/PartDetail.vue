@@ -1,7 +1,6 @@
 <template>
   <div id="partdetail">
     <main-swiper :swipercfg="swipercfg" />
-
     <van-cell-group inset>
       <div class="head">
         <div class="title" style="word-break: break-all">
@@ -52,12 +51,6 @@
           <van-cell title="分类" :value="partdetailcfg.sort" is-link />
           <van-cell title="标签" :value="partdetailcfg.tag" is-link />
           <van-cell title="备注" :value="partdetail.mark" />
-          <van-cell title="描述" :value="partdetail.desc" />
-          <!-- <van-cell title="所属设备" :value="partdetailcfg.device_type" />
-          <van-cell title="父备件" :value="partdetail.f_part_id" />
-          <van-cell title="分类" :value="partdetailcfg.sort" />
-          <van-cell title="标签" :value="partdetailcfg.tag" />
-          <van-cell title="备注" :value="partdetail.mark" /> -->
         </div>
       </template>
     </van-popup>

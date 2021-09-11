@@ -19,7 +19,7 @@
     </van-search>
     <div class="history">
       <div class="title">
-        <p>搜索历史</p>
+        <p>历史搜索</p>
         <van-icon name="delete-o" size="1.1rem" @click="searchcfg.delete" />
       </div>
 
@@ -44,7 +44,7 @@
 <script>
 import { toRef, reactive } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import PopNavBar from "@/components/content/mainnavbar/PopNavBar";
 import { Dialog } from "vant";
 
@@ -64,18 +64,24 @@ export default {
     const search = toRef(store.state, "search");
     // router
     const router = useRouter();
+    const route = useRoute();
     const querysearch = () => {
       store.commit("set_history", {
         target: "part",
         data: searchcfg.value,
       });
-      router.push({
-        name: "partslist",
-        params: {
-          type: "search",
-          search: searchcfg.value,
-        },
-      });
+      if (route.name == "partslist") {
+        // console.log(searchcfg.value);
+        context.emit("reSearch", searchcfg.value);
+      } else {
+        router.push({
+          name: "partslist",
+          params: {
+            type: "search",
+            search: searchcfg.value,
+          },
+        });
+      }
     };
     //组件配置
     const searchcfg = reactive({
@@ -120,7 +126,7 @@ export default {
 </script>
 
 <style lang="scss">
-#parts {
+#partsearch {
   .van-search {
     padding: 5px 10px;
     // --van-search-input-height: 20px;
@@ -139,8 +145,6 @@ export default {
       align-items: center;
       /* 元素平均分配 */
       justify-content: space-between;
-      p {
-      }
     }
     .tag {
       padding: 8px 10px;

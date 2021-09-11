@@ -1,5 +1,4 @@
 import axiosApi from "./http";
-
 // const URL_PREFIX = "fontend";
 // const URL_MODULE_WORKSTATION = "workstation";
 // const URL_MODULE_USER = "user";
@@ -81,21 +80,6 @@ export function listParts(params) {
 export function partupParts(params) {
   return axiosApi("api/workstation/parts/", params, "patch");
 }
-
-// //获取刀片申请订单数据
-// export function reqBladeItemData(params) {
-//   return axiosApi("workstation/bladeitem/blade_item/", params, "get");
-// }
-
-// //提交刀片申请表单
-// export function applyBlade(query) {
-//   return axiosApi("workstation/applyblade/", query, "post");
-// }
-
-// //获取刀片相关数据
-// export function reqBladeData(params) {
-//   return axiosApi("workstation/maintenance/", params, "get");
-// }
 /*
 =======================用户模块相关接口=======================
 */
@@ -146,5 +130,5 @@ export function deleteSort(query) {
 }
 
 export function listSortDevice(query) {
-  return axiosApi("api/workstation/sort/listsort_device", query, "get");
+  return axiosApi("api/workstation/sort/listsort_device/", query, "get");
 }

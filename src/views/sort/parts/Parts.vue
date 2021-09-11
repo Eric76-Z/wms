@@ -50,7 +50,6 @@ export default {
       value: "",
       showAction: false,
       clickInput: () => {
-        console.log("弹出");
         popupcfg.show = true;
       },
     });
@@ -87,7 +86,10 @@ export default {
         {
           text: "焊枪备件",
           iconText: "shebei",
-          route: "/sort/parts",
+          route: {
+            name: "partslist",
+            params: { type: "weldinggun" },
+          },
           tag: {
             text: "新",
             textColor: "",
@@ -98,7 +100,10 @@ export default {
         {
           text: "修模器",
           iconText: "shenqing",
-          route: "/sort/parts",
+          route: {
+            name: "partslist",
+            params: { type: "tipdresser" },
+          },
           tag: {
             text: "新",
             textColor: "",
@@ -137,7 +142,7 @@ export default {
           tag: {
             text: "新",
             textColor: "",
-            color: "var(--van-green)  ",
+            color: "var(--van-green)",
             show: "true",
           },
           auth: "super",

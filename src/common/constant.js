@@ -35,6 +35,8 @@ export const maintenanceFlow = [];
 
 export const sortModel = {
   type_layer_robot: "020100",
+  type_layer_weldinggun: "020200",
+  type_layer_tipdresser: "020300",
 };
 /*
 maintenanceFlow:

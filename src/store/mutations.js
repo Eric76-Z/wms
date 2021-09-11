@@ -58,10 +58,13 @@ export default {
     }
   },
 
+  //历史搜索
   [SET_HISTORY](state, payload) {
     switch (payload.target) {
       case "part":
-        if (state.search.partsearch.history.length >= 20) {
+        if (state.search.partsearch.history.indexOf(payload.data) != -1) {
+          state.search.partsearch.history.remove(payload.data);
+        } else if (state.search.partsearch.history.length >= 20) {
           state.search.partsearch.history.pop();
         }
         state.search.partsearch.history.unshift(payload.data);

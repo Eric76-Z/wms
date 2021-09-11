@@ -23,8 +23,8 @@
         <van-field
           v-model="state.username"
           name="username"
-          label="用户名"
-          placeholder="用户名"
+          label="账号"
+          placeholder="使用昵称/邮箱/手机号登陆"
           :rules="[{ required: true, message: '请填写用户名' }]"
         />
         <van-field

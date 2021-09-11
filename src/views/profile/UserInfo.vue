@@ -85,7 +85,6 @@ export default {
     } = store._actions;
     // const router = useRouter();
     const user = toRef(store.state, "user").value;
-    console.log(user);
     const state = reactive({
       username: "",
       password: "",
@@ -93,7 +92,6 @@ export default {
     const userinfocfg = reactive({
       data: user,
       groups: computed(() => {
-        console.log(userinfocfg.data.userinfo.groups.length);
         if (userinfocfg.data.userinfo.groups.length == 1) {
           return userinfocfg.data.userinfo.groups[0];
         } else if (

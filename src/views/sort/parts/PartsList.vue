@@ -45,12 +45,16 @@
     <van-popup
       v-model:show="popupcfg.show"
       position="right"
-      round
-      :style="{ height: '100%', width: '90%' }"
+      :round="popupcfg.round"
+      :style="popupcfg.style"
     >
-      <!-- <template #default>
-        <main-filter ref="MainFilter" @queryData="queryData"></main-filter>
-      </template> -->
+      <template #default>
+        <part-search
+          @onClickLeft="popupcfg.onClickLeft"
+          v-show="popupcfg.showSearch"
+          @reSearch="searchcfg.reSearch"
+        ></part-search>
+      </template>
     </van-popup>
     <back-top v-show="showBackTop" @click="backtop"></back-top>
   </div>
@@ -65,11 +69,14 @@ import PartCard from "@/components/content/cards/PartCard";
 import { listParts } from "@/network/sort.js";
 import { debounce } from "@/common/utils.js";
 import { sortModel } from "@/common/constant.js";
+import PartSearch from "@/components/content/search/PartSearch";
+
 export default {
   name: "PartsList",
   components: {
     BackTop,
     PartCard,
+    PartSearch,
   },
   setup() {
     const store = useStore();
@@ -96,6 +103,12 @@ export default {
             break;
           case "robot":
             title = ["全部", "柜箱及组件", "本体", ""];
+            break;
+          case "weldinggun":
+            title = ["全部", "自动", "手动", ""];
+            break;
+          case "tipdresser":
+            title = ["全部", "电气", "机械", ""];
             break;
           case "search":
             title = ["全部", "常用", "我的分组", ""];
@@ -129,7 +142,17 @@ export default {
         listcfg.onLoad();
       },
       clickInput: () => {
-        console.log("弹出");
+        if (route.params["type"] == "search") {
+          popupcfg.show = true;
+          popupcfg.style.width = "100%";
+          popupcfg.showSearch = true;
+          popupcfg.round = false;
+        }
+      },
+      reSearch: (val) => {
+        route.params.search = val;
+        listcfg.onRefresh();
+        popupcfg.show = false;
       },
     });
     const listcfg = reactive({
@@ -149,17 +172,24 @@ export default {
           case "robot":
             queryParam.sort__type_layer = sortModel.type_layer_robot;
             break;
+          case "weldinggun":
+            queryParam.sort__type_layer = sortModel.type_layer_weldinggun;
+            break;
+          case "tipdresser":
+            queryParam.sort__type_layer = sortModel.type_layer_tipdresser;
+            break;
           case "search":
-            console.log("wwwwwwwwwww");
             queryParam.search = route.params.search;
+            searchcfg.value = queryParam.search;
             break;
           default:
             break;
         }
         listcfg.loading = true;
-        // queryParam.page = listcfg.currPage;
-        // queryParam.pageSize = listcfg.pageSize;
+        queryParam.page = listcfg.currPage;
+        queryParam.pageSize = listcfg.pageSize;
         const p = scroll.value.scrollTop;
+
         listParts(queryParam).then((res) => {
           listcfg.list.push.apply(listcfg.list, res.results);
           const finishFlag = computed(() => {
@@ -171,16 +201,19 @@ export default {
           });
           listcfg.finished = finishFlag;
           listcfg.currPage++;
+          console.log(queryParam);
           listcfg.loading = false;
           scroll.value.scrollTop = p;
         });
       },
       onRefresh: () => {
         // 清空列表数据
+        listcfg.list.length = 0;
         listcfg.finished = false;
         // 重新加载数据
         // 将 loading 设置为 true，表示处于加载状态
         listcfg.loading = true;
+        listcfg.currPage = 1;
         listcfg.onLoad();
       },
     });
@@ -188,14 +221,25 @@ export default {
     const queryParam = reactive({
       page: listcfg.currPage,
       pageSize: listcfg.pageSize,
-      // user: user.value.userinfo.userId,
     });
 
     const popupcfg = reactive({
       show: false,
+      style: {
+        width: "100%",
+        height: "100%",
+      },
+      showSearch: false,
+      round: false,
+      onClickLeft: () => {
+        popupcfg.show = false;
+      },
     });
     const itemFilter = () => {
       popupcfg.show = true;
+      popupcfg.style.width = "90%";
+      popupcfg.round = true;
+      popupcfg.showSearch = false;
     };
     const backtop = () => {
       scroll.value.scrollTo({

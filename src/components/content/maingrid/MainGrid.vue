@@ -48,13 +48,12 @@ export default {
       show: computed(() => {
         let ret = [];
         for (const i of gridcfg.value.grid) {
-          console.log(i.auth);
           if (i.auth == undefined) {
             ret.push(true);
           } else {
             switch (i.auth) {
               case "super":
-                if (user.userinfo.isSuper == "true") {
+                if (user.userinfo.isSuper == true) {
                   ret.push(true);
                 }
                 break;
