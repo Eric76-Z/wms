@@ -9,6 +9,7 @@
       ref="search"
       show-action
       placeholder="请输入搜索关键词"
+      autofocus
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
       @click-input="searchcfg.clickInput"

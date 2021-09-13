@@ -4,7 +4,6 @@
       v-model="searchcfg.value"
       ref="search"
       placeholder="请输入搜索关键词"
-      autofocus
       @click-input="searchcfg.clickInput"
     >
     </van-search>

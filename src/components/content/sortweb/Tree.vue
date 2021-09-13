@@ -131,10 +131,11 @@ export default {
       .operation-view {
         display: inline-block;
         padding: 0px 5px;
-        margin-left: 20px;
+        margin-left: 35px;
         color: #777777;
         .van-icon {
-          margin: 0, 5px;
+          display: inline-block;
+          padding-right: 10px;
         }
       }
     }

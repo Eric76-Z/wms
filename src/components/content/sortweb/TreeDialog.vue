@@ -98,21 +98,25 @@ export default {
                 data.Lv.Lv1 + data.Lv.Lv2 + childrenLen;
               break;
             case 3:
-              disable = true;
+              if (isEdit == false) {
+                disable = true;
+              }
+
               break;
             default:
               formData.data.type_name = "";
               formData.data.type_layer = "";
               break;
           }
+
           if (disable == false) {
-            console.log(formData);
             dialogcfg.data.isEdit = isEdit;
             dialogcfg.data.parentId = data.parentId;
             dialogcfg.data.data = data;
             dialogcfg.data.title = isEdit ? "编辑" : "新增";
             dialogcfg.show = true;
             formData.data.f_type_id = data.id;
+            formData.data.type_name = "";
             if (isEdit) {
               formData.data.id = data.id;
               formData.data.f_type_id = data.f_type_id;
