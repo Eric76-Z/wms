@@ -1,36 +1,58 @@
 <template>
   <div id="partdetail">
-    <main-swiper :swipercfg="swipercfg" />
-    <van-cell-group inset>
-      <div class="head">
-        <div class="title" style="word-break: break-all">
-          {{ partdetailcfg.title }}
+    <div class="scroll">
+      <main-swiper :swipercfg="swipercfg" />
+      <van-cell-group inset>
+        <div class="head">
+          <div class="title" style="word-break: break-all">
+            {{ partdetailcfg.title }}
+          </div>
+          <div class="store" @click="partdetailcfg.click.addStore">
+            <van-icon
+              :name="partdetailcfg.icon.store.name"
+              :color="partdetailcfg.icon.store.color"
+            />
+            <p>收藏</p>
+          </div>
         </div>
-        <div class="store" @click="partdetailcfg.click.addStore">
-          <van-icon
-            :name="partdetailcfg.icon.store.name"
-            :color="partdetailcfg.icon.store.color"
-          />
-          <p>收藏</p>
+        <div class="price">
+          <van-cell :title="partdetailcfg.price" />
         </div>
-      </div>
-      <div class="price">
-        <van-cell :title="partdetailcfg.price" />
-      </div>
-      <van-cell
-        title="所属设备"
-        :value="partdetailcfg.device_type"
+        <van-cell
+          title="备件种类"
+          :value="partdetailcfg.part_type"
+          is-link
+          @click="partdetailcfg.click.pickDevice"
+        />
+        <!-- <van-cell
+        title="备件种类"
+        :value="partdetailcfg.part_type"
         is-link
         @click="partdetailcfg.click.pickDevice"
-      />
-      <van-cell
-        title="详细信息"
-        :value="partdetailcfg.part_num"
-        is-link
-        @click="partdetailcfg.click.showpopup"
-      />
-      <!-- <van-cell title="单元格" value="内容" label="描述信息" /> -->
-    </van-cell-group>
+      /> -->
+
+        <van-cell
+          title="详细信息"
+          :value="partdetailcfg.part_num"
+          is-link
+          @click="partdetailcfg.click.showpopup"
+        />
+        <!-- <van-cell title="单元格" value="内容" label="描述信息" /> -->
+      </van-cell-group>
+      <van-cell-group inset>
+        <van-collapse v-model="collapsecfg.activeNames">
+          <van-collapse-item title="所属设备" name="1">
+            <van-cell
+              v-for="(item, index) in partdetailcfg.device_type"
+              :key="index"
+              :value="item"
+            />
+            <van-button type="primary" size="mini">编辑</van-button>
+          </van-collapse-item>
+        </van-collapse>
+      </van-cell-group>
+    </div>
+
     <van-popup
       v-model:show="popupcfg.show"
       round
@@ -105,7 +127,6 @@ export default {
     listSortDevice().then((res) => {
       pickercfg.originData = res.results;
     });
-
     const partdetailcfg = reactive({
       userIdList: computed(() => {
         let ret = [];
@@ -128,7 +149,7 @@ export default {
         }
         return part_num;
       }),
-      device_type: computed(() => {
+      part_type: computed(() => {
         let ret = [];
         partdetail.sort.forEach((e) => {
           if (e.type_layer.substring(0, 2) == "02") {
@@ -137,6 +158,18 @@ export default {
         });
         return ret.join("；");
       }),
+      device_type: computed(() => {
+        let ret = [];
+        if (partdetail.device_type == null) {
+          ret = [];
+        } else {
+          partdetail.device_type.forEach((e) => {
+            ret.push(e.device_sort.type_name + "|" + e.parameter_1);
+          });
+        }
+        return ret;
+      }),
+
       sort: computed(() => {
         let ret = [];
         partdetail.sort.forEach((e) => {
@@ -259,68 +292,102 @@ export default {
       onChange: () => {},
     });
 
-    return { swipercfg, partdetailcfg, popupcfg, partdetail, pickercfg };
+    const collapsecfg = reactive({
+      activeNames: [],
+    });
+
+    return {
+      swipercfg,
+      partdetailcfg,
+      popupcfg,
+      partdetail,
+      pickercfg,
+      collapsecfg,
+    };
   },
 };
 </script>
 
 <style lang="scss">
 #partdetail {
-  .van-cell-group {
-    margin: 8px 10px;
-    .head {
-      display: flex;
-      position: relative;
-      padding: 10px 16px;
-      min-height: 30px;
-      .title {
-        flex: 10;
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 21px;
-      }
-      .store {
-        flex: 1;
-        margin-left: 10px;
-        border-left: 1px solid #ddd;
-        .van-icon {
-          padding: 0 12px;
-          font-size: 20px;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - #{$navbar-height + $tabbar-height});
+  overflow: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* ios5+ */
+  .scroll {
+    .van-cell-group {
+      margin: 8px 10px;
+      .head {
+        display: flex;
+        position: relative;
+        padding: 10px 16px;
+        min-height: 30px;
+        .title {
+          flex: 10;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 21px;
         }
-        p {
-          padding-left: 9px;
-        }
-      }
-    }
-    .price {
-      .van-cell {
-        font-size: 18px;
-        font-weight: 700;
-        color: var(--van-red);
-      }
-    }
-  }
-  .van-popup {
-    .title {
-      padding: 5px 5px;
-      text-align: center;
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--van-gray-7);
-    }
-    .content {
-      height: calc(100% - 54px);
-      overflow: auto;
-      padding: 10px 0;
-
-      .van-cell {
-        .van-cell__title {
+        .store {
           flex: 1;
-          font-size: 12px;
+          margin-left: 10px;
+          border-left: 1px solid #ddd;
+          .van-icon {
+            padding: 0 12px;
+            font-size: 20px;
+          }
+          p {
+            padding-left: 9px;
+          }
         }
-        .van-cell__value {
-          flex: 4;
-          text-align: left;
+      }
+      .price {
+        .van-cell {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--van-red);
+        }
+      }
+      .van-collapse {
+        .van-collapse-item {
+          .van-collapse-item__wrapper {
+            .van-collapse-item__content {
+              .van-cell__title {
+                flex: 0;
+              }
+              .van-button {
+                margin: 5px 0;
+                float: right;
+              }
+            }
+          }
+        }
+      }
+    }
+    .van-popup {
+      .title {
+        padding: 5px 5px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--van-gray-7);
+      }
+      .content {
+        height: calc(100% - 54px);
+        overflow: auto;
+        padding: 10px 0;
+
+        .van-cell {
+          .van-cell__title {
+            flex: 1;
+            font-size: 12px;
+          }
+          .van-cell__value {
+            flex: 4;
+            text-align: left;
+          }
         }
       }
     }

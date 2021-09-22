@@ -130,7 +130,6 @@ export default {
       type: Object,
     },
   },
-  components: {},
   setup(props) {
     const store = useStore();
     const user = toRef(store.state, "user").value;
