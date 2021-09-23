@@ -22,14 +22,8 @@
           title="备件种类"
           :value="partdetailcfg.part_type"
           is-link
-          @click="partdetailcfg.click.pickDevice"
+          @click="partdetailcfg.click.pickPartType"
         />
-        <!-- <van-cell
-        title="备件种类"
-        :value="partdetailcfg.part_type"
-        is-link
-        @click="partdetailcfg.click.pickDevice"
-      /> -->
 
         <van-cell
           title="详细信息"
@@ -47,7 +41,12 @@
               :key="index"
               :value="item"
             />
-            <van-button type="primary" size="mini">编辑</van-button>
+            <van-button
+              type="primary"
+              size="mini"
+              @click="partdetailcfg.click.editDeviceType"
+              >编辑</van-button
+            >
           </van-collapse-item>
         </van-collapse>
       </van-cell-group>
@@ -68,7 +67,6 @@
           <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
           <van-cell title="订货号" :value="partdetail.order_num" />
           <van-cell title="描述" :value="partdetail.desc" />
-
           <van-cell title="父备件" :value="partdetail.f_part_id" is-link />
           <van-cell title="分类" :value="partdetailcfg.sort" is-link />
           <van-cell title="标签" :value="partdetailcfg.tag" is-link />
@@ -80,21 +78,45 @@
       v-model:show="pickercfg.show"
       round
       position="bottom"
-      :style="{ height: '40%' }"
+      :style="pickercfg.style"
     >
       <van-picker
-        :title="pickercfg.title"
-        :columns="pickercfg.columns"
-        @confirm="pickercfg.onConfirm"
-        @cancel="pickercfg.onCancel"
-        @change="pickercfg.onChange"
+        :title="pickercfg.partType.title"
+        :columns="pickercfg.partType.columns"
+        @confirm="pickercfg.partType.onConfirm"
+        @cancel="pickercfg.partType.onCancel"
+        @change="pickercfg.partType.onChange"
+        v-show="pickercfg.partType.show"
       />
+      <van-checkbox-group
+        v-model="pickercfg.partType.checked"
+        v-show="pickercfg.deviceType.show"
+      >
+        <div class="title">编辑所属设备</div>
+        <van-cell-group>
+          <van-cell
+            v-for="(item, index) in pickercfg.deviceType.list"
+            clickable
+            :key="item"
+            :title="`复选框 ${item}`"
+            @click="toggle(index)"
+          >
+            <template #right-icon>
+              <van-checkbox
+                :name="item"
+                :ref="(el) => (pickercfg.partType.checkboxRefs[index] = el)"
+                @click.stop
+              />
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </van-checkbox-group>
     </van-popup>
   </div>
 </template>
 
 <script>
-import { toRef, reactive, computed } from "vue";
+import { toRef, reactive, computed, onBeforeUpdate } from "vue";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
 import { useStore } from "vuex";
 import { partupParts, listSortDevice } from "@/network/sort.js";
@@ -245,8 +267,16 @@ export default {
         showpopup: () => {
           popupcfg.show = true;
         },
-        pickDevice: () => {
+        pickPartType: () => {
           pickercfg.show = true;
+          pickercfg.deviceType.show = false;
+          pickercfg.partType.show = true;
+        },
+        editDeviceType: () => {
+          pickercfg.show = true;
+          pickercfg.partType.show = false;
+          pickercfg.deviceType.show = true;
+          pickercfg.deviceType.style.height = "80%";
         },
       },
     });
@@ -254,44 +284,61 @@ export default {
       show: false,
     });
     const pickercfg = reactive({
-      title: "",
-      columns: computed(() => {
-        let ret = [];
-        for (const i of pickercfg.originData) {
-          if (i.type_layer != "020000") {
-            ret.push(i.type_name + "-" + i.type_layer);
-          }
-        }
-        return ret;
-      }),
+      partType: {
+        title: "",
+        show: false,
 
-      originData: [],
-      show: false,
-      onConfirm: (val) => {
-        let t = val.split("-");
-        let sort_id = 0;
-        for (const i of pickercfg.originData) {
-          console.log(i);
-          if (i.type_layer == t[1]) {
-            sort_id = i.id;
+        columns: computed(() => {
+          let ret = [];
+          for (const i of pickercfg.originData) {
+            if (i.type_layer != "020000") {
+              ret.push(i.type_name + "-" + i.type_layer);
+            }
           }
-        }
-        partupParts({
-          id: partdetail.id,
-          action: "sorts_device",
-          sort_id: sort_id,
-        }).then((res) => {
-          console.log(res);
-          partdetail.sort = res.sort;
+          return ret;
+        }),
+        onConfirm: (val) => {
+          let t = val.split("-");
+          let sort_id = 0;
+          for (const i of pickercfg.originData) {
+            console.log(i);
+            if (i.type_layer == t[1]) {
+              sort_id = i.id;
+            }
+          }
+          partupParts({
+            id: partdetail.id,
+            action: "sorts_device",
+            sort_id: sort_id,
+          }).then((res) => {
+            console.log(res);
+            partdetail.sort = res.sort;
+            pickercfg.show = false;
+          });
+        },
+        onCancel: () => {
           pickercfg.show = false;
-        });
+        },
+        onChange: () => {},
       },
-      onCancel: () => {
-        pickercfg.show = false;
+      deviceType: {
+        checked: [],
+        checkboxRefs: [],
+        list: ["a", "b"],
+        toggle: (index) => {
+          console.log(pickercfg.partType.checkboxRefs[index]);
+          pickercfg.partType.checkboxRefs[index].toggle();
+        },
       },
-      onChange: () => {},
+      originData: [],
+      style: {
+        htight: "40%",
+      },
+      show: false,
     });
-
+    onBeforeUpdate(() => {
+      pickercfg.partType.checkboxRefs = [];
+    });
     const collapsecfg = reactive({
       activeNames: [],
     });
@@ -366,28 +413,28 @@ export default {
         }
       }
     }
-    .van-popup {
-      .title {
-        padding: 5px 5px;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 500;
-        color: var(--van-gray-7);
-      }
-      .content {
-        height: calc(100% - 54px);
-        overflow: auto;
-        padding: 10px 0;
+  }
+  .van-popup {
+    .title {
+      padding: 5px 5px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--van-gray-7);
+    }
+    .content {
+      height: calc(100% - 54px);
+      overflow: auto;
+      padding: 10px 0;
 
-        .van-cell {
-          .van-cell__title {
-            flex: 1;
-            font-size: 12px;
-          }
-          .van-cell__value {
-            flex: 4;
-            text-align: left;
-          }
+      .van-cell {
+        .van-cell__title {
+          flex: 1;
+          font-size: 12px;
+        }
+        .van-cell__value {
+          flex: 4;
+          text-align: left;
         }
       }
     }
