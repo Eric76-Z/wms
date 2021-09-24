@@ -89,7 +89,7 @@
         v-show="pickercfg.partType.show"
       />
       <van-checkbox-group
-        v-model="pickercfg.partType.checked"
+        v-model="pickercfg.deviceType.checked"
         v-show="pickercfg.deviceType.show"
       >
         <div class="title">编辑所属设备</div>
@@ -98,14 +98,15 @@
             v-for="(item, index) in pickercfg.deviceType.list"
             clickable
             :key="item"
-            :title="`复选框 ${item}`"
-            @click="toggle(index)"
+            :title="item"
+            @click="pickercfg.deviceType.toggle(index)"
           >
             <template #right-icon>
               <van-checkbox
                 :name="item"
-                :ref="(el) => (pickercfg.partType.checkboxRefs[index] = el)"
+                :ref="(el) => (pickercfg.deviceType.checkboxRefs[index] = el)"
                 @click.stop
+                @click="pickercfg.deviceType.toggle(index)"
               />
             </template>
           </van-cell>
@@ -119,7 +120,11 @@
 import { toRef, reactive, computed, onBeforeUpdate } from "vue";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
 import { useStore } from "vuex";
-import { partupParts, listSortDevice } from "@/network/sort.js";
+import {
+  partupParts,
+  listSortDevice,
+  listDevicesType,
+} from "@/network/sort.js";
 
 export default {
   name: "PartDetail",
@@ -131,8 +136,6 @@ export default {
     const navbarcfg = toRef(store.state, "navbarcfg");
     const user = toRef(store.state, "user");
     const partdetail = toRef(store.state, "temp").value.partdetail;
-    // console.log(user);
-    // console.log(partdetail);
     navbarcfg.value.mainnavbarcfg = {
       title: "备件-详情",
       isShow: [true, true, true],
@@ -154,6 +157,13 @@ export default {
         let ret = [];
         for (const user of partdetail.users) {
           ret.push(user.id);
+        }
+        return ret;
+      }),
+      deviceTypeIdList: computed(() => {
+        let ret = [];
+        for (const deviceType of partdetail.device_type) {
+          ret.push(deviceType.id);
         }
         return ret;
       }),
@@ -255,7 +265,6 @@ export default {
             action: "users",
             users: partdetailcfg.userIdList,
           }).then((res) => {
-            console.log(res);
             const payload = {
               target: "partdetail",
               data: res,
@@ -275,8 +284,32 @@ export default {
         editDeviceType: () => {
           pickercfg.show = true;
           pickercfg.partType.show = false;
+          let cur_type_layer = "";
+          for (const i of pickercfg.originData) {
+            if (i.type_name == partdetailcfg.part_type) {
+              cur_type_layer = i.type_layer;
+            }
+          }
+          // console.log(partdetailcfg.device_type);
+          listDevicesType({
+            device_sort__type_layer: cur_type_layer,
+          }).then((res) => {
+            pickercfg.deviceType.list = [];
+            pickercfg.deviceType.checked = [];
+            pickercfg.deviceType.parameter1toid = {};
+            res.forEach((e) => {
+              if (
+                partdetailcfg.device_type.indexOf("机器人|" + e.parameter_1) !=
+                -1
+              ) {
+                pickercfg.deviceType.checked.push(e.parameter_1);
+              }
+              pickercfg.deviceType.list.push(e.parameter_1);
+              pickercfg.deviceType.parameter1toid[e.parameter_1] = e.id;
+            });
+          });
           pickercfg.deviceType.show = true;
-          pickercfg.deviceType.style.height = "80%";
+          pickercfg.style.height = "80%";
         },
       },
     });
@@ -287,7 +320,6 @@ export default {
       partType: {
         title: "",
         show: false,
-
         columns: computed(() => {
           let ret = [];
           for (const i of pickercfg.originData) {
@@ -324,15 +356,44 @@ export default {
       deviceType: {
         checked: [],
         checkboxRefs: [],
+        parameter1toid: {},
         list: ["a", "b"],
         toggle: (index) => {
-          console.log(pickercfg.partType.checkboxRefs[index]);
-          pickercfg.partType.checkboxRefs[index].toggle();
+          let curr_checked_name = pickercfg.deviceType.checkboxRefs[index].name;
+          // console.log(index);
+          // console.log(pickercfg.deviceType.checked);
+          // console.log(pickercfg.deviceType.checkboxRefs[index]);
+          // console.log(pickercfg.deviceType.parameter1toid);
+          // console.log(partdetailcfg.deviceTypeIdList);
+          // console.log(pickercfg.deviceType.parameter1toid[curr_checked_name]);
+          let curr_checked_index = partdetailcfg.deviceTypeIdList.indexOf(
+            pickercfg.deviceType.parameter1toid[curr_checked_name]
+          );
+          if (curr_checked_index != -1) {
+            partdetailcfg.deviceTypeIdList.splice(curr_checked_index, 1);
+          } else {
+            partdetailcfg.deviceTypeIdList.push(
+              pickercfg.deviceType.parameter1toid[curr_checked_name]
+            );
+          }
+          partupParts({
+            id: partdetail.id,
+            action: "device_type",
+            device_types: partdetailcfg.deviceTypeIdList,
+          }).then((res) => {
+            const payload = {
+              target: "partdetail",
+              data: res,
+            };
+            store.commit("change_temp", payload);
+            partdetail.device_type = res.device_type;
+          });
+          pickercfg.deviceType.checkboxRefs[index].toggle();
         },
       },
       originData: [],
       style: {
-        htight: "40%",
+        height: "40%",
       },
       show: false,
     });

@@ -112,6 +112,14 @@ export function resetPwd(query) {
   return axiosApi("api/myuser/resetpwd/", query, "post");
 }
 
+//=======================设备类型相关接口=======================
+export function listDevicesType(query) {
+  return axiosApi("api/workstation/devicestype/", query, "get");
+}
+
+export function partupDevicesType(query) {
+  return axiosApi("api/workstation/devicestype/", query, "patch");
+}
 //=======================管理模块相关接口=======================
 export function listSort(query) {
   return axiosApi("api/workstation/sort/", query, "get");
