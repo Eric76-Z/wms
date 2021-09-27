@@ -11,6 +11,7 @@
       text="21/09/03: 重置密码功能已完善，忘记密码请重置密码！。"
     />
     <main-swiper :swipercfg="swipercfg" />
+    <main-grid :gridcfg="gridcfg" />
   </div>
 </template>
 
@@ -18,15 +19,14 @@
 import { reactive, toRef } from "vue";
 import { useStore } from "vuex";
 import MainSwiper from "@/components/content/mainswiper/MainSwiper";
+import MainGrid from "@/components/content/maingrid/MainGrid";
 import { NoticeBar } from "vant";
 
 export default {
   name: "Home",
-  data() {
-    return {};
-  },
   components: {
     MainSwiper,
+    MainGrid,
     [NoticeBar.name]: NoticeBar,
   },
   setup() {
@@ -43,8 +43,36 @@ export default {
         "http://nimak.cn/static/kindeditor/attached/image/20180827/20180827161937_78354.jpg",
       ],
     });
+    const gridcfg = reactive({
+      grid: [
+        {
+          text: "刀片申请",
+          iconText: "jiqiren",
+          route: "/sort/list/bladeapply",
+          tag: {
+            text: "",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+        {
+          text: "刀片登记详情",
+          iconText: "jiqiren",
+          route: "/sort/detail/bladedetail",
+          tag: {
+            text: "",
+            textColor: "",
+            color: "var(--van-gray-6)",
+            show: "true",
+          },
+        },
+      ],
+      columnNum: 4,
+    });
     return {
       swipercfg,
+      gridcfg,
     };
   },
 };

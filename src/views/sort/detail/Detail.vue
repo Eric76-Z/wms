@@ -56,10 +56,10 @@ export default {
           title: "tcp照片查看",
           label: "支持查看现场tcp照片......",
         },
-        maintenanceexp: {
-          title: "维修记录查看",
-          label: "现场维修故障记录，维修经验记录这些都是在这里查看的......",
-        },
+        // maintenanceexp: {
+        //   title: "维修记录查看",
+        //   label: "现场维修故障记录，维修经验记录这些都是在这里查看的......",
+        // },
       },
     };
     return {

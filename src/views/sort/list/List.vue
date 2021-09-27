@@ -54,10 +54,10 @@ export default {
           title: "tcp照片上传",
           label: "现场上传tcp照片请点击这里......",
         },
-        maintenanceexp: {
-          title: "维修记录",
-          label: "现场维修故障记录，维修经验记录请点击这里......",
-        },
+        // maintenanceexp: {
+        //   title: "维修记录",
+        //   label: "现场维修故障记录，维修经验记录请点击这里......",
+        // },
       },
     };
     return {
