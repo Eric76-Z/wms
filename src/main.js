@@ -28,11 +28,13 @@ import { RadioGroup, Radio } from "vant";
 import { Checkbox, CheckboxGroup } from "vant";
 import { ContactCard } from "vant";
 import { Picker } from "vant";
+import { Sticky } from "vant";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(Sticky);
 app.use(Picker);
 app.use(ContactCard);
 app.use(Checkbox);
