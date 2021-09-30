@@ -112,31 +112,33 @@
         <!-- 选择备件所属设备类型 -->
         <div class="deviceType" v-show="popupcfg.deviceType.show">
           <div class="title">编辑所属设备</div>
-          <van-checkbox-group
-            v-model="popupcfg.deviceType.checked"
-            v-show="popupcfg.deviceType.show"
-          >
-            <van-cell-group>
-              <van-cell
-                v-for="(item, index) in popupcfg.deviceType.list"
-                clickable
-                :key="item"
-                :title="item"
-                @click="popupcfg.deviceType.toggle(index)"
-              >
-                <template #right-icon>
-                  <van-checkbox
-                    :name="item"
-                    :ref="
-                      (el) => (popupcfg.deviceType.checkboxRefs[index] = el)
-                    "
-                    @click.stop
-                    @click="popupcfg.deviceType.toggle(index)"
-                  />
-                </template>
-              </van-cell>
-            </van-cell-group>
-          </van-checkbox-group>
+          <div class="content">
+            <van-checkbox-group
+              v-model="popupcfg.deviceType.checked"
+              v-show="popupcfg.deviceType.show"
+            >
+              <van-cell-group>
+                <van-cell
+                  v-for="(item, index) in popupcfg.deviceType.list"
+                  clickable
+                  :key="item"
+                  :title="item"
+                  @click="popupcfg.deviceType.toggle(index)"
+                >
+                  <template #right-icon>
+                    <van-checkbox
+                      :name="item"
+                      :ref="
+                        (el) => (popupcfg.deviceType.checkboxRefs[index] = el)
+                      "
+                      @click.stop
+                      @click="popupcfg.deviceType.toggle(index)"
+                    />
+                  </template>
+                </van-cell>
+              </van-cell-group>
+            </van-checkbox-group>
+          </div>
         </div>
       </template>
     </van-popup>
@@ -326,7 +328,6 @@ export default {
               cur_type_layer = i.type_layer;
             }
           }
-          // console.log(partdetailcfg.device_type);
           listDevicesType({
             device_sort__type_layer: cur_type_layer,
           }).then((res) => {
@@ -509,11 +510,8 @@ export default {
     }
   }
   .van-popup {
-    // position: relative;
-    .deviceType {
-      position: relative;
+    .partDetail {
       .title {
-        position: absolute;
         padding: 5px 5px;
         text-align: center;
         font-size: 16px;
@@ -534,6 +532,22 @@ export default {
             text-align: left;
           }
         }
+      }
+    }
+    .deviceType {
+      height: 100%;
+      .title {
+        padding: 5px 5px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        color: var(--van-gray-7);
+        height: 25px;
+      }
+      .content {
+        height: calc(100% - 35px);
+        overflow: hidden;
+        overflow-y: auto;
       }
     }
   }
