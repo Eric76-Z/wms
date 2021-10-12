@@ -1,79 +1,58 @@
 <template>
   <div id="partdetail">
-    <div class="scroll">
-      <main-swiper :swipercfg="swipercfg" />
-      <van-cell-group inset>
-        <div class="head">
-          <div class="title" style="word-break: break-all">
-            {{ partdetailcfg.title }}
+    <div class="partdetail">
+      <div class="scroll">
+        <main-swiper :swipercfg="swipercfg" />
+        <van-cell-group inset>
+          <div class="head">
+            <div class="title" style="word-break: break-all">
+              {{ partdetailcfg.title }}
+            </div>
+            <div class="store" @click="partdetailcfg.click.addStore">
+              <van-icon
+                :name="partdetailcfg.icon.store.name"
+                :color="partdetailcfg.icon.store.color"
+              />
+              <p>收藏</p>
+            </div>
           </div>
-          <div class="store" @click="partdetailcfg.click.addStore">
-            <van-icon
-              :name="partdetailcfg.icon.store.name"
-              :color="partdetailcfg.icon.store.color"
-            />
-            <p>收藏</p>
+          <div class="price">
+            <van-cell :title="partdetailcfg.price" />
           </div>
-        </div>
-        <div class="price">
-          <van-cell :title="partdetailcfg.price" />
-        </div>
-        <van-cell
-          title="备件种类"
-          :value="partdetailcfg.part_type"
-          is-link
-          @click="partdetailcfg.click.pickPartType"
-        />
+          <van-cell
+            title="备件种类"
+            :value="partdetailcfg.part_type"
+            is-link
+            @click="partdetailcfg.click.pickPartType"
+          />
 
-        <van-cell
-          title="详细信息"
-          :value="partdetailcfg.part_num"
-          is-link
-          @click="partdetailcfg.click.showPartDetail"
-        />
-        <!-- <van-cell title="单元格" value="内容" label="描述信息" /> -->
-      </van-cell-group>
-      <van-cell-group inset>
-        <van-collapse v-model="collapsecfg.activeNames">
-          <van-collapse-item title="所属设备" name="1">
-            <van-cell
-              v-for="(item, index) in partdetailcfg.device_type"
-              :key="index"
-              :value="item"
-            />
-            <van-button
-              type="primary"
-              size="mini"
-              @click="partdetailcfg.click.editDeviceType"
-              >编辑</van-button
-            >
-          </van-collapse-item>
-        </van-collapse>
-      </van-cell-group>
+          <van-cell
+            title="详细信息"
+            :value="partdetailcfg.part_num"
+            is-link
+            @click="partdetailcfg.click.showPartDetail"
+          />
+          <!-- <van-cell title="单元格" value="内容" label="描述信息" /> -->
+        </van-cell-group>
+        <van-cell-group inset>
+          <van-collapse v-model="collapsecfg.activeNames">
+            <van-collapse-item title="所属设备" name="1">
+              <van-cell
+                v-for="(item, index) in partdetailcfg.device_type"
+                :key="index"
+                :value="item"
+              />
+              <van-button
+                type="primary"
+                size="mini"
+                @click="partdetailcfg.click.editDeviceType"
+                >编辑</van-button
+              >
+            </van-collapse-item>
+          </van-collapse>
+        </van-cell-group>
+      </div>
     </div>
-
-    <!-- <van-popup
-      v-model:show="popupcfg.show"
-      round
-      position="bottom"
-      :style="{ height: '80%' }"
-    >
-      <template #default>
-        <div class="title">备件详情</div>
-        <div class="content">
-          <van-cell title="物料号" :value="partdetailcfg.part_num" />
-          <van-cell title="型号" :value="partdetail.my_spec" />
-          <van-cell title="东仓型号" :value="partdetail.setech_spec" />
-          <van-cell title="品牌" :value="partdetail.brand.abbreviation" />
-          <van-cell title="订货号" :value="partdetail.order_num" />
-          <van-cell title="描述" :value="partdetail.desc" />
-          <van-cell title="父备件" :value="partdetail.f_part_id" is-link />
-          <van-cell title="分类" :value="partdetailcfg.sort" is-link />
-          <van-cell title="标签" :value="partdetailcfg.tag" is-link />
-          <van-cell title="备注" :value="partdetail.mark" />
-        </div>
-      </template>
-    </van-popup> -->
     <van-popup
       v-model:show="popupcfg.show"
       round
@@ -303,25 +282,26 @@ export default {
           });
         },
         showPartDetail: () => {
+          popupcfg.style.height = "80%";
           popupcfg.show = true;
           popupcfg.partDetail.show = true;
           popupcfg.partType.show = false;
           popupcfg.deviceType.show = false;
-          popupcfg.style.height = "80%";
         },
         pickPartType: () => {
+          popupcfg.style.height = "40%";
           popupcfg.show = true;
           popupcfg.partDetail.show = false;
           popupcfg.partType.show = true;
           popupcfg.deviceType.show = false;
-          popupcfg.style.height = "40%";
         },
         editDeviceType: () => {
+          popupcfg.style.height = "80%";
           popupcfg.show = true;
           popupcfg.partDetail.show = false;
           popupcfg.partType.show = false;
           popupcfg.deviceType.show = true;
-          popupcfg.style.height = "80%";
+
           let cur_type_layer = "";
           for (const i of popupcfg.originData) {
             if (i.type_name == partdetailcfg.part_type) {
@@ -452,56 +432,59 @@ export default {
 
 <style lang="scss">
 #partdetail {
-  position: relative;
-  width: 100%;
-  height: calc(100vh - #{$navbar-height + $tabbar-height});
-  overflow: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch; /* ios5+ */
-  .scroll {
-    .van-cell-group {
-      margin: 8px 10px;
-      .head {
-        display: flex;
-        position: relative;
-        padding: 10px 16px;
-        min-height: 30px;
-        .title {
-          flex: 10;
-          font-size: 16px;
-          font-weight: 700;
-          line-height: 21px;
-        }
-        .store {
-          flex: 1;
-          margin-left: 10px;
-          border-left: 1px solid #ddd;
-          .van-icon {
-            padding: 0 12px;
-            font-size: 20px;
+  .partdetail {
+    // position: relative;
+    width: 100%;
+    height: calc(100vh - #{$navbar-height + $tabbar-height});
+    overflow: auto;
+    // overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* ios5+ */
+    .scroll {
+      margin-bottom: 30px;
+      .van-cell-group {
+        margin: 8px 10px;
+        .head {
+          display: flex;
+          position: relative;
+          padding: 10px 16px;
+          min-height: 30px;
+          .title {
+            flex: 10;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 21px;
           }
-          p {
-            padding-left: 9px;
+          .store {
+            flex: 1;
+            margin-left: 10px;
+            border-left: 1px solid #ddd;
+            .van-icon {
+              padding: 0 12px;
+              font-size: 20px;
+            }
+            p {
+              padding-left: 9px;
+            }
           }
         }
-      }
-      .price {
-        .van-cell {
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--van-red);
+        .price {
+          .van-cell {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--van-red);
+          }
         }
-      }
-      .van-collapse {
-        .van-collapse-item {
-          .van-collapse-item__wrapper {
-            .van-collapse-item__content {
-              .van-cell__title {
-                flex: 0;
-              }
-              .van-button {
-                margin: 5px 0;
-                float: right;
+        .van-collapse {
+          .van-collapse-item {
+            .van-collapse-item__wrapper {
+              .van-collapse-item__content {
+                .van-cell__title {
+                  flex: 0;
+                }
+                .van-button {
+                  margin: 5px 0;
+                  float: right;
+                }
               }
             }
           }
@@ -509,6 +492,7 @@ export default {
       }
     }
   }
+
   .van-popup {
     .partDetail {
       .title {
@@ -536,6 +520,7 @@ export default {
     }
     .deviceType {
       height: 100%;
+
       .title {
         padding: 5px 5px;
         text-align: center;
