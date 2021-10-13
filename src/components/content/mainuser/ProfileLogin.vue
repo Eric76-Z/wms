@@ -23,6 +23,12 @@
         name: 'findzjp',
       }"
     />
+    <van-cell
+      title="安卓下载"
+      is-link
+      url="https://www.xiuxiu.work/static/app/wms.apk"
+    />
+    <van-cell title="ios下载" is-link value="暂不开放" :to="{}" />
     <van-button type="danger" size="large" @click="userLogout"
       >退出登录</van-button
     >

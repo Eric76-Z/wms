@@ -4,8 +4,8 @@ function resolve(dir) {
   return path.join(__dirname, dir); //path.join(__dirname)设置绝对路径
 }
 module.exports = {
-  publicPath: "/", // 公共路径(必须有的)
-  // publicPath: "./", //打包安卓app
+  // publicPath: "/", // 公共路径(必须有的)
+  publicPath: "./", //打包安卓app
   indexPath: "index.html", // 相对于打包路径index.html的路径
   outputDir: "dist", // 'dist', 生产环境构建文件的目录
   assetsDir: "static/wms", // 相对于outputDir的静态资源(js、css、img、fonts)目录

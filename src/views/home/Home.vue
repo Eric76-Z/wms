@@ -2,7 +2,7 @@
   <div id="home">
     <van-notice-bar
       left-icon="volume-o"
-      text="21/08/17: 版本更迭快速，遇到问题可以试试清除浏览器数据，重新加载！。"
+      text="21/10/13: 登陆后：我的-app下载中下载app使用，体验更佳。"
     />
     <van-notice-bar
       color="#1989fa"
