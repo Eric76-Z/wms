@@ -6,6 +6,7 @@
       placeholder="请输入搜索关键词"
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
+      v-show="searchcfg.show"
     />
     <van-tabs v-model:active="tabscfg.active" animated>
       <van-tab
@@ -40,7 +41,7 @@
       </van-tab>
     </van-tabs>
     <!-- 筛选器 -->
-    <div class="filter" @click="itemFilter">
+    <div class="filter" @click="filtercfg.itemFilter" :style="filtercfg.style">
       <div class="filter-content">
         <span>筛选<van-icon name="filter-o" /> </span>
       </div>
@@ -199,6 +200,9 @@ export default {
         listcfg.error = false;
         listcfg.onLoad();
       },
+      show: computed(() => {
+        return tabscfg.active == 0;
+      }),
     });
     const listcfg = reactive({
       loading: false, // 是否处在加载状态
@@ -252,9 +256,19 @@ export default {
     const popupcfg = reactive({
       show: false,
     });
-    const itemFilter = () => {
-      popupcfg.show = true;
-    };
+    const filtercfg = reactive({
+      style: computed(() => {
+        if (searchcfg.show == true) {
+          return "top:44px";
+        } else {
+          return "top:0";
+        }
+      }),
+      itemFilter: () => {
+        popupcfg.show = true;
+      },
+    });
+
     const backtop = () => {
       scroll.value.scrollTo({
         top: 0,
@@ -424,7 +438,7 @@ export default {
       searchcfg,
       listcfg,
       popupcfg,
-      itemFilter,
+      filtercfg,
       scroll,
       showBackTop,
       backtop,
@@ -498,15 +512,14 @@ export default {
           }
         }
       }
-      // .page-list {
-      //   overflow: scroll; /* winphone8和android4+ */
-      //   -webkit-overflow-scrolling: touch; /* ios5+ */
-      //   overflow-y: auto;
-      //   overflow-x: hidden;
-      //   z-index: 1;
-      //   -webkit-backface-visibility: hidden;
-      //   -webkit-transform: translate3d(0, 0, 0);
-      // }
+      .analyse {
+        position: relative;
+        width: 100%;
+        // height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px);
+        // overflow: auto;
+        // overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* ios5+ */
+      }
     }
   }
 
@@ -516,7 +529,7 @@ export default {
     line-height: 28px;
     background-color: --van-white;
     position: absolute;
-    top: 44px;
+    // top: 44px;
     right: 0;
     align-items: center;
     justify-content: center;

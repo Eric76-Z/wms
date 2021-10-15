@@ -51,7 +51,6 @@
 
 <script>
 import { reactive, toRef, computed } from "vue";
-// import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default {

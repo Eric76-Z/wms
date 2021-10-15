@@ -77,7 +77,34 @@ Axios.interceptors.response.use(
       // 2.根据响应码具体处理
       switch (error.response.status) {
         case 400:
-          error.message = "错误请求";
+          if (error.response.data.length != 0) {
+            if (error.response.data["auth_err"] != undefined) {
+              Dialog.alert({
+                title: "认证失败",
+                message: error.response.data.auth_err,
+                onClose: () => {
+                  router.replace({
+                    path: "/login",
+                    query: { redirect: router.currentRoute.fullPath },
+                  });
+                },
+              });
+            } else {
+              Toast({
+                message: "错误请求!",
+                duration: 1000,
+                forbidClick: true,
+              });
+            }
+          } else {
+            error.message = "错误请求";
+            Toast({
+              message: "错误请求!",
+              duration: 1000,
+              forbidClick: true,
+            });
+          }
+
           break;
         // 401: 未登录
         // 未登录则跳转登录页面，并携带当前页面的路径

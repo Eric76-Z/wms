@@ -29,6 +29,7 @@ import { Checkbox, CheckboxGroup } from "vant";
 import { ContactCard } from "vant";
 import { Picker } from "vant";
 import { Sticky } from "vant";
+import { IndexBar, IndexAnchor } from "vant";
 
 const app = createApp(App);
 app.use(store);
@@ -74,6 +75,8 @@ app.use(Lazyload);
 app.use(ConfigProvider);
 app.use(Tag);
 app.use(Popup);
+app.use(IndexBar);
+app.use(IndexAnchor);
 
 app.config.devtools = true;
 
