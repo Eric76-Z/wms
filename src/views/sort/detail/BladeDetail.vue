@@ -172,8 +172,8 @@ export default {
     console.log(router);
 
     let scroll = ref(null);
-    let showBackTop = ref(false);
     console.log(scroll);
+    let showBackTop = ref(false);
 
     //组件配置
     const tabscfg = reactive({
@@ -513,12 +513,12 @@ export default {
         }
       }
       .analyse {
-        position: relative;
+        // position: relative;
         width: 100%;
         // height: calc(100vh - #{$navbar-height + $tabbar-height} - 28px);
         // overflow: auto;
         // overflow-x: hidden;
-        -webkit-overflow-scrolling: touch; /* ios5+ */
+        // -webkit-overflow-scrolling: touch; /* ios5+ */
       }
     }
   }

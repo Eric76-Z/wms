@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import * as echarts from "echarts";
 
 import { Tabbar, TabbarItem } from "vant";
 import { NavBar, Sidebar, SidebarItem } from "vant";
@@ -77,6 +78,9 @@ app.use(Tag);
 app.use(Popup);
 app.use(IndexBar);
 app.use(IndexAnchor);
+
+// vue3 给原型上挂载属性
+app.config.globalProperties.$echarts = echarts;
 
 app.config.devtools = true;
 

@@ -23,6 +23,14 @@ export function deleteBladeItemData(params) {
   return axiosApi("api/workstation/bladeitem/", params, "delete");
 }
 
+//获取刀片数据分析信息
+export function reqBladeAnalyseData(params) {
+  return axiosApi("api/workstation/bladeitem/analyse_data/", params, "get");
+}
+
+/*
+=======================工位模块相关接口=======================
+*/
 //获取CPH工位信息
 export function reqCphLocation(query) {
   return axiosApi("api/workstation/location/cph_location_tree/", query, "get");
