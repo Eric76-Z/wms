@@ -40,8 +40,13 @@ export default {
       indexList: ["工", "寿", "性", "库"],
       // indexList: ["工位领用Top", "寿命分析", "性价比分析", "库存量"],
     });
+    const analyseData = reactive({
+      top_ten_workstations: [],
+      top_ten_workstations_num: [],
+    });
     reqBladeAnalyseData().then((res) => {
-      console.log(res);
+      analyseData.top_ten_workstations = res.top_ten_workstations;
+      analyseData.top_ten_workstations_num = res.top_ten_workstations_num;
     });
     onMounted(() => {
       // 基于准备好的dom，初始化echarts实例
@@ -49,11 +54,7 @@ export default {
       const topReceiveChart = echarts.init(
         document.getElementById("topReceive")
       );
-      // 绘制图表
-      topReceiveChart.setOption({
-        // title: {
-        //   text: "World Population",
-        // },
+      let option1 = {
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -92,29 +93,14 @@ export default {
         },
         yAxis: {
           type: "category",
-          data: [
-            "5220R01SK1",
-            "5220R01SK2",
-            "5220R01SK3",
-            "5220R01SK4",
-            "5220R01SK5",
-            "5230R01SK1",
-            "5230R01SK2",
-            "5230R01SK3",
-            "5230R01SK4",
-            "5230R01SK5",
-          ],
+          data: analyseData.top_ten_workstations,
           name: "工位",
-          // axisLabel: {
-          //   interval: 0,
-          //   rotate: 20,
-          // },
         },
         series: [
           {
             name: "总",
             type: "bar",
-            data: [25, 42, 52, 10, 2, 52, 24, 47, 75, 58],
+            data: analyseData.top_ten_workstations_num,
           },
           {
             name: "2021",
@@ -127,7 +113,12 @@ export default {
             data: [25, 42, 52, 10, 2, 52, 24, 47, 75, 58],
           },
         ],
-      });
+      };
+      // 绘制图表
+      option1 && topReceiveChart.setOption(option1, true);
+      setTimeout(() => {
+        console.log(analyseData);
+      }, 1000);
     });
 
     return {
