@@ -5,12 +5,7 @@
       <van-index-anchor index="工">工位领用Top</van-index-anchor>
       <div id="topReceive"></div>
       <van-index-anchor index="寿">寿命分析</van-index-anchor>
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
+      <div id="serviceLife"></div>
       <van-index-anchor index="性">性价比分析</van-index-anchor>
       <van-cell title="文本" />
       <van-cell title="文本" />
@@ -30,7 +25,7 @@
 </template>
 
 <script>
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 import { reqBladeAnalyseData } from "@/network/sort.js";
 export default {
   name: "BladeAnalyse",
@@ -40,87 +35,135 @@ export default {
       indexList: ["工", "寿", "性", "库"],
       // indexList: ["工位领用Top", "寿命分析", "性价比分析", "库存量"],
     });
-    const analyseData = reactive({
-      top_ten_workstations: [],
-      top_ten_workstations_num: [],
-    });
     reqBladeAnalyseData().then((res) => {
-      analyseData.top_ten_workstations = res.top_ten_workstations;
-      analyseData.top_ten_workstations_num = res.top_ten_workstations_num;
-    });
-    onMounted(() => {
+      const option = reactive({
+        topReceiveOpt: {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+            show: true,
+          },
+          toolbox: {
+            show: true,
+            showTitle: false, // 隐藏默认文字，否则两者位置会重叠
+            feature: {
+              restore: {},
+              saveAsImage: {
+                show: true,
+                title: "Save As Image",
+              },
+            },
+          },
+          legend: {
+            data: ["总"],
+            selected: {
+              总: true,
+            },
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true,
+          },
+          xAxis: {
+            type: "value",
+            boundaryGap: [0, 0],
+            name: "次数",
+          },
+          yAxis: {
+            type: "category",
+            data: res.top_ten_workstations,
+            name: "工位",
+          },
+          series: [
+            {
+              name: "总",
+              type: "bar",
+              data: res.top_ten_workstations_num,
+            },
+            // {
+            //   name: "今年",
+            //   type: "bar",
+            //   data: res.top_ten_workstations_num_curr_year,
+            // },
+            // {
+            //   name: "去年",
+            //   type: "bar",
+            //   data: res.top_ten_workstations_num_last_year,
+            // },
+          ],
+        },
+        serviceLife: {
+          title: {
+            text: "特性示例：渐变色 阴影 点击缩放",
+            subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
+          },
+          xAxis: {
+            data: dataAxis,
+            axisLabel: {
+              inside: true,
+              color: "#fff",
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: false,
+            },
+            z: 10,
+          },
+          yAxis: {
+            axisLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLabel: {
+              color: "#999",
+            },
+          },
+          dataZoom: [
+            {
+              type: "inside",
+            },
+          ],
+          series: [
+            {
+              type: "bar",
+              showBackground: true,
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: "#83bff6" },
+                  { offset: 0.5, color: "#188df0" },
+                  { offset: 1, color: "#188df0" },
+                ]),
+              },
+              emphasis: {
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                  ]),
+                },
+              },
+              data: data,
+            },
+          ],
+        },
+      });
       // 基于准备好的dom，初始化echarts实例
       var echarts = require("echarts");
       const topReceiveChart = echarts.init(
         document.getElementById("topReceive")
       );
-      let option1 = {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-          show: true,
-        },
-        toolbox: {
-          show: true,
-          showTitle: false, // 隐藏默认文字，否则两者位置会重叠
-          feature: {
-            restore: {},
-            saveAsImage: {
-              show: true,
-              title: "Save As Image",
-            },
-          },
-        },
-        legend: {
-          data: ["总", "2021", "2020"],
-          selected: {
-            2021: false,
-            2020: false,
-          },
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true,
-        },
-        xAxis: {
-          type: "value",
-          boundaryGap: [0, 0],
-          name: "次数",
-        },
-        yAxis: {
-          type: "category",
-          data: analyseData.top_ten_workstations,
-          name: "工位",
-        },
-        series: [
-          {
-            name: "总",
-            type: "bar",
-            data: analyseData.top_ten_workstations_num,
-          },
-          {
-            name: "2021",
-            type: "bar",
-            data: [25, 42, 52, 10, 2, 52, 24, 47, 75, 58],
-          },
-          {
-            name: "2020",
-            type: "bar",
-            data: [25, 42, 52, 10, 2, 52, 24, 47, 75, 58],
-          },
-        ],
-      };
       // 绘制图表
-      option1 && topReceiveChart.setOption(option1, true);
-      setTimeout(() => {
-        console.log(analyseData);
-      }, 1000);
+      topReceiveChart.setOption(option.topReceiveOpt);
     });
-
     return {
       indexbarcfg,
     };
