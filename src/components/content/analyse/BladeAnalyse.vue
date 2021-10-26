@@ -36,6 +36,7 @@ export default {
       // indexList: ["工位领用Top", "寿命分析", "性价比分析", "库存量"],
     });
     reqBladeAnalyseData().then((res) => {
+      console.log(res);
       const option = reactive({
         topReceiveOpt: {
           tooltip: {
@@ -75,86 +76,76 @@ export default {
           },
           yAxis: {
             type: "category",
-            data: res.top_ten_workstations,
+            data: res.top_receive.workstations.slice(0, 10).reverse(),
             name: "工位",
           },
           series: [
             {
               name: "总",
               type: "bar",
-              data: res.top_ten_workstations_num,
-            },
-            // {
-            //   name: "今年",
-            //   type: "bar",
-            //   data: res.top_ten_workstations_num_curr_year,
-            // },
-            // {
-            //   name: "去年",
-            //   type: "bar",
-            //   data: res.top_ten_workstations_num_last_year,
-            // },
-          ],
-        },
-        serviceLife: {
-          title: {
-            text: "特性示例：渐变色 阴影 点击缩放",
-            subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
-          },
-          xAxis: {
-            data: dataAxis,
-            axisLabel: {
-              inside: true,
-              color: "#fff",
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLine: {
-              show: false,
-            },
-            z: 10,
-          },
-          yAxis: {
-            axisLine: {
-              show: false,
-            },
-            axisTick: {
-              show: false,
-            },
-            axisLabel: {
-              color: "#999",
-            },
-          },
-          dataZoom: [
-            {
-              type: "inside",
-            },
-          ],
-          series: [
-            {
-              type: "bar",
-              showBackground: true,
-              itemStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: "#83bff6" },
-                  { offset: 0.5, color: "#188df0" },
-                  { offset: 1, color: "#188df0" },
-                ]),
-              },
-              emphasis: {
-                itemStyle: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: "#2378f7" },
-                    { offset: 0.7, color: "#2378f7" },
-                    { offset: 1, color: "#83bff6" },
-                  ]),
-                },
-              },
-              data: data,
+              data: res.top_receive.workstations_freq.slice(0, 10).reverse(),
             },
           ],
         },
+        // serviceLife: {
+        //   title: {
+        //     text: "特性示例：渐变色 阴影 点击缩放",
+        //     subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
+        //   },
+        //   xAxis: {
+        //     data: dataAxis,
+        //     axisLabel: {
+        //       inside: true,
+        //       color: "#fff",
+        //     },
+        //     axisTick: {
+        //       show: false,
+        //     },
+        //     axisLine: {
+        //       show: false,
+        //     },
+        //     z: 10,
+        //   },
+        //   yAxis: {
+        //     axisLine: {
+        //       show: false,
+        //     },
+        //     axisTick: {
+        //       show: false,
+        //     },
+        //     axisLabel: {
+        //       color: "#999",
+        //     },
+        //   },
+        //   dataZoom: [
+        //     {
+        //       type: "inside",
+        //     },
+        //   ],
+        //   series: [
+        //     {
+        //       type: "bar",
+        //       showBackground: true,
+        //       itemStyle: {
+        //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //           { offset: 0, color: "#83bff6" },
+        //           { offset: 0.5, color: "#188df0" },
+        //           { offset: 1, color: "#188df0" },
+        //         ]),
+        //       },
+        //       emphasis: {
+        //         itemStyle: {
+        //           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //             { offset: 0, color: "#2378f7" },
+        //             { offset: 0.7, color: "#2378f7" },
+        //             { offset: 1, color: "#83bff6" },
+        //           ]),
+        //         },
+        //       },
+        //       data: data,
+        //     },
+        //   ],
+        // },
       });
       // 基于准备好的dom，初始化echarts实例
       var echarts = require("echarts");
