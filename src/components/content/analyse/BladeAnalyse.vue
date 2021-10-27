@@ -87,73 +87,107 @@ export default {
             },
           ],
         },
-        // serviceLife: {
-        //   title: {
-        //     text: "特性示例：渐变色 阴影 点击缩放",
-        //     subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
-        //   },
-        //   xAxis: {
-        //     data: dataAxis,
-        //     axisLabel: {
-        //       inside: true,
-        //       color: "#fff",
-        //     },
-        //     axisTick: {
-        //       show: false,
-        //     },
-        //     axisLine: {
-        //       show: false,
-        //     },
-        //     z: 10,
-        //   },
-        //   yAxis: {
-        //     axisLine: {
-        //       show: false,
-        //     },
-        //     axisTick: {
-        //       show: false,
-        //     },
-        //     axisLabel: {
-        //       color: "#999",
-        //     },
-        //   },
-        //   dataZoom: [
-        //     {
-        //       type: "inside",
-        //     },
-        //   ],
-        //   series: [
-        //     {
-        //       type: "bar",
-        //       showBackground: true,
-        //       itemStyle: {
-        //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //           { offset: 0, color: "#83bff6" },
-        //           { offset: 0.5, color: "#188df0" },
-        //           { offset: 1, color: "#188df0" },
-        //         ]),
-        //       },
-        //       emphasis: {
-        //         itemStyle: {
-        //           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //             { offset: 0, color: "#2378f7" },
-        //             { offset: 0.7, color: "#2378f7" },
-        //             { offset: 1, color: "#83bff6" },
-        //           ]),
-        //         },
-        //       },
-        //       data: data,
-        //     },
-        //   ],
-        // },
+        serviceLife_labelOption: {
+          show: true,
+          position: "insideBottom",
+          distance: 15,
+          align: "left",
+          verticalAlign: "middle",
+          rotate: 90,
+          formatter: "{c}  {name|{a}}",
+          fontSize: 16,
+          rich: {
+            name: {},
+          },
+        },
+        serviceLifeOpt: {
+          title: {
+            text: "刀片刀具寿命分析",
+            subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
+          },
+          xAxis: {
+            data: res.service_life.blade_type,
+            axisLabel: {
+              show: true,
+              // inside: true,
+              // color: "#fff",
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: false,
+            },
+            z: 10,
+          },
+          yAxis: {
+            axisLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLabel: {
+              color: "#999",
+            },
+          },
+          dataZoom: [
+            {
+              type: "inside",
+            },
+          ],
+          series: [
+            {
+              type: "bar",
+              showBackground: true,
+              // itemStyle: {
+              //   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              //     { offset: 0, color: "#83bff6" },
+              //     { offset: 0.5, color: "#188df0" },
+              //     { offset: 1, color: "#188df0" },
+              //   ]),
+              // },
+              // emphasis: {
+              //   itemStyle: {
+              //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              //       { offset: 0, color: "#2378f7" },
+              //       { offset: 0.7, color: "#2378f7" },
+              //       { offset: 1, color: "#83bff6" },
+              //     ]),
+              //   },
+              // },
+              label: {
+                show: true,
+                position: "insideTop",
+                distance: 10,
+                align: "right",
+                verticalAlign: "middle",
+                rotate: 90,
+                // formatter: "{c}  {name|{a}}",
+                fontSize: 16,
+                rich: {
+                  name: {},
+                },
+              },
+              data: res.service_life.average_life,
+              // data: [220, 182, 191, 234, 290, 100.11],
+            },
+          ],
+        },
       });
       // 基于准备好的dom，初始化echarts实例
       var echarts = require("echarts");
       const topReceiveChart = echarts.init(
         document.getElementById("topReceive")
       );
+      const serviceLifeChart = echarts.init(
+        document.getElementById("serviceLife")
+      );
       // 绘制图表
-      topReceiveChart.setOption(option.topReceiveOpt);
+      console.log(option.serviceLifeOpt);
+      option.topReceiveOpt && topReceiveChart.setOption(option.topReceiveOpt);
+      option.serviceLifeOpt &&
+        serviceLifeChart.setOption(option.serviceLifeOpt);
     });
     return {
       indexbarcfg,
@@ -190,6 +224,12 @@ export default {
       transform: translate3d(0px, 72px, 0px);
     }
     #topReceive {
+      width: 100%;
+      height: 70%;
+      min-height: 500px;
+      background-color: var(--van-cell-background-color);
+    }
+    #serviceLife {
       width: 100%;
       height: 70%;
       min-height: 500px;
