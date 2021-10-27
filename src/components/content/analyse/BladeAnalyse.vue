@@ -106,7 +106,7 @@ export default {
             subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
           },
           xAxis: {
-            data: res.service_life.blade_type,
+            data: res.service_life.blade_type.map((x) => x.split("刀")[0]),
             axisLabel: {
               show: true,
               // inside: true,
