@@ -7,12 +7,24 @@
       <van-index-anchor index="寿">寿命分析</van-index-anchor>
       <div id="serviceLife"></div>
       <van-index-anchor index="性">性价比分析</van-index-anchor>
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
+      <table id="table">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>11</td>
+            <td>22</td>
+            <td>33</td>
+            <td>44</td>
+          </tr>
+        </tbody>
+      </table>
       <van-index-anchor index="库">库存量</van-index-anchor>
       <van-cell title="文本" />
       <van-cell title="文本" />
@@ -39,6 +51,9 @@ export default {
       console.log(res);
       const option = reactive({
         topReceiveOpt: {
+          title: {
+            text: "工位领用Top10",
+          },
           tooltip: {
             trigger: "axis",
             axisPointer: {
@@ -57,12 +72,12 @@ export default {
               },
             },
           },
-          legend: {
-            data: ["总"],
-            selected: {
-              总: true,
-            },
-          },
+          // legend: {
+          //   data: ["总"],
+          //   selected: {
+          //     总: true,
+          //   },
+          // },
           grid: {
             left: "3%",
             right: "4%",
@@ -74,6 +89,7 @@ export default {
             boundaryGap: [0, 0],
             name: "次数",
           },
+
           yAxis: {
             type: "category",
             data: res.top_receive.workstations.slice(0, 10).reverse(),
@@ -87,30 +103,30 @@ export default {
             },
           ],
         },
-        serviceLife_labelOption: {
-          show: true,
-          position: "insideBottom",
-          distance: 15,
-          align: "left",
-          verticalAlign: "middle",
-          rotate: 90,
-          formatter: "{c}  {name|{a}}",
-          fontSize: 16,
-          rich: {
-            name: {},
-          },
-        },
         serviceLifeOpt: {
           title: {
             text: "刀片刀具寿命分析",
-            subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              restore: { show: true },
+              saveAsImage: { show: true },
+            },
+          },
+          legend: {
+            top: "7%",
+            data: ["平均寿命", "样本数量"],
           },
           xAxis: {
-            data: res.service_life.blade_type.map((x) => x.split("刀")[0]),
+            data: res.service_life.blade_type.map((x) => x.split("|")[0]),
             axisLabel: {
               show: true,
               // inside: true,
               // color: "#fff",
+
+              interval: 0,
+              rotate: 40,
             },
             axisTick: {
               show: false,
@@ -120,17 +136,22 @@ export default {
             },
             z: 10,
           },
-          yAxis: {
-            axisLine: {
-              show: false,
+          yAxis: [
+            {
+              axisLine: {
+                show: false,
+              },
+              axisTick: {
+                show: false,
+              },
+              axisLabel: {
+                color: "#999",
+              },
             },
-            axisTick: {
-              show: false,
+            {
+              type: "value",
             },
-            axisLabel: {
-              color: "#999",
-            },
-          },
+          ],
           dataZoom: [
             {
               type: "inside",
@@ -138,6 +159,7 @@ export default {
           ],
           series: [
             {
+              name: "平均寿命",
               type: "bar",
               showBackground: true,
               // itemStyle: {
@@ -163,14 +185,22 @@ export default {
                 align: "right",
                 verticalAlign: "middle",
                 rotate: 90,
-                // formatter: "{c}  {name|{a}}",
                 fontSize: 16,
                 rich: {
                   name: {},
                 },
               },
               data: res.service_life.average_life,
-              // data: [220, 182, 191, 234, 290, 100.11],
+            },
+            {
+              name: "样本数量",
+              type: "line",
+              yAxisIndex: 1,
+              label: {
+                show: true,
+                position: "top",
+              },
+              data: res.service_life.temple_num,
             },
           ],
         },
@@ -231,7 +261,7 @@ export default {
     }
     #serviceLife {
       width: 100%;
-      height: 70%;
+      // height: 70%;
       min-height: 500px;
       background-color: var(--van-cell-background-color);
     }
