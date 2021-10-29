@@ -36,6 +36,18 @@
           ></location-filter-card>
         </van-cell-group>
       </div>
+      <div class="filter-status">
+        <van-cell title="订单状态过滤" class="cell-title" />
+        <van-checkbox-group
+          v-model="checkboxcfg.checked"
+          direction="horizontal"
+        >
+          <van-checkbox name="1">待审核</van-checkbox>
+          <van-checkbox name="2">审核失败</van-checkbox>
+          <van-checkbox name="3">待领取</van-checkbox>
+          <van-checkbox name="4">待善后</van-checkbox>
+        </van-checkbox-group>
+      </div>
     </div>
     <div class="filter-operate">
       <van-button square class="reset" type="warning" @click="reset"
@@ -55,11 +67,6 @@ import LocationFilterCard from "@/components/common/maincard/LocationFilterCard"
 import { reqCphLocation } from "@/network/sort";
 export default {
   name: "MainFilter",
-  // props: {
-  //   mainfiltercfg: {
-  //     type: Object,
-  //   },
-  // },
   components: {
     LocationFilterCard,
   },
@@ -83,6 +90,7 @@ export default {
       localLv1: [],
       localLv2: [],
       localLv3: [],
+      orderStatus: 0,
     });
     const toshowData = reactive({
       localLv2: [],
@@ -182,7 +190,6 @@ export default {
     const mainfiltercfg = reactive({
       arrowDirection: ["", "", ""],
     });
-
     const lfcardlv1cfg = reactive({
       data: ["CPH2.1", "CPH2.2"],
       selected: [],
@@ -254,6 +261,10 @@ export default {
         : (mainfiltercfg.arrowDirection[2] = "down");
     };
 
+    const checkboxcfg = reactive({
+      checked: [],
+    });
+
     //重置确认
     const reset = () => {
       lfcardlv1cfg.selected = [];
@@ -278,6 +289,7 @@ export default {
       mainfiltercfg,
       reset,
       confirm,
+      checkboxcfg,
     };
   },
 };
@@ -300,6 +312,22 @@ export default {
           font-size: 15px;
           font-weight: 1200;
           color: #000;
+        }
+      }
+    }
+    .filter-status {
+      margin-top: 15px;
+      width: 100%;
+      background-color: var(--van-cell-group-background-color);
+      padding-bottom: 16px;
+      .van-checkbox-group {
+        margin-top: 8px;
+        padding-left: 8px;
+        .van-checkbox {
+          flex: 0 0 calc(50% - 15px);
+          &:nth-child(-n + 2) {
+            margin-bottom: 5px;
+          }
         }
       }
     }

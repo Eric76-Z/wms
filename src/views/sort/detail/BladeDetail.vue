@@ -420,7 +420,6 @@ export default {
           break;
       }
     };
-
     const imgpopupcfg = reactive({
       show: false,
       img: "",
