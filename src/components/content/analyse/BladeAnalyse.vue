@@ -5,33 +5,17 @@
       <van-index-anchor index="工">工位领用Top</van-index-anchor>
       <div id="topReceive"></div>
       <van-index-anchor index="寿">寿命分析</van-index-anchor>
-      <div id="serviceLife"></div>
+      <div id="serviceData"></div>
       <van-index-anchor index="性">性价比分析</van-index-anchor>
-      <table id="table">
-        <thead>
-          <tr>
-            <th>编号</th>
-            <th>姓名</th>
-            <th>年龄</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>11</td>
-            <td>22</td>
-            <td>33</td>
-            <td>44</td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="costEffective"></div>
       <van-index-anchor index="库">库存量</van-index-anchor>
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
-      <van-cell title="文本" />
+      <el-table :data="tableData.data" style="width: 100%">
+        <el-table-column prop="blade_spec" label="名称"> </el-table-column>
+        <el-table-column prop="total_receive" label="总领用量" width="100">
+        </el-table-column>
+        <el-table-column prop="blade_stock_nb" label="库存量-宁波" width="120">
+        </el-table-column>
+      </el-table>
     </van-index-bar>
   </div>
 </template>
@@ -39,16 +23,24 @@
 <script>
 import { reactive } from "vue";
 import { reqBladeAnalyseData } from "@/network/sort.js";
+import { ElTable, ElTableColumn } from "element-plus";
 export default {
   name: "BladeAnalyse",
-
+  components: {
+    ElTable,
+    ElTableColumn,
+  },
   setup() {
     const indexbarcfg = reactive({
       indexList: ["工", "寿", "性", "库"],
       // indexList: ["工位领用Top", "寿命分析", "性价比分析", "库存量"],
     });
+    const tableData = reactive({
+      data: [],
+    });
     reqBladeAnalyseData().then((res) => {
       console.log(res);
+      tableData.data = res.blade_service_status;
       const option = reactive({
         topReceiveOpt: {
           title: {
@@ -103,7 +95,7 @@ export default {
             },
           ],
         },
-        serviceLifeOpt: {
+        serviceDataOpt: {
           title: {
             text: "刀片刀具寿命分析",
           },
@@ -119,7 +111,7 @@ export default {
             data: ["平均寿命", "样本数量"],
           },
           xAxis: {
-            data: res.service_life.blade_type.map((x) => x.split("|")[0]),
+            data: res.service_data.blade_type.map((x) => x.split("|")[0]),
             axisLabel: {
               show: true,
               // inside: true,
@@ -190,7 +182,7 @@ export default {
                   name: {},
                 },
               },
-              data: res.service_life.average_life,
+              data: res.service_data.average_life,
             },
             {
               name: "样本数量",
@@ -200,7 +192,79 @@ export default {
                 show: true,
                 position: "top",
               },
-              data: res.service_life.temple_num,
+              data: res.service_data.temple_num,
+            },
+          ],
+        },
+        costEffectiveOpt: {
+          title: {
+            text: "刀片刀具性价比分析",
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              restore: { show: true },
+              saveAsImage: { show: true },
+            },
+          },
+          // legend: {
+          //   top: "7%",
+          //   data: ["性价比"],
+          // },
+          xAxis: {
+            data: res.service_data.blade_type.map((x) => x.split("|")[0]),
+            axisLabel: {
+              show: true,
+              // inside: true,
+              // color: "#fff",
+
+              interval: 0,
+              rotate: 40,
+            },
+            axisTick: {
+              show: false,
+            },
+            axisLine: {
+              show: false,
+            },
+            z: 10,
+          },
+          yAxis: [
+            {
+              axisLine: {
+                show: false,
+              },
+              axisTick: {
+                show: false,
+              },
+              axisLabel: {
+                color: "#999",
+              },
+            },
+          ],
+          dataZoom: [
+            {
+              type: "inside",
+            },
+          ],
+          series: [
+            {
+              name: "性价比",
+              type: "bar",
+              showBackground: true,
+              label: {
+                show: true,
+                position: "insideTop",
+                distance: 10,
+                align: "right",
+                verticalAlign: "middle",
+                rotate: 90,
+                fontSize: 16,
+                rich: {
+                  name: {},
+                },
+              },
+              data: res.service_data.cost_effective,
             },
           ],
         },
@@ -210,17 +274,23 @@ export default {
       const topReceiveChart = echarts.init(
         document.getElementById("topReceive")
       );
-      const serviceLifeChart = echarts.init(
-        document.getElementById("serviceLife")
+      const serviceDataChart = echarts.init(
+        document.getElementById("serviceData")
+      );
+      const costEffectiveChart = echarts.init(
+        document.getElementById("costEffective")
       );
       // 绘制图表
-      console.log(option.serviceLifeOpt);
+      console.log(option.serviceDataOpt);
       option.topReceiveOpt && topReceiveChart.setOption(option.topReceiveOpt);
-      option.serviceLifeOpt &&
-        serviceLifeChart.setOption(option.serviceLifeOpt);
+      option.serviceDataOpt &&
+        serviceDataChart.setOption(option.serviceDataOpt);
+      option.costEffectiveOpt &&
+        costEffectiveChart.setOption(option.costEffectiveOpt);
     });
     return {
       indexbarcfg,
+      tableData,
     };
   },
 };
@@ -259,9 +329,15 @@ export default {
       min-height: 500px;
       background-color: var(--van-cell-background-color);
     }
-    #serviceLife {
+    #serviceData {
       width: 100%;
       // height: 70%;
+      min-height: 500px;
+      background-color: var(--van-cell-background-color);
+    }
+    #costEffective {
+      width: 100%;
+      height: 70%;
       min-height: 500px;
       background-color: var(--van-cell-background-color);
     }
