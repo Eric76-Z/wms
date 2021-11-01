@@ -47,10 +47,18 @@ export default {
           },
         },
         type2: {
+          title: "EMS故障记录",
+          desc: "此向导主要针对EMS小车故障......",
+          to: {
+            name: "emsfaultrecord",
+            params: { type: 2 },
+          },
+        },
+        type3: {
           title: "高频故障",
           desc: "此向导主要针对高频故障，如滞后误差，传感器误感应......",
         },
-        type3: {
+        type4: {
           title: "截图导入",
           desc: "待开放......",
         },

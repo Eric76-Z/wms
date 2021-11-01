@@ -31,11 +31,13 @@ import { ContactCard } from "vant";
 import { Picker } from "vant";
 import { Sticky } from "vant";
 import { IndexBar, IndexAnchor } from "vant";
+import { Calendar } from "vant";
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 
+app.use(Calendar);
 app.use(Sticky);
 app.use(Picker);
 app.use(ContactCard);

@@ -3,8 +3,9 @@
     <van-search
       v-model="searchcfg.value"
       ref="search"
+      disabled
       placeholder="请输入搜索关键词"
-      @click-input="searchcfg.clickInput"
+      @click="searchcfg.clickInput"
     >
     </van-search>
     <main-grid :gridcfg="gridcfg" />

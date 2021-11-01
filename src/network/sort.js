@@ -78,6 +78,14 @@ export function partupMaintenanceRecords(params) {
 }
 
 /*
+=======================EMS故障申报模块相关接口=======================
+*/
+//申报故障
+export function createEmsMaintenanceRecords(params) {
+  return axiosApi("api/workstation/emsmaintenance/", params, "post");
+}
+
+/*
 =======================备件模块相关接口=======================
 */
 //获取备件信息

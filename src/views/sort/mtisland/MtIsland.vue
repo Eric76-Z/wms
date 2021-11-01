@@ -79,6 +79,17 @@ export default {
             show: "true",
           },
         },
+        {
+          text: "EMS故障记录",
+          iconText: "liebiao",
+          route: "",
+          tag: {
+            text: "",
+            textColor: "",
+            color: "",
+            show: "",
+          },
+        },
       ],
 
       columnNum: 4,

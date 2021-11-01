@@ -21,6 +21,8 @@ const FaultRecord1 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord1");
 const FaultRecord2 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord2");
+const EmsFaultRecord = () =>
+  import("@/views/sort/mtisland/faultrecord/EmsFaultRecord");
 
 const Detail = () => import("@/views/sort/detail/Detail");
 const BladeDetail = () => import("@/views/sort/detail/BladeDetail");
@@ -166,6 +168,12 @@ const routes = [
         name: "faultrecord2",
         path: "faultrecord2",
         component: FaultRecord2,
+        props: true,
+      },
+      {
+        name: "emsfaultrecord",
+        path: "emsfaultrecord",
+        component: EmsFaultRecord,
         props: true,
       },
     ],

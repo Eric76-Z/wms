@@ -3,10 +3,11 @@
     <van-search
       v-model="searchcfg.value"
       ref="search"
+      disabled
       placeholder="请输入搜索关键词"
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
-      @click-input="searchcfg.clickInput"
+      @click="searchcfg.clickInput"
     />
     <van-tabs v-model:active="tabscfg.active" animated>
       <van-tab
