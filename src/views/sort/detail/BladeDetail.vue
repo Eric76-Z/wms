@@ -278,12 +278,8 @@ export default {
 
     const handle = debounce(() => {
       if (scroll.value.scrollTop >= 1000) {
-        // console.log(scroll.value.scrollTop);
-        // console.log(showBackTop.value);
         showBackTop.value = true;
       } else {
-        // console.log(scroll.value.scrollTop);
-        // console.log(showBackTop.value);
         showBackTop.value = false;
       }
     }, 100);
@@ -294,7 +290,6 @@ export default {
     });
 
     //搜索模块
-    // let listData = reactive();
     const queryData = (data) => {
       queryParam["localLv1"] = data.localLv1.toString();
       queryParam["localLv2"] = data.localLv2.toString();

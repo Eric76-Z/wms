@@ -3,7 +3,6 @@
     <van-search
       v-model="searchcfg.value"
       ref="search"
-      disabled
       placeholder="请输入搜索关键词"
       @search="searchcfg.onSearch"
       @clear="searchcfg.onClear"
