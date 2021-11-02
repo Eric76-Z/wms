@@ -15,7 +15,6 @@ import { toRef } from "vue";
 import { useStore } from "vuex";
 export default {
   name: "faultlist",
-
   setup() {
     const store = useStore();
     const navbarcfg = toRef(store.state, "navbarcfg");

@@ -112,6 +112,21 @@ export const formatDate = {
 
     return time;
   },
+  format4: (dateData) => {
+    let date = new Date(dateData);
+
+    let y = date.getFullYear();
+
+    let m = date.getMonth() + 1;
+
+    m = m < 10 ? "0" + m : m;
+
+    let d = date.getDate();
+    d = d < 10 ? "0" + d : d;
+    const time = y + "/" + m + "/" + d;
+
+    return time;
+  },
   deltaMin: (dateData1, dateData2) => {
     // console.log(dateData1.replace(/-/g, "/"));
     //安卓和ios系统对于日期的格式不懂，将****-**-**转化为****/**/**的格式

@@ -111,6 +111,11 @@ export default {
     //vuex数据
     const store = useStore();
     const user = toRef(store.state, "user");
+    const navbarcfg = toRef(store.state, "navbarcfg");
+    navbarcfg.value.mainnavbarcfg = {
+      title: "EMS-小车故障记录",
+      isShow: [true, true, true],
+    };
     const formData = reactive({
       localLv1: "CPH2.1",
       localLv2: "ST",

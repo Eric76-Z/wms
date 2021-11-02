@@ -21,8 +21,6 @@ const FaultRecord1 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord1");
 const FaultRecord2 = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord2");
-const EmsFaultRecord = () =>
-  import("@/views/sort/mtisland/faultrecord/EmsFaultRecord");
 
 const Detail = () => import("@/views/sort/detail/Detail");
 const BladeDetail = () => import("@/views/sort/detail/BladeDetail");
@@ -32,6 +30,10 @@ const FaultList1 = () => import("@/views/sort/mtisland/faultlist/FaultList1");
 const FaultListSearch = () =>
   import("@/views/sort/mtisland/faultlist/FaultListSearch");
 const FaultDetail = () => import("@/views/sort/mtisland/faultlist/FaultDetail");
+
+const Ems = () => import("@/views/sort/mtisland/ems/Ems");
+const EmsFaultRecord = () => import("@/views/sort/mtisland/ems/EmsFaultRecord");
+const EmsFaultList = () => import("@/views/sort/mtisland/ems/EmsFaultList");
 
 const Parts = () => import("@/views/sort/parts/Parts");
 const PartsList = () => import("@/views/sort/parts/PartsList");
@@ -206,6 +208,31 @@ const routes = [
         props: true,
       },
     ],
+  },
+  //------------------------------------ems系统-------------------------------------
+  {
+    name: "ems",
+    path: "/sort/mtisland/ems",
+    component: Ems,
+    meta: {
+      type: "login",
+    },
+  },
+  {
+    name: "emsfaultrecord",
+    path: "/sort/mtisland/ems/emsfaultrecord",
+    component: EmsFaultRecord,
+    meta: {
+      type: "login",
+    },
+  },
+  {
+    name: "emsfaultlist",
+    path: "/sort/mtisland/ems/emsfaultlist",
+    component: EmsFaultList,
+    meta: {
+      type: "login",
+    },
   },
   {
     name: "parts",

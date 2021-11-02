@@ -82,7 +82,7 @@ export default {
         {
           text: "EMS故障记录",
           iconText: "liebiao",
-          route: "",
+          route: "/sort/mtisland/ems",
           tag: {
             text: "",
             textColor: "",
