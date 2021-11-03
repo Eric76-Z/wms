@@ -60,13 +60,9 @@ export const formatDate = {
   },
   format1: (dateData) => {
     let date = new Date(dateData);
-
     let y = date.getFullYear();
-
     let m = date.getMonth() + 1;
-
     m = m < 10 ? "0" + m : m;
-
     let d = date.getDate();
     d = d < 10 ? "0" + d : d;
     let h = date.getHours();

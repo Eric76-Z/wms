@@ -88,6 +88,14 @@ export function createEmsMaintenanceRecords(params) {
 export function listEmsMaintenanceRecords(params) {
   return axiosApi("api/workstation/emsmaintenance/", params, "get");
 }
+//删除故障
+export function deleteEmsMaintenanceRecords(params) {
+  return axiosApi("api/workstation/emsmaintenance/", params, "delete");
+}
+//更新故障信息
+export function partupEmsMaintenanceRecords(params) {
+  return axiosApi("api/workstation/emsmaintenance/", params, "patch");
+}
 
 /*
 =======================备件模块相关接口=======================

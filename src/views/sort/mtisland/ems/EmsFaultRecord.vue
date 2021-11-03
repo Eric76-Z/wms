@@ -2,14 +2,6 @@
   <div id="emsfaultrecord">
     <van-form @submit="formData.onSubmit">
       <van-cell-group inset>
-        <!-- <van-field name="localLv1" label="车间">
-          <template #input>
-            <van-radio-group v-model="formData.localLv1" direction="horizontal">
-              <van-radio name="CPH2.1">CPH2.1</van-radio>
-              <van-radio name="CPH2.2">CPH2.2</van-radio>
-            </van-radio-group>
-          </template>
-        </van-field> -->
         <van-field
           v-model="formData.CarModel.value"
           readonly
@@ -139,9 +131,8 @@ export default {
         data: "",
         showCalendar: false,
         formatDate: (date) =>
-          `${date.getYear() + 1900}/${date.getMonth() + 1}/${date.getDate()}`,
+          `${date.getYear() + 1900}-${date.getMonth() + 1}-${date.getDate()}`,
         onConfirm: (date) => {
-          console.log(date.getYear() + 1900);
           formData.closingDate.data = formData.closingDate.formatDate(date);
           formData.closingDate.showCalendar = false;
         },

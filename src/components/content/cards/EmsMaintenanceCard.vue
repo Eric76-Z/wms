@@ -47,30 +47,20 @@
       </div>
     </div>
     <div class="jp-card__footer">
-      <van-popover
-        v-model:show="emsmaintenancecardcfg.btn.check.showPopover"
-        theme="dark"
-        :actions="emsmaintenancecardcfg.btn.check.actions"
-        @select="emsmaintenancecardcfg.btn.check.onSelected"
-      >
-        <template #reference>
-          <van-button
-            class="check-btn"
-            square
-            color="linear-gradient(to right, #ff6034, #ee0a24)"
-            v-if="emsmaintenancecardcfg.btn.check.permit"
-            @click="emsmaintenancecardcfg.btn.check"
-            >审核
-          </van-button>
-        </template>
-      </van-popover>
-
       <van-button
+        class="check-btn"
+        square
+        color="linear-gradient(to right, #cc976a, #ff976a)"
+        v-if="emsmaintenancecardcfg.btn.check.permit"
+        @click="emsmaintenancecardcfg.btn.check.click"
+        >指定节点
+      </van-button>
+      <!-- <van-button
         square
         color="linear-gradient(to right, #cc976a, #ff976a)"
         @click="emsmaintenancecardcfg.btn.detail(listdata.id)"
         >详情</van-button
-      >
+      > -->
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
@@ -80,9 +70,15 @@
           user.userinfo.groups.indexOf(1) != -1
         "
         @click="emsmaintenancecardcfg.btn.delete"
-        >放弃</van-button
+        >删除</van-button
       >
     </div>
+    <van-calendar
+      v-model:show="calendarcfg.showCalendar"
+      :show-confirm="false"
+      style="width: 25%"
+      @confirm="calendarcfg.onConfirm"
+    />
   </div>
 </template>
 
@@ -93,8 +89,8 @@ import { useRouter } from "vue-router";
 import { formatDate, beautySub, innerArry } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import {
-  deleteMaintenanceRecords,
-  partupMaintenanceRecords,
+  deleteEmsMaintenanceRecords,
+  partupEmsMaintenanceRecords,
 } from "@/network/sort";
 export default {
   name: "MainListCard",
@@ -127,7 +123,14 @@ export default {
       isShow: true,
       data: {
         title:
-          listData.localLv1 + "-" + listData.localLv2 + "-" + listData.localLv3,
+          listData.localLv1 +
+          "-" +
+          listData.localLv2 +
+          "-" +
+          listData.localLv3 +
+          "-" +
+          listData.ng_car +
+          "号小车",
         desc: {
           descTag: {
             tagText: "故障描述",
@@ -154,7 +157,7 @@ export default {
             message: "确认删除此条故障记录？",
           })
             .then(() => {
-              deleteMaintenanceRecords({
+              deleteEmsMaintenanceRecords({
                 id: listData.id,
               }).then(() => {
                 Toast.success({
@@ -178,55 +181,8 @@ export default {
           });
         },
         check: {
-          showPopover: false,
-          actions: [
-            { text: "指定责任人", disabled: true },
-            { text: "维修经验" },
-            { text: "直接通过" },
-          ],
-          onSelected: (action) => {
-            switch (action.text) {
-              case "指定责任人":
-                partupMaintenanceRecords({
-                  id: listData.id,
-                  order_status: 3,
-                  need_summary: 1,
-                }).then((res) => {
-                  console.log(res);
-                  Toast.success({
-                    message: "审核通过，等待领取",
-                    duration: 1000,
-                    onClose: () => {
-                      listData.order_status = res.order_status;
-                      listData.need_summary = res.need_summary;
-                    },
-                  });
-                });
-                break;
-              case "维修经验":
-                // console.log(innerArry([1, 18, 4, 5], user.userinfo.groups));
-                partupMaintenanceRecords({
-                  id: listData.id,
-                  order_status: 3,
-                  need_summary: !emsmaintenancecardcfg.data.needSummary,
-                }).then((res) => {
-                  listData.order_status = res.order_status;
-                  listData.need_summary = res.need_summary;
-                });
-                break;
-              case "直接通过":
-                partupMaintenanceRecords({
-                  id: listData.id,
-                  order_status: 4,
-                }).then((res) => {
-                  console.log(res);
-                  listData.order_status = res.order_status;
-                  listData.need_summary = res.need_summary;
-                });
-                break;
-              default:
-                break;
-            }
+          click: () => {
+            calendarcfg.showCalendar = true;
           },
           permit: computed(() => {
             return (
@@ -239,12 +195,26 @@ export default {
       },
       step: {
         steps: ["申报", "操作", "完成"],
-        active: 2,
+        active: 1,
         activeIcon: "cross",
       },
     });
-
-    return { listData, emsmaintenancecardcfg, user };
+    const calendarcfg = reactive({
+      showCalendar: false,
+      formatDate: (date) =>
+        `${date.getYear() + 1900}-${date.getMonth() + 1}-${date.getDate()}`,
+      onConfirm: (date) => {
+        console.log(calendarcfg.formatDate(date));
+        partupEmsMaintenanceRecords({
+          id: listData.id,
+          order_status: 3,
+          closeing_date: calendarcfg.formatDate(date),
+        }).then((res) => {
+          console.log(res);
+        });
+      },
+    });
+    return { listData, emsmaintenancecardcfg, user, calendarcfg };
   },
 };
 </script>
@@ -259,23 +229,6 @@ export default {
   background-color: var(--van-card-background-color);
   .jp-card__header {
     display: flex;
-    // .jp-card__thumb {
-    //   position: relative;
-    //   flex: none;
-    //   width: var(--van-card-thumb-size);
-    //   height: var(--van-card-thumb-size);
-    //   margin-right: var(--van-padding-xs);
-    //   .van-image {
-    //     width: 100%;
-    //     height: 100%;
-    //   }
-    //   .jp-card__tag {
-    //     position: absolute;
-    //     top: 2px;
-    //     left: -5px;
-    //   }
-    // }
-
     .jp-card__content {
       position: relative;
       display: flex;
@@ -355,6 +308,9 @@ export default {
       .check-dialog {
         width: 100%;
       }
+    }
+    .check-btn {
+      width: 80px;
     }
   }
 }
