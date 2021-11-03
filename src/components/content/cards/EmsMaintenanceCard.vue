@@ -30,6 +30,9 @@
             >
             {{ emsmaintenancecardcfg.data.desc.content }}
           </div>
+
+          <van-tag color="var(--van-warning-color)">节点</van-tag>
+          {{ listData.closing_date }}
         </div>
         <div class="jp-card__bottom">
           <van-steps
@@ -51,25 +54,23 @@
         class="check-btn"
         square
         color="linear-gradient(to right, #cc976a, #ff976a)"
-        v-if="emsmaintenancecardcfg.btn.check.permit"
+        v-if="emsmaintenancecardcfg.btn.check.show"
         @click="emsmaintenancecardcfg.btn.check.click"
-        >指定节点
+        >重置节点
       </van-button>
-      <!-- <van-button
+      <van-button
         square
+        :disabled="emsmaintenancecardcfg.btn.complete.disabled"
+        v-if="emsmaintenancecardcfg.btn.complete.show"
         color="linear-gradient(to right, #cc976a, #ff976a)"
-        @click="emsmaintenancecardcfg.btn.detail(listdata.id)"
-        >详情</van-button
-      > -->
+        @click="emsmaintenancecardcfg.btn.complete.click"
+        >{{ emsmaintenancecardcfg.btn.complete.text }}</van-button
+      >
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="
-          [1].indexOf(listData.order_status) != -1 ||
-          user.userinfo.isSuper == true ||
-          user.userinfo.groups.indexOf(1) != -1
-        "
-        @click="emsmaintenancecardcfg.btn.delete"
+        v-if="emsmaintenancecardcfg.btn.delete.show"
+        @click="emsmaintenancecardcfg.btn.delete.click"
         >删除</van-button
       >
     </div>
@@ -85,7 +86,7 @@
 <script>
 import { reactive, computed, toRef } from "vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
+
 import { formatDate, beautySub, innerArry } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import {
@@ -114,11 +115,8 @@ export default {
       isShow: [true, true, true],
     };
 
-    //路由
-    const router = reactive(useRouter());
     // console.log(router);
     const listData = reactive(props.listdata);
-    // console.log(listData);
     const emsmaintenancecardcfg = reactive({
       isShow: true,
       data: {
@@ -151,40 +149,83 @@ export default {
         },
       },
       btn: {
-        delete: () => {
-          Dialog.confirm({
-            title: "确认删除",
-            message: "确认删除此条故障记录？",
-          })
-            .then(() => {
-              deleteEmsMaintenanceRecords({
-                id: listData.id,
-              }).then(() => {
-                Toast.success({
-                  message: "删除成功",
-                  duration: 1000,
-                  onClose: () => {
-                    emsmaintenancecardcfg.isShow = false;
-                  },
-                });
-              });
+        delete: {
+          click: () => {
+            Dialog.confirm({
+              title: "确认删除",
+              message: "确认删除此条故障记录？",
             })
-            .catch(() => {
-              // on cancel
-            });
+              .then(() => {
+                deleteEmsMaintenanceRecords({
+                  id: listData.id,
+                }).then(() => {
+                  Toast.success({
+                    message: "删除成功",
+                    duration: 1000,
+                    onClose: () => {
+                      emsmaintenancecardcfg.isShow = false;
+                    },
+                  });
+                });
+              })
+              .catch(() => {
+                // on cancel
+              });
+          },
+          show: computed(() => {
+            return (
+              [1].indexOf(listData.order_status) != -1 ||
+              user.value.userinfo.isSuper == true ||
+              user.value.userinfo.groups.indexOf(1) != -1
+            );
+          }),
         },
-        detail: (val) => {
-          console.log(val);
-          router.push({
-            name: "faultdetail",
-            params: { maintenanceId: val },
-          });
+        complete: {
+          text: computed(() => {
+            if (
+              user.value.userinfo.isSuper == true ||
+              innerArry(user.value.userinfo.groups, [1, 18, 4, 5]) == true
+            ) {
+              return "完成";
+            } else {
+              return "修复";
+            }
+          }),
+          disabled: computed(() => {
+            return !(
+              user.value.userinfo.isSuper == true ||
+              innerArry(user.value.userinfo.groups, [1, 18, 4, 5]) == true ||
+              listData.applicant.id == user.value.userinfo.userId
+            );
+          }),
+          show: computed(() => {
+            if (listData.order_status == 4) {
+              return false;
+            } else {
+              return true;
+            }
+          }),
+          order_status: computed(() => {
+            if (emsmaintenancecardcfg.btn.complete.text == "完成") {
+              return 4;
+            } else {
+              return 5;
+            }
+          }),
+          click: () => {
+            partupEmsMaintenanceRecords({
+              id: listData.id,
+              order_status: emsmaintenancecardcfg.btn.complete.order_status,
+            }).then((res) => {
+              listData.order_status = res.order_status;
+            });
+          },
         },
         check: {
           click: () => {
             calendarcfg.showCalendar = true;
           },
-          permit: computed(() => {
+          show: computed(() => {
             return (
               [1, 2, 3].indexOf(listData.order_status) != -1 &&
               (user.value.userinfo.isSuper == true ||
@@ -194,9 +235,21 @@ export default {
         },
       },
       step: {
-        steps: ["申报", "操作", "完成"],
-        active: 1,
-        activeIcon: "cross",
+        steps: ["申报", "操作 ", "完成"],
+        active: computed(() => {
+          if (listData.order_status == 4) {
+            return 2;
+          } else {
+            return 1;
+          }
+        }),
+        activeIcon: computed(() => {
+          if (listData.order_status == 4) {
+            return "success";
+          } else {
+            return "cross";
+          }
+        }),
       },
     });
     const calendarcfg = reactive({
@@ -204,16 +257,17 @@ export default {
       formatDate: (date) =>
         `${date.getYear() + 1900}-${date.getMonth() + 1}-${date.getDate()}`,
       onConfirm: (date) => {
-        console.log(calendarcfg.formatDate(date));
         partupEmsMaintenanceRecords({
           id: listData.id,
           order_status: 3,
-          closeing_date: calendarcfg.formatDate(date),
+          closing_date: calendarcfg.formatDate(date),
         }).then((res) => {
-          console.log(res);
+          listData.closing_date = res.closing_date;
+          calendarcfg.showCalendar = false;
         });
       },
     });
+
     return { listData, emsmaintenancecardcfg, user, calendarcfg };
   },
 };
