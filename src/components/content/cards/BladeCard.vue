@@ -92,16 +92,18 @@
       <van-button
         square
         color="linear-gradient(to right, #01b160, #07e160)"
-        v-if="listData.order_status == 3"
-        @click="bladecardcfg.btn.receive"
+        v-if="bladecardcfg.btn.receive.showbtn"
+        :disabled="bladecardcfg.btn.receive.disabled"
+        @click="bladecardcfg.btn.receive.click"
         >领取</van-button
       >
 
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="listData.order_status == 2"
-        @click="bladecardcfg.btn.appeal"
+        v-if="bladecardcfg.btn.appeal.showbtn"
+        :disabled="bladecardcfg.btn.appeal.disabled"
+        @click="bladecardcfg.btn.appeal.click"
         >申诉</van-button
       >
 
@@ -132,11 +134,8 @@
       <van-button
         square
         color="linear-gradient(to right, #ff6034, #ee0a24)"
-        v-if="
-          [1, 3].indexOf(listData.order_status) != -1 &&
-          user.userinfo.isSuper == true
-        "
-        @click="bladecardcfg.btn.delete"
+        v-if="bladecardcfg.btn.delete.showbtn"
+        @click="bladecardcfg.btn.delete.click"
         >删除</van-button
       >
     </div>
@@ -146,7 +145,7 @@
 <script>
 import { reactive, computed, ref, toRef } from "vue";
 import { useStore } from "vuex";
-import { formatDate } from "@/common/utils";
+import { formatDate, innerArry } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import { deleteBladeItemData, partupBladeItemData } from "@/network/sort";
 export default {
@@ -163,9 +162,7 @@ export default {
   },
   setup(props, context) {
     const store = useStore();
-
-    const user = toRef(store.state, "user").value;
-
+    const user = toRef(store.state, "user");
     const listData = reactive(props.listdata);
     const descTag = ref();
     // console.log(listData);
@@ -356,31 +353,47 @@ export default {
         },
       },
       btn: {
-        delete: () => {
-          Dialog.confirm({
-            title: "确认删除",
-            message: "确认删除刀片订单？",
-          })
-            .then(() => {
-              deleteBladeItemData({
-                id: listData.id,
-              }).then(() => {
-                Toast.success({
-                  message: "删除成功",
-                  duration: 1000,
-                  onClose: () => {
-                    bladecardcfg.isShow = false;
-                  },
-                });
-              });
+        delete: {
+          click: () => {
+            Dialog.confirm({
+              title: "确认删除",
+              message: "确认删除刀片订单？",
             })
-            .catch(() => {
-              // on cancel
-            });
+              .then(() => {
+                deleteBladeItemData({
+                  id: listData.id,
+                }).then(() => {
+                  Toast.success({
+                    message: "删除成功",
+                    duration: 1000,
+                    onClose: () => {
+                      bladecardcfg.isShow = false;
+                    },
+                  });
+                });
+              })
+              .catch(() => {
+                // on cancel
+              });
+          },
+          showbtn: computed(() => {
+            return (
+              [1, 2, 3].indexOf(listData.order_status) != -1 &&
+              (user.value.userinfo.isSuper == true ||
+                innerArry(user.value.userinfo.groups, [1, 7]) == true)
+            );
+          }),
         },
         check: {
           showPopover: false,
           actions: [{ text: "通过" }, { text: "不通过" }],
+          showbtn: computed(() => {
+            return (
+              user.value.userinfo.isSuper == true ||
+              ([1, 2, 3].indexOf(listData.order_status) != -1 &&
+                innerArry(user.value.userinfo.groups, [1, 7]) == true)
+            );
+          }),
           onSelected: (action) => {
             switch (action.text) {
               case "通过":
@@ -417,21 +430,48 @@ export default {
             }
           },
         },
-        receive: () => {
-          let data = {
-            id: listData.id,
-            workstation: listData.weldinggun,
-            action: "receive",
-          };
-          context.emit("selectedid", data);
+        receive: {
+          click: () => {
+            let data = {
+              id: listData.id,
+              workstation: listData.weldinggun,
+              action: "receive",
+            };
+            context.emit("selectedid", data);
+          },
+          showbtn: computed(() => {
+            return (
+              user.value.userinfo.isSuper == true &&
+              [3].indexOf(listData.order_status) != -1
+            );
+          }),
+          disabled: computed(() => {
+            return !(
+              user.value.userinfo.isSuper == true ||
+              innerArry(user.value.userinfo.groups, [1, 7]) == true ||
+              listData.applicant.id == user.value.userinfo.userId
+            );
+          }),
         },
-        appeal: () => {
-          let data = {
-            id: listData.id,
-            workstation: listData.weldinggun,
-            action: "appeal",
-          };
-          context.emit("selectedid", data);
+        appeal: {
+          click: () => {
+            let data = {
+              id: listData.id,
+              workstation: listData.weldinggun,
+              action: "appeal",
+            };
+            context.emit("selectedid", data);
+          },
+          showbtn: computed(() => {
+            return [2].indexOf(listData.order_status) != -1;
+          }),
+          disabled: computed(() => {
+            return !(
+              user.value.userinfo.isSuper == true ||
+              innerArry(user.value.userinfo.groups, [1, 7]) == true ||
+              listData.applicant.id == user.value.userinfo.userId
+            );
+          }),
         },
         todolast: {
           showPopover: false,

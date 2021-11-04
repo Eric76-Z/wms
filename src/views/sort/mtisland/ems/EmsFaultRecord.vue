@@ -91,6 +91,7 @@
 <script>
 import { reactive, toRef } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { carModel } from "@/common/constant.js";
 import { createEmsMaintenanceRecords } from "@/network/sort.js";
 import { Toast } from "vant";
@@ -108,6 +109,8 @@ export default {
       title: "EMS-小车故障记录",
       isShow: [true, true, true],
     };
+    //router
+    const router = useRouter();
     const formData = reactive({
       localLv1: "CPH2.1",
       localLv2: "ST",
@@ -149,8 +152,7 @@ export default {
               duration: 1000,
               onClose: () => {
                 // 命名的路由，并加上参数，让路由建立 url
-                // router.push({ name: "bladedetail" });
-                console.log("跳转详情");
+                router.push({ name: "emsfaultlist" });
               },
             });
           })

@@ -86,7 +86,6 @@
 <script>
 import { reactive, computed, toRef } from "vue";
 import { useStore } from "vuex";
-
 import { formatDate, beautySub, innerArry } from "@/common/utils";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import {
@@ -184,7 +183,7 @@ export default {
           text: computed(() => {
             if (
               user.value.userinfo.isSuper == true ||
-              innerArry(user.value.userinfo.groups, [1, 18, 4, 5]) == true
+              innerArry(user.value.userinfo.groups, [1, 6]) == true
             ) {
               return "完成";
             } else {
@@ -194,12 +193,16 @@ export default {
           disabled: computed(() => {
             return !(
               user.value.userinfo.isSuper == true ||
-              innerArry(user.value.userinfo.groups, [1, 18, 4, 5]) == true ||
+              innerArry(user.value.userinfo.groups, [1, 6]) == true ||
               listData.applicant.id == user.value.userinfo.userId
             );
           }),
           show: computed(() => {
-            if (listData.order_status == 4) {
+            if (
+              listData.order_status == 4 ||
+              (emsmaintenancecardcfg.btn.complete.text == "修复" &&
+                listData.order_status == 5)
+            ) {
               return false;
             } else {
               return true;
@@ -229,15 +232,17 @@ export default {
             return (
               [1, 2, 3].indexOf(listData.order_status) != -1 &&
               (user.value.userinfo.isSuper == true ||
-                innerArry(user.value.userinfo.groups, [1, 18, 4, 5]) == true)
+                innerArry(user.value.userinfo.groups, [1, 6]) == true)
             );
           }),
         },
       },
       step: {
-        steps: ["申报", "操作 ", "完成"],
+        steps: ["申报", "操作 ", "修复", "完成"],
         active: computed(() => {
           if (listData.order_status == 4) {
+            return 3;
+          } else if (listData.order_status == 5) {
             return 2;
           } else {
             return 1;
@@ -366,6 +371,9 @@ export default {
     .check-btn {
       width: 80px;
     }
+  }
+  .van-calendar {
+    z-index: 999;
   }
 }
 </style>
