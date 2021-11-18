@@ -441,7 +441,8 @@ export default {
           },
           showbtn: computed(() => {
             return (
-              user.value.userinfo.isSuper == true &&
+              (user.value.userinfo.isSuper == true ||
+                innerArry(user.value.userinfo.groups, [1, 3, 7]) == true) &&
               [3].indexOf(listData.order_status) != -1
             );
           }),
