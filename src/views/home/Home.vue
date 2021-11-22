@@ -2,13 +2,13 @@
   <div id="home">
     <van-notice-bar
       left-icon="volume-o"
-      text="21/10/13: 登陆后：我的-app下载中下载app使用，体验更佳。"
+      text="21/11/22: 请完成我的-用户信息中角色，班组，区域等信息的填写！"
     />
     <van-notice-bar
       color="#1989fa"
       left-icon="volume-o"
       scrollable="false"
-      text="21/09/03: 重置密码功能已完善，忘记密码请重置密码！。"
+      text="21/10/13: 登陆后：我的-app下载中下载app使用，体验更佳。"
     />
     <main-swiper :swipercfg="swipercfg" />
     <main-grid :gridcfg="gridcfg" />

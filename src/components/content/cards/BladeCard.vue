@@ -146,6 +146,7 @@
 import { reactive, computed, ref, toRef } from "vue";
 import { useStore } from "vuex";
 import { formatDate, innerArry } from "@/common/utils";
+import { userGroupLocalMap } from "@/common/constant";
 import { Dialog, Toast, Grid, GridItem } from "vant";
 import { deleteBladeItemData, partupBladeItemData } from "@/network/sort";
 export default {
@@ -380,7 +381,7 @@ export default {
             return (
               [1, 2, 3].indexOf(listData.order_status) != -1 &&
               (user.value.userinfo.isSuper == true ||
-                innerArry(user.value.userinfo.groups, [1, 7]) == true)
+                innerArry(user.value.userinfo.groups, [1, 7], false) == true)
             );
           }),
         },
@@ -391,7 +392,7 @@ export default {
             return (
               user.value.userinfo.isSuper == true ||
               ([1, 2, 3].indexOf(listData.order_status) != -1 &&
-                innerArry(user.value.userinfo.groups, [1, 7]) == true)
+                innerArry(user.value.userinfo.groups, [1, 7], false) == true)
             );
           }),
           onSelected: (action) => {
@@ -401,7 +402,7 @@ export default {
                   id: listData.id,
                   order_status: 3,
                 }).then((res) => {
-                  console.log(res);
+                  // console.log(res);
                   Toast.success({
                     message: "审核通过，等待领取",
                     duration: 1000,
@@ -442,14 +443,19 @@ export default {
           showbtn: computed(() => {
             return (
               (user.value.userinfo.isSuper == true ||
-                innerArry(user.value.userinfo.groups, [1, 3, 7]) == true) &&
-              [3].indexOf(listData.order_status) != -1
+                innerArry(user.value.userinfo.groups, [1, 3, 5, 7], false) ==
+                  true) &&
+              listData.order_status == 3
             );
           }),
           disabled: computed(() => {
             return !(
               user.value.userinfo.isSuper == true ||
-              innerArry(user.value.userinfo.groups, [1, 7]) == true ||
+              innerArry(user.value.userinfo.groups, [1, 7], false) == true ||
+              innerArry(user.value.userinfo.groups, [
+                userGroupLocalMap[listData.localLv1],
+                userGroupLocalMap[listData.localLv2],
+              ]) == true ||
               listData.applicant.id == user.value.userinfo.userId
             );
           }),
@@ -469,7 +475,7 @@ export default {
           disabled: computed(() => {
             return !(
               user.value.userinfo.isSuper == true ||
-              innerArry(user.value.userinfo.groups, [1, 7]) == true ||
+              innerArry(user.value.userinfo.groups, [1, 7], false) == true ||
               listData.applicant.id == user.value.userinfo.userId
             );
           }),
@@ -512,7 +518,7 @@ export default {
               formData: formData,
             })
               .then((res) => {
-                console.log(res);
+                // console.log(res);
                 file.status = "done";
                 file.url = res.repair_order_img.img;
                 listData.order_status = res.order_status;

@@ -34,9 +34,25 @@
       <van-cell
         class="role"
         title="角色"
-        :value="userinfocfg.groups"
+        :value="userinfocfg.role"
         is-link
-        @click="userinfocfg.changeGroups"
+        @click="userinfocfg.changeRole"
+      />
+      <van-cell
+        class="class"
+        title="班组"
+        :value="userinfocfg.class"
+        is-link
+        @click="userinfocfg.changeClass"
+        v-if="userinfocfg.show.class"
+      />
+      <van-cell
+        class="area"
+        title="区域"
+        :value="userinfocfg.area"
+        is-link
+        @click="userinfocfg.changeArea"
+        v-if="userinfocfg.show.class"
       />
     </van-cell-group>
     <van-popup
@@ -60,6 +76,15 @@
         />
       </van-cell-group>
     </van-popup>
+    <van-popup v-model:show="pickercfg.show" position="bottom">
+      <van-picker
+        :title="pickercfg.title"
+        :default-index="pickercfg.default"
+        :columns="pickercfg.columns"
+        @confirm="pickercfg.confirm"
+        @cancel="pickercfg.cancel"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -67,6 +92,8 @@
 import { reactive, toRef, computed, onMounted } from "vue";
 // import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { innerArry } from "@/common/utils";
+import { userGroupLocalMap, userGroupRoleMap } from "@/common/constant";
 // import { partupUser } from "@/network/sort.js";
 import { Toast } from "vant";
 
@@ -103,6 +130,68 @@ export default {
           return "";
         }
       }),
+      class: computed(() => {
+        for (const iterator of userinfocfg.data.userinfo.groups) {
+          if (userGroupLocalMap["A班"] == iterator) {
+            return "A班";
+          } else if (userGroupLocalMap["B班"] == iterator) {
+            return "B班";
+          }
+        }
+        return "未选";
+      }),
+      area: computed(() => {
+        let Lv1 = "null";
+        let Lv2 = "null";
+        for (const iterator of userinfocfg.data.userinfo.groups) {
+          switch (iterator) {
+            case userGroupLocalMap["CPH2.1"]:
+              Lv1 = "CPH2.1";
+              break;
+            case userGroupLocalMap["CPH2.2"]:
+              Lv1 = "CPH2.2";
+              break;
+            case userGroupLocalMap["UB"]:
+              Lv2 = "UB";
+              break;
+            case userGroupLocalMap["AB"]:
+              Lv2 = "AB";
+              break;
+            case userGroupLocalMap["ABT"]:
+              Lv2 = "ABT";
+              break;
+            case userGroupLocalMap["ST"]:
+              Lv2 = "ST";
+              break;
+            case userGroupLocalMap["装配"]:
+              Lv2 = "装配";
+              break;
+            case userGroupLocalMap["调整"]:
+              Lv2 = "调整";
+              break;
+            default:
+              break;
+          }
+        }
+        return Lv1 + "-" + Lv2;
+      }),
+      role: computed(() => {
+        for (const iterator of userinfocfg.data.userinfo.groups) {
+          switch (iterator) {
+            case userGroupRoleMap["维修技术员"]:
+              return "维修技术员";
+            case userGroupRoleMap["维修工长"]:
+              return "维修工长";
+            case userGroupRoleMap["维修班长"]:
+              return "维修班长";
+            case userGroupRoleMap["维修工"]:
+              return "维修工";
+            default:
+              return "";
+          }
+        }
+        return "";
+      }),
       changeUserName: () => {
         userinfocfg.popup.show = true;
         userinfocfg.popup.value = userinfocfg.data.userinfo.username;
@@ -138,6 +227,30 @@ export default {
           message: "通知管理员更改",
           duration: 1000,
         });
+      },
+      changeClass: () => {
+        pickercfg.title = "更改班组";
+        pickercfg.columns = ["A班", "B班"];
+        pickercfg.mode = "class";
+        pickercfg.show = true;
+      },
+      changeArea: () => {
+        pickercfg.title = "更改区域";
+        pickercfg.columns = [
+          { values: ["CPH2.1", "CPH2.2"], defaultIndex: 0 },
+          {
+            values: ["UB", "AB", "ABT", "ST", "装配", "调整"],
+            defaultIndex: 0,
+          },
+        ];
+        pickercfg.mode = "area";
+        pickercfg.show = true;
+      },
+      changeRole: () => {
+        pickercfg.title = "更改角色";
+        pickercfg.columns = ["维修技术员", "维修工长", "维修班长", "维修工"];
+        pickercfg.mode = "role";
+        pickercfg.show = true;
       },
       params: {
         id: computed(() => {
@@ -196,6 +309,66 @@ export default {
           }
         },
       },
+      show: {
+        class: computed(() => {
+          // 经理
+          return !innerArry(user.userinfo.groups, [1, 2, 3], false);
+        }),
+        area: computed(() => {
+          // 经理
+          return !innerArry(user.userinfo.groups, [1, 2, 3], false);
+        }),
+      },
+    });
+    const pickercfg = reactive({
+      show: false,
+      mode: "class",
+      title: "",
+      columns: [],
+      default: computed(() => {
+        if (userinfocfg.class == "B班") {
+          return 1;
+        } else {
+          return 0;
+        }
+      }),
+      confirm: (val) => {
+        if (pickercfg.mode == "class") {
+          user.userinfo.groups.remove(userGroupLocalMap["A班"]);
+          user.userinfo.groups.remove(userGroupLocalMap["B班"]);
+          user.userinfo.groups.push(userGroupLocalMap[val]);
+          userinfocfg.params.groups = user.userinfo.groups;
+          userChangeState(userinfocfg.params).then(() => {
+            pickercfg.show = false;
+          });
+        } else if (pickercfg.mode == "area") {
+          user.userinfo.groups.remove(userGroupLocalMap["UB"]);
+          user.userinfo.groups.remove(userGroupLocalMap["AB"]);
+          user.userinfo.groups.remove(userGroupLocalMap["ABT"]);
+          user.userinfo.groups.remove(userGroupLocalMap["ST"]);
+          user.userinfo.groups.remove(userGroupLocalMap["装配"]);
+          user.userinfo.groups.remove(userGroupLocalMap["调整"]);
+          user.userinfo.groups.push(userGroupLocalMap[val[0]]);
+          user.userinfo.groups.push(userGroupLocalMap[val[1]]);
+          userinfocfg.params.groups = user.userinfo.groups;
+          userChangeState(userinfocfg.params).then(() => {
+            pickercfg.show = false;
+          });
+        } else if (pickercfg.mode == "role") {
+          user.userinfo.groups.remove(userGroupRoleMap["维修技术员"]);
+          user.userinfo.groups.remove(userGroupRoleMap["维修工长"]);
+          user.userinfo.groups.remove(userGroupRoleMap["维修班长"]);
+          user.userinfo.groups.remove(userGroupRoleMap["维修工"]);
+          user.userinfo.groups.push(userGroupRoleMap[val]);
+          userinfocfg.params.groups = user.userinfo.groups;
+          userChangeState(userinfocfg.params).then(() => {
+            pickercfg.show = false;
+          });
+        }
+      },
+      cancel: () => {
+        pickercfg.show = false;
+      },
     });
     onMounted(() => {
       if (user.userinfo.last_name == "" || user.userinfo.first_name == "") {
@@ -208,6 +381,7 @@ export default {
     return {
       state,
       userinfocfg,
+      pickercfg,
     };
   },
 };
@@ -215,7 +389,7 @@ export default {
 
 <style lang="scss">
 #userinfo {
-  .role {
+  .group {
     .van-cell__value {
       flex: 3;
     }

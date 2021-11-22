@@ -55,7 +55,6 @@ const mutations = {
     console.log(state);
   },
 };
-
 const actions = {
   //  用户login/logout
   userChangeState(context, payload) {

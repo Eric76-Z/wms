@@ -164,17 +164,30 @@ export const beautySub = (str, len) => {
 
 /**
  * 判断arry1 是否包含 arry2
+ * flag为是否开启严格模式:
+ * flase:arry1中包含arry2的其中一个元素则返回true
+ * true：arry1包含arry2的所有元素
+ * 默认严格模式（true)
  */
 
-export const innerArry = (arry1, arry2) => {
-  for (const i of arry2) {
-    console.log(i);
-
-    if (arry1.indexOf(i) == -1) {
-      return false;
+export const innerArry = (arry1, arry2, flag) => {
+  let ret = false;
+  if (flag == false) {
+    ret = false;
+    for (const i of arry2) {
+      if (arry1.indexOf(i) != -1) {
+        ret = true;
+      }
+    }
+  } else {
+    ret = true;
+    for (const i of arry2) {
+      if (arry1.indexOf(i) == -1) {
+        ret = false;
+      }
     }
   }
-  return true;
+  return ret;
 };
 
 export const filters = {

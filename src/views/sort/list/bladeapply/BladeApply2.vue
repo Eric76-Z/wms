@@ -107,7 +107,6 @@ export default {
     const bladeDataCol = computed(() => {
       return store.getters.bladeDataCol;
     });
-    console.log(bladeDataCol);
     const user = toRef(store.state, "user");
     //route
     const route = reactive(useRoute());
