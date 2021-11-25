@@ -104,11 +104,11 @@ export default {
         {
           text: "故障代码",
           iconText: "faultcode",
-          route: "",
+          route: "/sort/faultcode",
           tag: {
-            text: "未开发",
+            text: "新",
             textColor: "",
-            color: "var(--van-gray-6)",
+            color: "var(--van-green)  ",
             show: "true",
           },
         },

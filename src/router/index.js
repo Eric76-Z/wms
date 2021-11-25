@@ -10,10 +10,12 @@ const UserInfo = () => import("@/views/profile/UserInfo");
 const FindZjp = () => import("@/views/profile/FindZjp");
 
 const List = () => import("@/views/sort/list/List");
-
 const BladeApply = () => import("@/views/sort/list/bladeapply/BladeApply");
 const BladeApply1 = () => import("@/views/sort/list/bladeapply/BladeApply1");
 const BladeApply2 = () => import("@/views/sort/list/bladeapply/BladeApply2");
+
+const FaultCode = () => import("@/views/sort/faultcode/FaultCode");
+
 const MtIsland = () => import("@/views/sort/mtisland/MtIsland");
 const FaultRecord = () =>
   import("@/views/sort/mtisland/faultrecord/FaultRecord");
@@ -145,6 +147,12 @@ const routes = [
       },
     ],
   },
+  {
+    name: "faultcode",
+    path: "/sort/faultcode",
+    component: FaultCode,
+  },
+
   {
     name: "mtisland",
     path: "/sort/mtisland",

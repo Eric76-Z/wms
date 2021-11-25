@@ -1,3 +1,23 @@
+<!-- 
+const gridcfg = reactive({
+  grid: [
+    {
+      text: "机器人",   必填
+      iconText: "jiqiren",  选填
+      route: "/sort",  必填
+      tag: {   选填
+        text: "未开发",
+        textColor: "",
+        color: "var(--van-gray-6)",
+        show: "true",
+      },
+    },
+    ......
+  ],
+  columnNum: 3,
+}); 
+-->
+
 <template>
   <van-grid :column-num="gridcfg.columnNum">
     <van-grid-item
@@ -8,12 +28,14 @@
       v-show="tagcfg.show[index]"
     >
       <van-icon
+        v-if="item.hasOwnProperty('iconText')"
         class="iconfont"
         class-prefix="icon"
         :name="item.iconText"
       ></van-icon>
       <span class="van-grid-item__text">{{ item.text }}</span>
-      <div class="tag">
+      <!-- <div>{{ item }}</div> -->
+      <div v-if="item.hasOwnProperty('tag')" class="tag">
         <van-tag
           :color="item.tag.color"
           :text-color="item.tag.textColor"
