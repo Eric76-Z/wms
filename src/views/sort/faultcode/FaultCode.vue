@@ -28,40 +28,33 @@ export default {
       grid: [
         {
           text: "机器人",
-          textcolor: "",
+          textcolor: "color:var(--van-primary-color)",
           route: "/sort",
         },
         {
           text: "焊枪",
+          textcolor: "color:var(--van-primary-color)",
           route: "",
         },
         {
           text: "其他设备",
+          textcolor: "color:var(--van-primary-color)",
           route: "",
         },
         {
           text: "申报列表",
+          textcolor: "color:var(--van-primary-color)",
           route: "/sort/list",
         },
         {
           text: "列表明细",
+          textcolor: "color:var(--van-primary-color)",
           route: "/sort/detail",
         },
         {
           text: "备件查询",
+          textcolor: "color:var(--van-primary-color)",
           route: "/sort/parts",
-        },
-        {
-          text: "资料查询",
-          route: "",
-        },
-        {
-          text: "故障代码",
-          route: "/sort/faultcode",
-        },
-        {
-          text: "维修专家",
-          route: "/sort/mtisland",
         },
       ],
       columnNum: 3,

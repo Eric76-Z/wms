@@ -3,6 +3,7 @@ const gridcfg = reactive({
   grid: [
     {
       text: "机器人",   必填
+      textcolor: "",  选填
       iconText: "jiqiren",  选填
       route: "/sort",  必填
       tag: {   选填
@@ -33,8 +34,9 @@ const gridcfg = reactive({
         class-prefix="icon"
         :name="item.iconText"
       ></van-icon>
-      <span class="van-grid-item__text">{{ item.text }}</span>
-      <!-- <div>{{ item }}</div> -->
+      <span class="van-grid-item__text" :style="item.textcolor">{{
+        item.text
+      }}</span>
       <div v-if="item.hasOwnProperty('tag')" class="tag">
         <van-tag
           :color="item.tag.color"
