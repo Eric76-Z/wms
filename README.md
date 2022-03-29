@@ -1,5 +1,9 @@
 # wms
 
+## 说明
+
+于上汽大众离职后停止维护。
+
 ## Project setup
 ```
 npm install
